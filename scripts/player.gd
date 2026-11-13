@@ -1,64 +1,122 @@
 ## scripts/player.gd
-## Player controller: 8-direction top-down movement with camera follow.
-## Uses Input.get_vector which automatically normalizes diagonals,
-## so diagonal speed equals straight-line speed.
+## Player controller: 8-direction movement, camera, and unified interaction.
+## The InteractionArea detects nearby objects in group "interactable".
+## On E press, the NEAREST one gets its interact(player) called.
 extends CharacterBody2D
 
-## Movement speed in pixels per second. Tweak in the Inspector.
-@export var speed: float = 200.0
-
-## Set to false to freeze the player (e.g. when a menu is open).
-## Other scripts can do: player.can_move = false
+@export var speed: float = 250.0
 @export var can_move: bool = true
 
-## Camera limits — set these to match the map edges so the camera
-## never shows empty space outside the playable area.
 @export_group("Camera Limits")
 @export var camera_limit_left: int = 0
 @export var camera_limit_top: int = 0
 @export var camera_limit_right: int = 2000
 @export var camera_limit_bottom: int = 1200
 
-# Node references — resolved once when the scene loads.
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var camera: Camera2D = $Camera2D
+@onready var interaction_area: Area2D = $InteractionArea
+
+# All interactable Area2Ds currently overlapping our InteractionArea.
+var _nearby_interactables: Array = []
+# The one we would interact with if the player presses E right now.
+var _current_target: Node = null
 
 
 func _ready() -> void:
-	# Apply the exported camera limits to the actual Camera2D node.
 	if camera:
 		camera.limit_left = camera_limit_left
 		camera.limit_top = camera_limit_top
 		camera.limit_right = camera_limit_right
 		camera.limit_bottom = camera_limit_bottom
 
+	if interaction_area:
+		interaction_area.area_entered.connect(_on_interaction_area_entered)
+		interaction_area.area_exited.connect(_on_interaction_area_exited)
+
 
 func _physics_process(_delta: float) -> void:
 	# --- Freeze check ---
 	if not can_move:
-		# Stop all movement immediately so the player doesn't drift.
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
 
-	# --- Read input ---
-	# get_vector returns a Vector2 clamped to length 1.0.
-	# When two axes are pressed (diagonal), the vector is normalized,
-	# so the player moves at the same speed in every direction.
+	# --- Movement ---
 	var direction := Input.get_vector(
 		"move_left", "move_right",
 		"move_up", "move_down"
 	)
-
-	# --- Apply movement ---
 	velocity = direction * speed
 	move_and_slide()
 
-	# --- Flip sprite ---
-	# Only change flip when the player is actually moving horizontally,
-	# so the sprite keeps its last facing when the player stops.
+	# --- Sprite flip ---
 	if sprite:
 		if direction.x > 0.0:
 			sprite.flip_h = false
 		elif direction.x < 0.0:
 			sprite.flip_h = true
+
+	# --- Re-evaluate nearest target while moving ---
+	# Only needed when multiple objects are in range.
+	if _nearby_interactables.size() > 1:
+		_update_interaction_target()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("interact"):
+		if _current_target and is_instance_valid(_current_target):
+			if _current_target.has_method("interact"):
+				_current_target.interact(self)
+				get_viewport().set_input_as_handled()
+
+
+# --- Interaction area callbacks ---
+
+func _on_interaction_area_entered(area: Area2D) -> void:
+	if area.is_in_group("interactable") and area not in _nearby_interactables:
+		_nearby_interactables.append(area)
+		_update_interaction_target()
+
+
+func _on_interaction_area_exited(area: Area2D) -> void:
+	_nearby_interactables.erase(area)
+	# If the thing that left was our current target, clear it.
+	if _current_target == area:
+		if is_instance_valid(area) and area.has_method("hide_prompt"):
+			area.hide_prompt()
+		_current_target = null
+	_update_interaction_target()
+
+
+func _update_interaction_target() -> void:
+	# Purge freed objects (e.g. a resource that was queue_free'd).
+	_nearby_interactables = _nearby_interactables.filter(
+		func(obj: Variant) -> bool: return is_instance_valid(obj)
+	)
+
+	if _nearby_interactables.is_empty():
+		if _current_target and is_instance_valid(_current_target):
+			if _current_target.has_method("hide_prompt"):
+				_current_target.hide_prompt()
+		_current_target = null
+		return
+
+	# Pick the closest one (distance² avoids a sqrt per frame).
+	var nearest: Node = null
+	var nearest_dist_sq: float = INF
+	for obj: Node in _nearby_interactables:
+		var d: float = global_position.distance_squared_to(obj.global_position)
+		if d < nearest_dist_sq:
+			nearest_dist_sq = d
+			nearest = obj
+
+	if nearest != _current_target:
+		# Hide prompt on the old target.
+		if _current_target and is_instance_valid(_current_target):
+			if _current_target.has_method("hide_prompt"):
+				_current_target.hide_prompt()
+		# Show prompt on the new target.
+		_current_target = nearest
+		if _current_target and _current_target.has_method("show_prompt"):
+			_current_target.show_prompt()

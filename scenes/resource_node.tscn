@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/resource_node.gd" id="1_script"]
+
+[sub_resource type="PlaceholderTexture2D" id="SubResource_tex"]
+size = Vector2(24, 24)
+
+[sub_resource type="CircleShape2D" id="SubResource_area"]
+radius = 50.0
+
+[node name="ResourceNode" type="Area2D"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("SubResource_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("SubResource_area")
+
+[node name="TypeLabel" type="Label" parent="."]
+offset_left = -50.0
+offset_top = -65.0
+offset_right = 50.0
+offset_bottom = -45.0
+horizontal_alignment = 1
+text = "ORE"
+
+[node name="PromptLabel" type="Label" parent="."]
+offset_left = -50.0
+offset_top = 15.0
+offset_right = 50.0
+offset_bottom = 35.0
+horizontal_alignment = 1
+text = "Press E"
+visible = false

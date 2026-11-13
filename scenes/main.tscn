@@ -1,7 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://bw1e5xmqxgpqy"]
+[gd_scene load_steps=12 format=3 uid="uid://bw1e5xmqxgpqy"]
 
 [ext_resource type="Script" path="res://scripts/main_debug.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/resource_node.tscn" id="3_resource"]
+[ext_resource type="PackedScene" path="res://scenes/building.tscn" id="4_building"]
+[ext_resource type="PackedScene" path="res://scenes/farm_plot.tscn" id="5_farm"]
 
 [sub_resource type="RectangleShape2D" id="SubResource_walltop"]
 size = Vector2(2064, 32)
@@ -106,6 +109,90 @@ offset_top = -32.0
 offset_right = 64.0
 offset_bottom = 32.0
 color = Color(0.5, 0.5, 0.5, 1)
+
+[node name="OreRock1" parent="." instance=ExtResource("3_resource")]
+position = Vector2(300, 500)
+resource_type = "ore"
+amount_per_collect = 3
+total_amount = 9
+respawn_time = 15.0
+sprite_color = Color(0.65, 0.5, 0.35, 1)
+
+[node name="OreRock2" parent="." instance=ExtResource("3_resource")]
+position = Vector2(800, 200)
+resource_type = "ore"
+amount_per_collect = 2
+total_amount = 6
+respawn_time = 15.0
+sprite_color = Color(0.65, 0.5, 0.35, 1)
+
+[node name="OreRock3" parent="." instance=ExtResource("3_resource")]
+position = Vector2(1600, 400)
+resource_type = "ore"
+amount_per_collect = 5
+total_amount = 10
+respawn_time = 15.0
+sprite_color = Color(0.65, 0.5, 0.35, 1)
+
+[node name="WaterIce1" parent="." instance=ExtResource("3_resource")]
+position = Vector2(400, 900)
+resource_type = "water"
+amount_per_collect = 2
+total_amount = 8
+respawn_time = 15.0
+sprite_color = Color(0.6, 0.85, 1.0, 1)
+
+[node name="WaterIce2" parent="." instance=ExtResource("3_resource")]
+position = Vector2(1500, 1000)
+resource_type = "water"
+amount_per_collect = 3
+total_amount = 6
+respawn_time = 15.0
+sprite_color = Color(0.6, 0.85, 1.0, 1)
+
+[node name="SolarPanel1" parent="." instance=ExtResource("4_building")]
+position = Vector2(700, 550)
+building_id = "solar_panel"
+start_on = true
+visual_color = Color(0.95, 0.85, 0.2, 1)
+
+[node name="SolarPanel2" parent="." instance=ExtResource("4_building")]
+position = Vector2(850, 550)
+building_id = "solar_panel"
+start_on = true
+visual_color = Color(0.95, 0.85, 0.2, 1)
+
+[node name="OxygenGenerator" parent="." instance=ExtResource("4_building")]
+position = Vector2(700, 700)
+building_id = "oxygen_generator"
+visual_color = Color(0.3, 0.7, 1.0, 1)
+
+[node name="Greenhouse" parent="." instance=ExtResource("4_building")]
+position = Vector2(850, 700)
+building_id = "greenhouse"
+visual_color = Color(0.3, 0.8, 0.3, 1)
+
+[node name="ShieldGenerator" parent="." instance=ExtResource("4_building")]
+position = Vector2(700, 850)
+building_id = "shield_generator"
+visual_color = Color(0.7, 0.3, 0.9, 1)
+
+[node name="ResearchLab" parent="." instance=ExtResource("4_building")]
+position = Vector2(850, 850)
+building_id = "research_lab"
+visual_color = Color(0.9, 0.6, 0.2, 1)
+
+[node name="FarmPlot1" parent="." instance=ExtResource("5_farm")]
+position = Vector2(1100, 650)
+
+[node name="FarmPlot2" parent="." instance=ExtResource("5_farm")]
+position = Vector2(1200, 650)
+
+[node name="FarmPlot3" parent="." instance=ExtResource("5_farm")]
+position = Vector2(1100, 750)
+
+[node name="FarmPlot4" parent="." instance=ExtResource("5_farm")]
+position = Vector2(1200, 750)
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
 position = Vector2(1000, 600)

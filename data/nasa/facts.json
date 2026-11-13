@@ -18,5 +18,35 @@
     "source_url": "https://www.asc-csa.gc.ca/eng/sciences/radiation.asp",
     "retrieved_date": "2024-10-01",
     "placeholder": true
+  },
+  {
+    "id": "fact_farming_potato",
+    "title": "NASA Grew Potatoes in Space Soil!",
+    "text": "Scientists at NASA and the International Potato Center grew potatoes in soil that was almost like Mars dirt. Potatoes are tough — they can grow in very harsh conditions!",
+    "category": "Farming",
+    "source": "NASA — Can Plants Grow on Mars?",
+    "source_url": "https://www.nasa.gov/",
+    "retrieved_date": "2024-10-01",
+    "placeholder": true
+  },
+  {
+    "id": "fact_farming_lettuce",
+    "title": "Astronauts Ate Space Lettuce!",
+    "text": "In 2015, astronauts on the International Space Station grew and ate red romaine lettuce for the first time. It was part of NASA's Veggie experiment!",
+    "category": "Farming",
+    "source": "NASA — Veggie Plant Growth System",
+    "source_url": "https://www.nasa.gov/mission_pages/station/research/experiments/explorer/Investigation.html?#id=383",
+    "retrieved_date": "2024-10-01",
+    "placeholder": true
+  },
+  {
+    "id": "fact_farming_radish",
+    "title": "Radishes Grow Super Fast in Space!",
+    "text": "NASA picked radishes for space farming tests because they grow in just 27 days. Astronauts on the ISS grew them in the Advanced Plant Habitat in 2020!",
+    "category": "Farming",
+    "source": "NASA — Plant Habitat-02",
+    "source_url": "https://www.nasa.gov/mission_pages/station/research/experiments/explorer/Investigation.html?#id=7908",
+    "retrieved_date": "2024-10-01",
+    "placeholder": true
   }
 ]

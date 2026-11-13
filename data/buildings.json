@@ -1,22 +1,87 @@
 [
   {
     "id": "solar_panel",
-    "name": "Solar Panel",
-    "description": "Generates energy each Sol from sunlight.",
-    "cost": { "ore": 5 },
-    "power_draw": 0,
-    "power_output": 10,
-    "produces": { "energy": 10 },
+    "display_name": "Solar Panel",
+    "description": "Catches sunlight and turns it into electricity for your base.",
+    "power_per_sol": 12,
+    "consumes": {},
+    "produces": { "energy": 12 },
+    "build_cost": { "ore": 5, "water": 2 },
+    "grid_cells": [1, 1],
+    "shield_decay_per_sol": 0,
+    "upgrades": [
+      { "cost": { "ore": 4, "water": 2 },  "power_per_sol": 18,  "produces": { "energy": 18 } },
+      { "cost": { "ore": 8, "water": 4 },  "power_per_sol": 25,  "produces": { "energy": 25 } }
+    ],
+    "teaches": "Mars gets about 43% of Earth's sunlight because it is farther from the Sun.",
     "placeholder": true
   },
   {
     "id": "oxygen_generator",
-    "name": "Oxygen Generator",
-    "description": "Splits water into breathable oxygen using electrolysis.",
-    "cost": { "ore": 8, "energy": 5 },
-    "power_draw": 5,
-    "power_output": 0,
+    "display_name": "Oxygen Generator",
+    "description": "Splits water into oxygen so your crew can breathe.",
+    "power_per_sol": -6,
+    "consumes": { "water": 1 },
     "produces": { "oxygen": 8 },
+    "build_cost": { "ore": 8, "water": 3 },
+    "grid_cells": [1, 1],
+    "shield_decay_per_sol": 0,
+    "upgrades": [
+      { "cost": { "ore": 6, "water": 3 },  "power_per_sol": -9,  "consumes": { "water": 1 },  "produces": { "oxygen": 11 } },
+      { "cost": { "ore": 12, "water": 6 }, "power_per_sol": -14, "consumes": { "water": 2 },  "produces": { "oxygen": 15 } }
+    ],
+    "teaches": "Real astronauts on the ISS use electrolysis to split H2O into breathable O2.",
+    "placeholder": true
+  },
+  {
+    "id": "greenhouse",
+    "display_name": "Greenhouse",
+    "description": "Grows food using water and artificial light inside a dome.",
+    "power_per_sol": -5,
+    "consumes": { "water": 2 },
+    "produces": { "food": 4 },
+    "build_cost": { "ore": 10, "water": 5 },
+    "grid_cells": [2, 1],
+    "shield_decay_per_sol": 0,
+    "upgrades": [
+      { "cost": { "ore": 8, "water": 4 },  "power_per_sol": -8,  "consumes": { "water": 3 },  "produces": { "food": 6 } },
+      { "cost": { "ore": 16, "water": 8 }, "power_per_sol": -12, "consumes": { "water": 4 },  "produces": { "food": 8 } }
+    ],
+    "teaches": "NASA grew and ate lettuce on the ISS in the Veggie experiment (2015).",
+    "placeholder": true
+  },
+  {
+    "id": "shield_generator",
+    "display_name": "Shield Generator",
+    "description": "Generates a protective field that blocks harmful space radiation.",
+    "power_per_sol": -8,
+    "consumes": {},
+    "produces": { "shield": 15 },
+    "build_cost": { "ore": 12, "water": 4 },
+    "grid_cells": [1, 1],
+    "shield_decay_per_sol": 5,
+    "upgrades": [
+      { "cost": { "ore": 10, "water": 5 }, "power_per_sol": -12, "produces": { "shield": 21 }, "shield_decay_per_sol": 6 },
+      { "cost": { "ore": 20, "water": 10 }, "power_per_sol": -18, "produces": { "shield": 29 }, "shield_decay_per_sol": 7 }
+    ],
+    "teaches": "Mars has no global magnetic field, so astronauts need shielding against cosmic rays.",
+    "placeholder": true
+  },
+  {
+    "id": "research_lab",
+    "display_name": "Research Lab",
+    "description": "Your crew studies Mars rocks and soil to unlock new knowledge.",
+    "power_per_sol": -6,
+    "consumes": {},
+    "produces": { "science": 2 },
+    "build_cost": { "ore": 15, "water": 6 },
+    "grid_cells": [1, 1],
+    "shield_decay_per_sol": 0,
+    "upgrades": [
+      { "cost": { "ore": 12, "water": 5 }, "power_per_sol": -9,  "produces": { "science": 3 } },
+      { "cost": { "ore": 24, "water": 10 }, "power_per_sol": -14, "produces": { "science": 4 } }
+    ],
+    "teaches": "The Curiosity rover has been studying Mars geology since 2012.",
     "placeholder": true
   }
 ]

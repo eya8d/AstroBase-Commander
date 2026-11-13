@@ -1,0 +1,38 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/farm_plot.gd" id="1_script"]
+
+[sub_resource type="PlaceholderTexture2D" id="SubResource_tex"]
+size = Vector2(40, 40)
+
+[sub_resource type="CircleShape2D" id="SubResource_area"]
+radius = 50.0
+
+[node name="FarmPlot" type="Area2D"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_script")
+
+[node name="Visual" type="Sprite2D" parent="."]
+texture = SubResource("SubResource_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("SubResource_area")
+
+[node name="StateLabel" type="Label" parent="."]
+offset_left = -50.0
+offset_top = -48.0
+offset_right = 50.0
+offset_bottom = -28.0
+horizontal_alignment = 1
+text = "EMPTY"
+
+[node name="InfoLabel" type="Label" parent="."]
+offset_left = -100.0
+offset_top = 30.0
+offset_right = 100.0
+offset_bottom = 150.0
+horizontal_alignment = 1
+autowrap_mode = 2
+text = ""
+visible = false
