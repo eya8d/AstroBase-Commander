@@ -1,26 +1,32 @@
 [
   {
-    "id": "rad_mars_surface",
-    "location": "Mars Surface",
-    "annual_dose_mSv": 234,
-    "daily_dose_mSv": 0.64,
-    "description": "Average daily GCR dose on Mars surface measured by MSL/RAD.",
-    "shielding_factor": 1.0,
-    "source": "NASA RadLab — MSL/RAD (Mars Science Laboratory Radiation Assessment Detector)",
-    "source_url": "https://radlab.jpl.nasa.gov/",
-    "retrieved_date": "2024-10-01",
-    "placeholder": true
+    "id": "mars_rad_baseline_20170906",
+    "event_id": "donki_sep_13081",
+    "date": "2017-09-06",
+    "instrument": "MSL-RAD-Surface",
+    "spacecraft": "Curiosity",
+    "location": "Mars surface",
+    "daily_mean_absorbed_dose_rate": 7.68,
+    "unit": "microgray_per_hour",
+    "sample_count": 83,
+    "source": "NASA OSDR RadLab, MSL-RAD-Surface",
+    "source_url": "https://visualization.osdr.nasa.gov/radlab/api/?celestial_body=Mars&trajectory=Surface&timestamp%3E=2017-09-06&timestamp%3C=2017-09-07&absorbed_dose_rate&format=json",
+    "retrieved_date": "2026-11-13",
+    "data_note": "Daily mean calculated from 83 RadLab readings for this date. This is the background comparison day, not a dose limit."
   },
   {
-    "id": "rad_mars_shielded",
-    "location": "Mars Habitat (10 cm regolith)",
-    "annual_dose_mSv": 150,
-    "daily_dose_mSv": 0.41,
-    "description": "Estimated dose behind 10 cm of Martian regolith shielding.",
-    "shielding_factor": 0.64,
-    "source": "NASA RadLab — MSL/RAD (Mars Science Laboratory Radiation Assessment Detector)",
-    "source_url": "https://radlab.jpl.nasa.gov/",
-    "retrieved_date": "2024-10-01",
-    "placeholder": true
+    "id": "mars_rad_sep_peak_20170911",
+    "event_id": "donki_sep_13081",
+    "date": "2017-09-11",
+    "instrument": "MSL-RAD-Surface",
+    "spacecraft": "Curiosity",
+    "location": "Mars surface",
+    "daily_mean_absorbed_dose_rate": 17.87,
+    "unit": "microgray_per_hour",
+    "sample_count": 129,
+    "source": "NASA OSDR RadLab, MSL-RAD-Surface",
+    "source_url": "https://visualization.osdr.nasa.gov/radlab/api/?celestial_body=Mars&trajectory=Surface&timestamp%3E=2017-09-11&timestamp%3C=2017-09-12&absorbed_dose_rate&format=json",
+    "retrieved_date": "2026-11-13",
+    "data_note": "Daily mean calculated from 129 RadLab readings during the Mars surface solar-particle event. The daily mean is about 2.3 times the 6 September comparison mean; it is a measured absorbed dose rate, not a crew health limit."
   }
 ]

@@ -1,26 +1,20 @@
 [
   {
-    "event_id": "donki_2024_001",
-    "type": "CME",
-    "date": "2024-05-10",
-    "intensity": "moderate",
-    "description": "Coronal Mass Ejection observed. Estimated transit time to Mars: 2-3 days.",
-    "radiation_dose_mSv": 15,
-    "source": "NASA DONKI (Space Weather Database Of Notifications, Knowledge, Information)",
-    "source_url": "https://kauai.ccmc.gsfc.nasa.gov/DONKI/",
-    "retrieved_date": "2024-10-01",
-    "placeholder": true
-  },
-  {
-    "event_id": "donki_2024_002",
-    "type": "Solar Flare",
-    "date": "2024-09-01",
-    "intensity": "strong",
-    "description": "X-class solar flare. High-energy protons arriving within hours.",
-    "radiation_dose_mSv": 50,
-    "source": "NASA DONKI (Space Weather Database Of Notifications, Knowledge, Information)",
-    "source_url": "https://kauai.ccmc.gsfc.nasa.gov/DONKI/",
-    "retrieved_date": "2024-10-01",
-    "placeholder": true
+    "event_id": "donki_sep_13081",
+    "id": "donki_sep_13081",
+    "type": "radiation_warning",
+    "donki_type": "SEP",
+    "date": "2017-09-06T23:30:00Z",
+    "mars_event_start": "2017-09-10T19:50:00Z",
+    "title": "Solar particle storm warning",
+    "description": "Archived SEP event first recorded near Earth on 6 September 2017. NASA's Curiosity rover measured the strongest solar-particle radiation increase on Mars since landing during 10–12 September 2017.",
+    "lesson": "Solar particles can travel across space and raise radiation at Mars. The crew must decide whether to spend power on the Shield Generator.",
+    "chance_weight": 2,
+    "duration_sols": 1,
+    "source": "NASA CCMC DONKI SEP; NASA/JPL Curiosity RAD report",
+    "source_url": "https://kauai.ccmc.gsfc.nasa.gov/DONKI/view/SEP/13081/1",
+    "mars_effect_source_url": "https://www.jpl.nasa.gov/news/large-solar-storm-sparks-global-aurora-and-doubles-radiation-levels-on-the-martian-surface/",
+    "retrieved_date": "2026-11-13",
+    "data_note": "The DONKI observation date and the later Mars surface measurement are both archived. RadLab dose-rate samples for the Mars event are stored separately in radiation.json."
   }
 ]

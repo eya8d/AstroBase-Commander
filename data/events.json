@@ -1,0 +1,43 @@
+[
+  {
+    "id": "dust_storm",
+    "type": "dust_storm",
+    "title": "Dust Storm!",
+    "kid_text": "A dust storm is covering the solar panels! They make less electricity until the storm passes.",
+    "lesson": "Dust blocks sunlight, so the panels make less electricity. Real Martian dust storms can cover the whole planet!",
+    "power_output_multiplier": 0.5,
+    "affected_building_id": "solar_panel",
+    "duration_sols": 2,
+    "chance_weight": 5,
+    "source": "NASA Mars Exploration",
+    "source_url": "https://mars.nasa.gov/",
+    "simplification_note": "Real Martian dust storms can last for months. We shortened it to 2 Sols for gameplay."
+  },
+  {
+    "id": "oxygen_leak",
+    "type": "oxygen_leak",
+    "title": "Oxygen Leak!",
+    "kid_text": "Oh no! There is a small crack in the habitat. Oxygen is leaking out!",
+    "lesson": "A leak wastes oxygen. In space, every molecule of air is precious because there is no atmosphere to breathe outside.",
+    "oxygen_loss_per_sol": 8,
+    "duration_sols": 1,
+    "chance_weight": 5,
+    "source": "NASA ISS Life Support",
+    "source_url": "https://www.nasa.gov/mission_pages/station/research/experiments/explorer/Investigation.html",
+    "simplification_note": "ISS astronauts train for rapid leak detection. Real leaks are patched immediately."
+  },
+  {
+    "id": "radiation_burst",
+    "type": "radiation_warning",
+    "title": "Radiation Warning!",
+    "kid_text": "The Sun just sent dangerous particles our way! Your shield generator can protect the crew.",
+    "lesson": "Solar energetic particles are invisible but dangerous. Without shielding, astronauts get harmful radiation.",
+    "shield_needed": 10,
+    "oxygen_penalty": 15,
+    "duration_sols": 1,
+    "chance_weight": 3,
+    "source": "NASA CCMC DONKI",
+    "source_url": "https://kauai.ccmc.gsfc.nasa.gov/DONKI/",
+    "simplification_note": "Based on real Solar Energetic Particle events. The game simplifies radiation exposure into a shield check — real radiation effects are more complex."
+  }
+]

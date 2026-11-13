@@ -9,7 +9,9 @@ extends Area2D
 ## Whether this building starts powered on.
 @export var start_on: bool = false
 ## Tint for the placeholder sprite so each type looks different.
-@export var visual_color: Color = Color(0.8, 0.8, 0.8, 1.0)
+## WHY: defaults to white so real sprites show their natural colors.
+##       Set to a tint if you want to recolor a sprite.
+@export var visual_color: Color = Color(1.0, 1.0, 1.0, 1.0)
 
 # --- State ---
 var _data: Dictionary = {}          # row from buildings.json
@@ -111,6 +113,12 @@ func force_shutdown() -> void:
 	_forced_off = true
 	EventBus.building_toggled.emit(building_id, false)
 	_update_labels()
+
+
+## How much shield decays per Sol while this building is ON.
+## Only the shield_generator has a value > 0.
+func get_shield_decay_per_sol() -> int:
+	return int(_data.get("shield_decay_per_sol", 0))
 
 
 ## Direct setter (e.g. for future systems that enable/disable buildings).

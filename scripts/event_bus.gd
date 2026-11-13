@@ -23,6 +23,13 @@ signal crop_harvested(crop_id: String, amount: int)
 @warning_ignore("unused_signal")
 signal day_changed(day: int)
 
+# --- Random Events ---
+@warning_ignore("unused_signal")
+signal game_event_started(event: Dictionary)
+
+@warning_ignore("unused_signal")
+signal game_event_ended(event_id: String)
+
 # --- Space Weather ---
 @warning_ignore("unused_signal")
 signal space_weather_warning(event: Dictionary)
