@@ -46,10 +46,10 @@ func _ready() -> void:
 
 # --- Unified interaction interface (called by the player) ---
 
-func interact(_player: Node) -> void:
+func interact(player: Node) -> void:
 	if _depleted:
 		return
-	_collect()
+	_collect(player)
 
 
 func show_prompt() -> void:
@@ -67,10 +67,21 @@ func hide_prompt() -> void:
 
 # --- Internal ---
 
-func _collect() -> void:
+func _collect(player: Node) -> void:
 	var to_add: int = mini(amount_per_collect, _remaining)
 	if to_add <= 0:
 		return
+
+	var action_animation: StringName = &""
+	if resource_type == "water":
+		action_animation = &"collect_water"
+	elif resource_type == "ore":
+		action_animation = &"mine_hammer"
+	if action_animation != &"" and is_instance_valid(player) and player is Node2D:
+		var actor := player as Node2D
+		if actor.has_method("play_action_animation"):
+			var face_left := action_animation == &"collect_water" and global_position.x < actor.global_position.x
+			actor.call("play_action_animation", action_animation, face_left)
 
 	_remaining -= to_add
 	ResourceManager.add(resource_type, to_add)

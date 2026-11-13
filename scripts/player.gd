@@ -13,9 +13,31 @@ extends CharacterBody2D
 @export var camera_limit_right: int = 2000
 @export var camera_limit_bottom: int = 1200
 
-@onready var sprite: Sprite2D = $Sprite2D
+@onready var sprite: AnimatedSprite2D = $Sprite2D
 @onready var camera: Camera2D = $Camera2D
 @onready var interaction_area: Area2D = $InteractionArea
+
+const IDLE_SOUTH_SCALE := Vector2(0.09, 0.09)
+const ACTION_SCALES := {
+	&"collect_water": Vector2(0.28, 0.28),
+	&"mine_hammer": Vector2(0.28, 0.28),
+	&"interact_building": Vector2(0.28, 0.28),
+}
+const WALK_SCALES := {
+	&"walk_down": Vector2(0.25, 0.25),
+	&"walk_up": Vector2(0.25, 0.25),
+	&"walk_right": Vector2(0.27, 0.27),
+	&"walk_left": Vector2(0.235, 0.235),
+	&"walk_up_right": Vector2(0.257, 0.257),
+	&"walk_up_left": Vector2(0.257, 0.257),
+	&"walk_down_right": Vector2(0.235, 0.235),
+	&"walk_down_left": Vector2(0.235, 0.235),
+}
+
+# The supplied artwork includes a south-facing idle only. Other directions hold
+# their last walk frame while stopped, preserving the last facing direction.
+var _last_facing_animation: StringName = &"walk_down"
+var _active_action_animation: StringName = &""
 
 # All interactable Area2Ds currently overlapping our InteractionArea.
 var _nearby_interactables: Array = []
@@ -24,6 +46,12 @@ var _current_target: Node = null
 
 
 func _ready() -> void:
+	if sprite:
+		sprite.scale = IDLE_SOUTH_SCALE
+		sprite.play(&"idle_down")
+		sprite.stop()
+		sprite.animation_finished.connect(_on_sprite_animation_finished)
+
 	if camera:
 		camera.limit_left = camera_limit_left
 		camera.limit_top = camera_limit_top
@@ -40,6 +68,12 @@ func _physics_process(_delta: float) -> void:
 	if not can_move:
 		velocity = Vector2.ZERO
 		move_and_slide()
+		_update_walking_animation(Vector2.ZERO)
+		return
+
+	if not _active_action_animation.is_empty():
+		velocity = Vector2.ZERO
+		move_and_slide()
 		return
 
 	# --- Movement ---
@@ -50,12 +84,7 @@ func _physics_process(_delta: float) -> void:
 	velocity = direction * speed
 	move_and_slide()
 
-	# --- Sprite flip ---
-	if sprite:
-		if direction.x > 0.0:
-			sprite.flip_h = false
-		elif direction.x < 0.0:
-			sprite.flip_h = true
+	_update_walking_animation(direction)
 
 	# --- Re-evaluate nearest target while moving ---
 	# Only needed when multiple objects are in range.
@@ -63,11 +92,86 @@ func _physics_process(_delta: float) -> void:
 		_update_interaction_target()
 
 
+func _update_walking_animation(direction: Vector2) -> void:
+	if not sprite or not sprite.sprite_frames or not _active_action_animation.is_empty():
+		return
+
+	if direction.is_zero_approx():
+		if _last_facing_animation == &"walk_down":
+			sprite.scale = IDLE_SOUTH_SCALE
+			if sprite.animation != &"idle_down":
+				sprite.play(&"idle_down")
+			sprite.stop()
+		elif sprite.is_playing():
+			sprite.stop()
+		return
+
+	var animation_name := _animation_for_direction(direction)
+	_last_facing_animation = animation_name
+	sprite.scale = WALK_SCALES.get(animation_name, Vector2(0.25, 0.25))
+	if sprite.animation != animation_name or not sprite.is_playing():
+		sprite.play(animation_name)
+
+
+func play_action_animation(animation_name: StringName, flip_h: bool = false) -> bool:
+	if not sprite or not sprite.sprite_frames:
+		return false
+	if not ACTION_SCALES.has(animation_name) or not sprite.sprite_frames.has_animation(animation_name):
+		return false
+	if not _active_action_animation.is_empty():
+		return false
+
+	_active_action_animation = animation_name
+	sprite.scale = ACTION_SCALES[animation_name]
+	sprite.flip_h = flip_h
+	sprite.play(animation_name)
+	return true
+
+
+func _on_sprite_animation_finished() -> void:
+	if _active_action_animation.is_empty() or sprite.animation != _active_action_animation:
+		return
+
+	_active_action_animation = &""
+	sprite.flip_h = false
+	if _last_facing_animation == &"walk_down":
+		sprite.scale = IDLE_SOUTH_SCALE
+		sprite.play(&"idle_down")
+		sprite.stop()
+	else:
+		sprite.scale = WALK_SCALES.get(_last_facing_animation, Vector2(0.25, 0.25))
+		sprite.play(_last_facing_animation)
+		sprite.stop()
+
+
+func _animation_for_direction(direction: Vector2) -> StringName:
+	var horizontal := "right" if direction.x > 0.0 else "left"
+	var vertical := "down" if direction.y > 0.0 else "up"
+	var abs_x := absf(direction.x)
+	var abs_y := absf(direction.y)
+	const DIAGONAL_THRESHOLD := 0.41421356
+
+	if abs_x > abs_y * DIAGONAL_THRESHOLD and abs_y > abs_x * DIAGONAL_THRESHOLD:
+		return StringName("walk_%s_%s" % [vertical, horizontal])
+	if abs_y >= abs_x:
+		return StringName("walk_%s" % vertical)
+	return StringName("walk_%s" % horizontal)
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact"):
+		if not _active_action_animation.is_empty():
+			get_viewport().set_input_as_handled()
+			return
 		if _current_target and is_instance_valid(_current_target):
 			if _current_target.has_method("interact"):
-				_current_target.interact(self)
+				var interaction_target := _current_target
+				interaction_target.interact(self)
+				if _active_action_animation.is_empty():
+					var flip_action_h := false
+					if is_instance_valid(interaction_target) and interaction_target is Node2D:
+						flip_action_h = (interaction_target as Node2D).global_position.x < global_position.x
+					play_action_animation(&"interact_building", flip_action_h)
 				get_viewport().set_input_as_handled()
 
 
