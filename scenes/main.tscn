@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bw1e5xmqxgpqy"]
+[gd_scene load_steps=30 format=3 uid="uid://bw1e5xmqxgpqy"]
 
 [ext_resource type="Script" path="res://scripts/main_debug.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_player"]
@@ -6,11 +6,23 @@
 [ext_resource type="PackedScene" path="res://scenes/building.tscn" id="4_building"]
 [ext_resource type="PackedScene" path="res://scenes/farm_plot.tscn" id="5_farm"]
 [ext_resource type="PackedScene" path="res://scenes/event_director.tscn" id="6_events"]
-[ext_resource type="Texture2D" path="res://assets/sprites/environment/mars_ground.png" id="7_ground"]
-[ext_resource type="Texture2D" path="res://assets/sprites/buildings/oxygen_generator.png" id="9_oxygen"]
-[ext_resource type="Texture2D" path="res://assets/sprites/buildings/greenhouse.png" id="10_greenhouse"]
-[ext_resource type="Texture2D" path="res://assets/sprites/buildings/shield_generator.png" id="11_shield"]
-[ext_resource type="Texture2D" path="res://assets/sprites/buildings/research_lab.png" id="12_research"]
+[ext_resource type="Texture2D" path="res://assets/environment/ground/mars_colony_ground.png" id="7_ground"]
+[ext_resource type="Texture2D" path="res://assets/environment/backgrounds/distant_mars_landscape.png" id="8_horizon"]
+[ext_resource type="Texture2D" path="res://assets/environment/props/mesa_rock.png" id="9_mesa"]
+[ext_resource type="Texture2D" path="res://assets/environment/props/rock_pile.png" id="10_pile"]
+[ext_resource type="Texture2D" path="res://assets/environment/props/impact_crater.png" id="11_crater"]
+[ext_resource type="Texture2D" path="res://assets/environment/props/crystal_rock_cluster.png" id="12_crystals"]
+[ext_resource type="Texture2D" path="res://assets/environment/props/flat_rock.png" id="13_flat_rock"]
+[ext_resource type="Texture2D" path="res://assets/environment/props/withered_shrub.png" id="14_shrub"]
+[ext_resource type="Texture2D" path="res://assets/environment/props/satellite_debris.png" id="15_satellite"]
+[ext_resource type="Texture2D" path="res://assets/environment/props/meteorite.png" id="16_meteorite"]
+[ext_resource type="Texture2D" path="res://assets/environment/props/rover_console.png" id="17_console"]
+[ext_resource type="Texture2D" path="res://assets/environment/props/dune_ground_patch.png" id="18_dune"]
+[ext_resource type="Texture2D" path="res://assets/environment/props/small_impact_crater.png" id="19_small_crater"]
+[ext_resource type="Texture2D" path="res://assets/environment/props/pipe_wreckage.png" id="20_wreckage"]
+[ext_resource type="Texture2D" path="res://assets/buildings/off/crew_habitat.png" id="21_habitat"]
+[ext_resource type="Texture2D" path="res://assets/buildings/on/storage_facility.png" id="22_storage"]
+[ext_resource type="Texture2D" path="res://assets/buildings/off/water_extraction.png" id="23_waterworks"]
 
 [sub_resource type="RectangleShape2D" id="SubResource_walltop"]
 size = Vector2(2064, 32)
@@ -33,10 +45,25 @@ size = Vector2(128, 64)
 [node name="Main" type="Node2D"]
 script = ExtResource("1_script")
 
-[node name="Floor" type="Sprite2D" parent="."]
+[node name="MarsBaseColor" type="ColorRect" parent="."]
+offset_right = 2000.0
+offset_bottom = 1200.0
+color = Color(0.55, 0.22, 0.12, 1)
+z_index = -4
+
+[node name="DistantMarsLandscape" type="Sprite2D" parent="."]
+texture = ExtResource("8_horizon")
 position = Vector2(1000, 600)
-scale = Vector2(1.454, 1.563)
+scale = Vector2(2.4, 2.4)
+texture_filter = 1
+z_index = -3
+
+[node name="Floor" type="Sprite2D" parent="."]
+z_index = -2
+position = Vector2(1000, 600)
+scale = Vector2(2.4, 2.58)
 texture = ExtResource("7_ground")
+texture_filter = 1
 
 [node name="WallTop" type="StaticBody2D" parent="."]
 position = Vector2(1000, -16)
@@ -96,12 +123,10 @@ position = Vector2(500, 350)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle1"]
 shape = SubResource("SubResource_obs1")
 
-[node name="Visual" type="ColorRect" parent="Obstacle1"]
-offset_left = -48.0
-offset_top = -48.0
-offset_right = 48.0
-offset_bottom = 48.0
-color = Color(0.5, 0.5, 0.5, 0)
+[node name="Visual" type="Sprite2D" parent="Obstacle1"]
+texture = ExtResource("9_mesa")
+scale = Vector2(0.42, 0.42)
+texture_filter = 1
 
 [node name="Obstacle2" type="StaticBody2D" parent="."]
 position = Vector2(1400, 800)
@@ -109,12 +134,89 @@ position = Vector2(1400, 800)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle2"]
 shape = SubResource("SubResource_obs2")
 
-[node name="Visual" type="ColorRect" parent="Obstacle2"]
-offset_left = -64.0
-offset_top = -32.0
-offset_right = 64.0
-offset_bottom = 32.0
-color = Color(0.5, 0.5, 0.5, 0)
+[node name="Visual" type="Sprite2D" parent="Obstacle2"]
+texture = ExtResource("13_flat_rock")
+scale = Vector2(0.52, 0.52)
+texture_filter = 1
+
+[node name="RockPile" type="Sprite2D" parent="."]
+texture = ExtResource("10_pile")
+position = Vector2(250, 220)
+scale = Vector2(0.44, 0.44)
+texture_filter = 1
+
+[node name="ImpactCrater" type="Sprite2D" parent="."]
+texture = ExtResource("11_crater")
+position = Vector2(250, 800)
+scale = Vector2(0.42, 0.42)
+texture_filter = 1
+
+[node name="CrystalRockCluster" type="Sprite2D" parent="."]
+texture = ExtResource("12_crystals")
+position = Vector2(1800, 920)
+scale = Vector2(0.36, 0.36)
+texture_filter = 1
+
+[node name="WitheredShrub" type="Sprite2D" parent="."]
+texture = ExtResource("14_shrub")
+position = Vector2(300, 650)
+scale = Vector2(0.42, 0.42)
+texture_filter = 1
+
+[node name="SatelliteDebris" type="Sprite2D" parent="."]
+texture = ExtResource("15_satellite")
+position = Vector2(1740, 250)
+scale = Vector2(0.4, 0.4)
+texture_filter = 1
+
+[node name="Meteorite" type="Sprite2D" parent="."]
+texture = ExtResource("16_meteorite")
+position = Vector2(1200, 300)
+scale = Vector2(0.5, 0.5)
+texture_filter = 1
+
+[node name="RoverConsole" type="Sprite2D" parent="."]
+texture = ExtResource("17_console")
+position = Vector2(1600, 700)
+scale = Vector2(0.37, 0.37)
+texture_filter = 1
+
+[node name="DuneGroundPatch" type="Sprite2D" parent="."]
+texture = ExtResource("18_dune")
+position = Vector2(1300, 450)
+scale = Vector2(0.65, 0.65)
+texture_filter = 1
+z_index = -1
+
+[node name="SmallImpactCrater" type="Sprite2D" parent="."]
+texture = ExtResource("19_small_crater")
+position = Vector2(1200, 920)
+scale = Vector2(0.55, 0.55)
+texture_filter = 1
+
+[node name="PipeWreckage" type="Sprite2D" parent="."]
+texture = ExtResource("20_wreckage")
+position = Vector2(1500, 820)
+scale = Vector2(0.37, 0.37)
+texture_filter = 1
+
+[node name="CrewHabitatArt" type="Sprite2D" parent="."]
+texture = ExtResource("21_habitat")
+position = Vector2(350, 380)
+scale = Vector2(0.24, 0.24)
+texture_filter = 1
+
+[node name="StorageFacilityArt" type="Sprite2D" parent="."]
+texture = ExtResource("22_storage")
+position = Vector2(1700, 560)
+scale = Vector2(0.24, 0.24)
+texture_filter = 1
+
+[node name="WaterExtractionArt" type="Sprite2D" parent="."]
+texture = ExtResource("23_waterworks")
+position = Vector2(1650, 880)
+scale = Vector2(0.24, 0.24)
+texture_filter = 1
 
 [node name="OreRock1" parent="." instance=ExtResource("3_resource")]
 position = Vector2(300, 500)
@@ -170,29 +272,17 @@ start_on = true
 position = Vector2(700, 700)
 building_id = "oxygen_generator"
 
-[node name="Visual" parent="OxygenGenerator" index="0"]
-texture = ExtResource("9_oxygen")
-
 [node name="Greenhouse" parent="." instance=ExtResource("4_building")]
 position = Vector2(850, 700)
 building_id = "greenhouse"
-
-[node name="Visual" parent="Greenhouse" index="0"]
-texture = ExtResource("10_greenhouse")
 
 [node name="ShieldGenerator" parent="." instance=ExtResource("4_building")]
 position = Vector2(700, 850)
 building_id = "shield_generator"
 
-[node name="Visual" parent="ShieldGenerator" index="0"]
-texture = ExtResource("11_shield")
-
 [node name="ResearchLab" parent="." instance=ExtResource("4_building")]
 position = Vector2(850, 850)
 building_id = "research_lab"
-
-[node name="Visual" parent="ResearchLab" index="0"]
-texture = ExtResource("12_research")
 
 [node name="FarmPlot1" parent="." instance=ExtResource("5_farm")]
 position = Vector2(1100, 650)

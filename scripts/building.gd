@@ -26,19 +26,53 @@ static var _next_activation_tick: int = 0
 @onready var state_label: Label = $StateLabel
 @onready var info_label: Label = $InfoLabel
 
+const BUILDING_ART := {
+	"solar_panel": {
+		"off": "res://assets/buildings/off/solar_panel_station.png",
+		"on": "res://assets/buildings/on/solar_panel_station.png",
+	},
+	"oxygen_generator": {
+		"off": "res://assets/buildings/off/oxygen_generator_1.png",
+		"on": "res://assets/buildings/on/oxygen_generator_1.png",
+	},
+	"shield_generator": {
+		"off": "res://assets/buildings/off/oxygen_generator_2.png",
+		"on": "res://assets/buildings/on/oxygen_generator_2.png",
+	},
+	"greenhouse": {
+		"off": "res://assets/buildings/off/greenhouse.png",
+		"on": "res://assets/buildings/on/greenhouse.png",
+	},
+	"research_lab": {
+		"off": "res://assets/buildings/off/research_laboratory.png",
+		"on": "res://assets/buildings/off/research_laboratory.png",
+	},
+	"crew_habitat": {
+		"off": "res://assets/buildings/off/crew_habitat.png",
+		"on": "res://assets/buildings/on/crew_habitat.png",
+	},
+	"water_extraction": {
+		"off": "res://assets/buildings/off/water_extraction.png",
+		"on": "res://assets/buildings/on/water_extraction.png",
+	},
+	"storage_facility": {
+		"off": "res://assets/buildings/on/storage_facility.png",
+		"on": "res://assets/buildings/on/storage_facility.png",
+	},
+}
+const BUILDING_ART_SCALE := Vector2(0.24, 0.24)
+
 
 func _ready() -> void:
 	add_to_group("interactable")
 	add_to_group("buildings")
 	_load_data()
 
-	if visual:
-		visual.modulate = visual_color
-
 	_is_on = start_on
 	if _is_on:
 		_next_activation_tick += 1
 		activation_tick = _next_activation_tick
+	_update_visual()
 
 	info_label.visible = false
 	_update_labels()
@@ -63,6 +97,7 @@ func interact(_player: Node) -> void:
 		_next_activation_tick += 1
 		activation_tick = _next_activation_tick
 	EventBus.building_toggled.emit(building_id, _is_on)
+	_update_visual()
 	_update_labels()
 	print("Building '%s' toggled → %s" % [building_id, "ON" if _is_on else "OFF"])
 
@@ -112,6 +147,7 @@ func force_shutdown() -> void:
 	_is_on = false
 	_forced_off = true
 	EventBus.building_toggled.emit(building_id, false)
+	_update_visual()
 	_update_labels()
 
 
@@ -128,7 +164,27 @@ func set_on(value: bool) -> void:
 		_forced_off = false
 		_next_activation_tick += 1
 		activation_tick = _next_activation_tick
+	_update_visual()
 	_update_labels()
+
+
+func _update_visual() -> void:
+	if not visual:
+		return
+
+	var art: Dictionary = BUILDING_ART.get(building_id, {})
+	if art.is_empty():
+		visual.modulate = visual_color
+		return
+
+	var state := "on" if _is_on else "off"
+	var texture_path: String = art.get(state, art.get("off", ""))
+	var art_texture := load(texture_path) as Texture2D
+	if art_texture:
+		visual.texture = art_texture
+		visual.scale = BUILDING_ART_SCALE
+		visual.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		visual.modulate = Color.WHITE
 
 
 # ==================== Labels ====================

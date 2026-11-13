@@ -5,6 +5,15 @@
 ## This script just exposes interact(), show_prompt(), hide_prompt().
 extends Area2D
 
+const ORE_STAGE_TEXTURES := PackedStringArray([
+	"res://assets/environment/resources/ore_node_intact.png",
+	"res://assets/environment/resources/ore_node_damaged.png",
+	"res://assets/environment/resources/ore_node_depleted.png",
+])
+const WATER_ICE_TEXTURE := "res://assets/environment/props/crystal_rock_cluster.png"
+const ORE_SPRITE_SCALE := Vector2(0.17, 0.17)
+const WATER_SPRITE_SCALE := Vector2(0.24, 0.24)
+
 @export var resource_type: String = "ore"
 @export var amount_per_collect: int = 1
 @export var total_amount: int = 5
@@ -34,8 +43,7 @@ func _ready() -> void:
 	prompt_label.visible = false
 	add_to_group("interactable")
 
-	if sprite:
-		sprite.modulate = sprite_color
+	_update_resource_visual()
 
 	# Set the label text from resource_type (e.g. "ORE", "WATER").
 	# Starts HIDDEN — only shown when the player approaches (show_prompt).
@@ -84,14 +92,16 @@ func _collect(player: Node) -> void:
 			actor.call("play_action_animation", action_animation, face_left)
 
 	_remaining -= to_add
+	_update_resource_visual()
 	ResourceManager.add(resource_type, to_add)
 	EventBus.item_collected.emit(resource_type, to_add)
 
 	# Juice: tiny "pop" scale animation.
 	if sprite:
+		var base_scale := sprite.scale
 		var tween := create_tween()
-		tween.tween_property(sprite, "scale", Vector2(1.3, 1.3), 0.08)
-		tween.tween_property(sprite, "scale", Vector2(1.0, 1.0), 0.08)
+		tween.tween_property(sprite, "scale", base_scale * 1.12, 0.08)
+		tween.tween_property(sprite, "scale", base_scale, 0.08)
 
 	if _remaining <= 0:
 		_deplete()
@@ -120,5 +130,31 @@ func _respawn() -> void:
 			randf_range(spawn_area_min.x, spawn_area_max.x),
 			randf_range(spawn_area_min.y, spawn_area_max.y)
 		)
+	_update_resource_visual()
 	visible = true
 	collision_shape.set_deferred("disabled", false)
+
+
+func _update_resource_visual() -> void:
+	if not sprite:
+		return
+
+	if resource_type == "water":
+		sprite.texture = load(WATER_ICE_TEXTURE) as Texture2D
+		sprite.scale = WATER_SPRITE_SCALE
+		sprite.modulate = sprite_color
+		return
+
+	if resource_type == "ore":
+		var remaining_ratio := float(_remaining) / maxf(float(total_amount), 1.0)
+		var stage_index := 0
+		if remaining_ratio <= 0.34:
+			stage_index = 2
+		elif remaining_ratio <= 0.67:
+			stage_index = 1
+		sprite.texture = load(ORE_STAGE_TEXTURES[stage_index]) as Texture2D
+		sprite.scale = ORE_SPRITE_SCALE
+		sprite.modulate = Color.WHITE
+		return
+
+	sprite.modulate = sprite_color
