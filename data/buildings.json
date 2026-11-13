@@ -1,0 +1,22 @@
+[
+  {
+    "id": "solar_panel",
+    "name": "Solar Panel",
+    "description": "Generates energy each Sol from sunlight.",
+    "cost": { "ore": 5 },
+    "power_draw": 0,
+    "power_output": 10,
+    "produces": { "energy": 10 },
+    "placeholder": true
+  },
+  {
+    "id": "oxygen_generator",
+    "name": "Oxygen Generator",
+    "description": "Splits water into breathable oxygen using electrolysis.",
+    "cost": { "ore": 8, "energy": 5 },
+    "power_draw": 5,
+    "power_output": 0,
+    "produces": { "oxygen": 8 },
+    "placeholder": true
+  }
+]

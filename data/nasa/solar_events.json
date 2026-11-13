@@ -1,0 +1,26 @@
+[
+  {
+    "event_id": "donki_2024_001",
+    "type": "CME",
+    "date": "2024-05-10",
+    "intensity": "moderate",
+    "description": "Coronal Mass Ejection observed. Estimated transit time to Mars: 2-3 days.",
+    "radiation_dose_mSv": 15,
+    "source": "NASA DONKI (Space Weather Database Of Notifications, Knowledge, Information)",
+    "source_url": "https://kauai.ccmc.gsfc.nasa.gov/DONKI/",
+    "retrieved_date": "2024-10-01",
+    "placeholder": true
+  },
+  {
+    "event_id": "donki_2024_002",
+    "type": "Solar Flare",
+    "date": "2024-09-01",
+    "intensity": "strong",
+    "description": "X-class solar flare. High-energy protons arriving within hours.",
+    "radiation_dose_mSv": 50,
+    "source": "NASA DONKI (Space Weather Database Of Notifications, Knowledge, Information)",
+    "source_url": "https://kauai.ccmc.gsfc.nasa.gov/DONKI/",
+    "retrieved_date": "2024-10-01",
+    "placeholder": true
+  }
+]

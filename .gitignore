@@ -1,0 +1,15 @@
+# Godot 4 - generated data
+.godot/
+
+# Web export build output
+build/
+export/
+
+# OS junk
+.DS_Store
+Thumbs.db
+*.tmp
+
+# IDE
+.vscode/
+*.swp

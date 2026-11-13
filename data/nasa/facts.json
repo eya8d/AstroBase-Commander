@@ -1,0 +1,22 @@
+[
+  {
+    "id": "fact_001",
+    "title": "A Sol is Longer Than a Day",
+    "text": "One Sol (a Martian day) is 24 hours and 37 minutes — just a bit longer than an Earth day!",
+    "category": "Mars Basics",
+    "source": "NASA Mars Exploration — OSDR (Open Science Data Repository)",
+    "source_url": "https://osdr.nasa.gov/",
+    "retrieved_date": "2024-10-01",
+    "placeholder": true
+  },
+  {
+    "id": "fact_002",
+    "title": "Mars Has Almost No Magnetic Field",
+    "text": "Earth's magnetic field protects us from most space radiation. Mars lost its global magnetic field billions of years ago, so astronauts need extra shielding.",
+    "category": "Radiation",
+    "source": "Canadian Space Agency (CSA) — Space Radiation",
+    "source_url": "https://www.asc-csa.gc.ca/eng/sciences/radiation.asp",
+    "retrieved_date": "2024-10-01",
+    "placeholder": true
+  }
+]

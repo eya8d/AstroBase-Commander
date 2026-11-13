@@ -1,0 +1,120 @@
+[gd_scene load_steps=9 format=3 uid="uid://bw1e5xmqxgpqy"]
+
+[ext_resource type="Script" path="res://scripts/main_debug.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_player"]
+
+[sub_resource type="RectangleShape2D" id="SubResource_walltop"]
+size = Vector2(2064, 32)
+
+[sub_resource type="RectangleShape2D" id="SubResource_wallbottom"]
+size = Vector2(2064, 32)
+
+[sub_resource type="RectangleShape2D" id="SubResource_wallleft"]
+size = Vector2(32, 1264)
+
+[sub_resource type="RectangleShape2D" id="SubResource_wallright"]
+size = Vector2(32, 1264)
+
+[sub_resource type="RectangleShape2D" id="SubResource_obs1"]
+size = Vector2(96, 96)
+
+[sub_resource type="RectangleShape2D" id="SubResource_obs2"]
+size = Vector2(128, 64)
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Floor" type="ColorRect" parent="."]
+offset_right = 2000.0
+offset_bottom = 1200.0
+color = Color(0.72, 0.35, 0.18, 1)
+
+[node name="WallTop" type="StaticBody2D" parent="."]
+position = Vector2(1000, -16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallTop"]
+shape = SubResource("SubResource_walltop")
+
+[node name="Visual" type="ColorRect" parent="WallTop"]
+offset_left = -1032.0
+offset_top = -16.0
+offset_right = 1032.0
+offset_bottom = 16.0
+color = Color(0.4, 0.2, 0.1, 1)
+
+[node name="WallBottom" type="StaticBody2D" parent="."]
+position = Vector2(1000, 1216)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallBottom"]
+shape = SubResource("SubResource_wallbottom")
+
+[node name="Visual" type="ColorRect" parent="WallBottom"]
+offset_left = -1032.0
+offset_top = -16.0
+offset_right = 1032.0
+offset_bottom = 16.0
+color = Color(0.4, 0.2, 0.1, 1)
+
+[node name="WallLeft" type="StaticBody2D" parent="."]
+position = Vector2(-16, 600)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallLeft"]
+shape = SubResource("SubResource_wallleft")
+
+[node name="Visual" type="ColorRect" parent="WallLeft"]
+offset_left = -16.0
+offset_top = -632.0
+offset_right = 16.0
+offset_bottom = 632.0
+color = Color(0.4, 0.2, 0.1, 1)
+
+[node name="WallRight" type="StaticBody2D" parent="."]
+position = Vector2(2016, 600)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallRight"]
+shape = SubResource("SubResource_wallright")
+
+[node name="Visual" type="ColorRect" parent="WallRight"]
+offset_left = -16.0
+offset_top = -632.0
+offset_right = 16.0
+offset_bottom = 632.0
+color = Color(0.4, 0.2, 0.1, 1)
+
+[node name="Obstacle1" type="StaticBody2D" parent="."]
+position = Vector2(500, 350)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle1"]
+shape = SubResource("SubResource_obs1")
+
+[node name="Visual" type="ColorRect" parent="Obstacle1"]
+offset_left = -48.0
+offset_top = -48.0
+offset_right = 48.0
+offset_bottom = 48.0
+color = Color(0.5, 0.5, 0.5, 1)
+
+[node name="Obstacle2" type="StaticBody2D" parent="."]
+position = Vector2(1400, 800)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle2"]
+shape = SubResource("SubResource_obs2")
+
+[node name="Visual" type="ColorRect" parent="Obstacle2"]
+offset_left = -64.0
+offset_top = -32.0
+offset_right = 64.0
+offset_bottom = 32.0
+color = Color(0.5, 0.5, 0.5, 1)
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector2(1000, 600)
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="DebugLabel" type="Label" parent="UILayer"]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 500.0
+offset_bottom = 350.0
+text = "Loading..."

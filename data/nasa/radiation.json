@@ -1,0 +1,26 @@
+[
+  {
+    "id": "rad_mars_surface",
+    "location": "Mars Surface",
+    "annual_dose_mSv": 234,
+    "daily_dose_mSv": 0.64,
+    "description": "Average daily GCR dose on Mars surface measured by MSL/RAD.",
+    "shielding_factor": 1.0,
+    "source": "NASA RadLab — MSL/RAD (Mars Science Laboratory Radiation Assessment Detector)",
+    "source_url": "https://radlab.jpl.nasa.gov/",
+    "retrieved_date": "2024-10-01",
+    "placeholder": true
+  },
+  {
+    "id": "rad_mars_shielded",
+    "location": "Mars Habitat (10 cm regolith)",
+    "annual_dose_mSv": 150,
+    "daily_dose_mSv": 0.41,
+    "description": "Estimated dose behind 10 cm of Martian regolith shielding.",
+    "shielding_factor": 0.64,
+    "source": "NASA RadLab — MSL/RAD (Mars Science Laboratory Radiation Assessment Detector)",
+    "source_url": "https://radlab.jpl.nasa.gov/",
+    "retrieved_date": "2024-10-01",
+    "placeholder": true
+  }
+]

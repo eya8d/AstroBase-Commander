@@ -1,0 +1,20 @@
+[
+  {
+    "id": "potato",
+    "name": "Potato",
+    "grow_time_sols": 3,
+    "water_cost": 2,
+    "food_yield": 5,
+    "description": "A hardy crop — just ask Mark Watney.",
+    "placeholder": true
+  },
+  {
+    "id": "lettuce",
+    "name": "Lettuce",
+    "grow_time_sols": 2,
+    "water_cost": 1,
+    "food_yield": 3,
+    "description": "Fast-growing greens tested on the ISS (Veggie experiment).",
+    "placeholder": true
+  }
+]
