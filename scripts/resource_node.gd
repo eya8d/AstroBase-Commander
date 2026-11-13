@@ -5,11 +5,11 @@
 ## This script just exposes interact(), show_prompt(), hide_prompt().
 extends Area2D
 
-const ORE_STAGE_TEXTURES := PackedStringArray([
+const ORE_STAGE_TEXTURES: Array[String] = [
 	"res://assets/environment/resources/ore_node_intact.png",
 	"res://assets/environment/resources/ore_node_damaged.png",
 	"res://assets/environment/resources/ore_node_depleted.png",
-])
+]
 const WATER_ICE_TEXTURE := "res://assets/environment/props/crystal_rock_cluster.png"
 const ORE_SPRITE_SCALE := Vector2(0.17, 0.17)
 const WATER_SPRITE_SCALE := Vector2(0.24, 0.24)
