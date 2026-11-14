@@ -36,6 +36,7 @@ var _remaining: int = 0
 @onready var prompt_label: Label = $PromptLabel
 @onready var type_label: Label = $TypeLabel
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
+@onready var solid_collision_shape: CollisionShape2D = $SolidBody2D/CollisionShape2D
 
 
 func _ready() -> void:
@@ -50,6 +51,7 @@ func _ready() -> void:
 	if type_label:
 		type_label.text = resource_type.to_upper()
 		type_label.visible = false
+	_set_solid_collision_enabled(resource_type == "ore")
 
 
 # --- Unified interaction interface (called by the player) ---
@@ -114,6 +116,7 @@ func _deplete() -> void:
 		type_label.visible = false
 	visible = false
 	collision_shape.set_deferred("disabled", true)
+	_set_solid_collision_enabled(false)
 
 	if respawn_time > 0.0:
 		get_tree().create_timer(respawn_time).timeout.connect(_respawn)
@@ -133,6 +136,12 @@ func _respawn() -> void:
 	_update_resource_visual()
 	visible = true
 	collision_shape.set_deferred("disabled", false)
+	_set_solid_collision_enabled(resource_type == "ore")
+
+
+func _set_solid_collision_enabled(enabled: bool) -> void:
+	if solid_collision_shape:
+		solid_collision_shape.set_deferred("disabled", not enabled)
 
 
 func _update_resource_visual() -> void:

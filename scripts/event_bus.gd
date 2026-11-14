@@ -40,3 +40,18 @@ signal space_weather_resolved(result: Dictionary)
 # --- Education / Facts ---
 @warning_ignore("unused_signal")
 signal fact_unlocked(fact: Dictionary)
+
+# --- Pack v2 interface (added when the asset pack was wired in) ---
+
+## Short HUD toast text (assets/ui/hud/notification_toast.png).
+@warning_ignore("unused_signal")
+signal notice(text: String)
+
+## The pointer is hovering this building id in the build menu ("" = left it),
+## which opens the painted STRUCTURE DETAILS panel.
+@warning_ignore("unused_signal")
+signal build_menu_focus(building_id: String)
+
+## Mission finished: state is "complete" or "failed".
+@warning_ignore("unused_signal")
+signal mission_over(state: String, reason: String)

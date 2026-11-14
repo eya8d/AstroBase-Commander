@@ -34,6 +34,23 @@
     "placeholder": true
   },
   {
+    "id": "water_extraction",
+    "display_name": "Water Extraction Rig",
+    "description": "Drills into buried ice and melts it into water for drinking and for oxygen.",
+    "power_per_sol": -7,
+    "consumes": {},
+    "produces": { "water": 6 },
+    "build_cost": { "ore": 10, "water": 1 },
+    "grid_cells": [2, 1],
+    "shield_decay_per_sol": 0,
+    "upgrades": [
+      { "cost": { "ore": 8, "water": 3 },  "power_per_sol": -10, "produces": { "water": 9 } },
+      { "cost": { "ore": 16, "water": 6 }, "power_per_sol": -15, "produces": { "water": 13 } }
+    ],
+    "teaches": "NASA's Phoenix lander touched real water ice on Mars with its robotic arm in 2008.",
+    "placeholder": true
+  },
+  {
     "id": "greenhouse",
     "display_name": "Greenhouse",
     "description": "Grows food using water and artificial light inside a dome.",
@@ -48,6 +65,23 @@
       { "cost": { "ore": 16, "water": 8 }, "power_per_sol": -12, "consumes": { "water": 4 },  "produces": { "food": 8 } }
     ],
     "teaches": "NASA grew and ate lettuce on the ISS in the Veggie experiment (2015).",
+    "placeholder": true
+  },
+  {
+    "id": "crew_habitat",
+    "display_name": "Crew Habitat",
+    "description": "A pressurised dome where the crew sleeps, eats and hides from radiation.",
+    "power_per_sol": -6,
+    "consumes": { "oxygen": 1 },
+    "produces": { "shield": 6 },
+    "build_cost": { "ore": 14, "water": 5 },
+    "grid_cells": [2, 2],
+    "shield_decay_per_sol": 2,
+    "upgrades": [
+      { "cost": { "ore": 12, "water": 5 }, "power_per_sol": -9,  "consumes": { "oxygen": 1 }, "produces": { "shield": 9 },  "shield_decay_per_sol": 2 },
+      { "cost": { "ore": 24, "water": 10 }, "power_per_sol": -14, "consumes": { "oxygen": 2 }, "produces": { "shield": 13 }, "shield_decay_per_sol": 3 }
+    ],
+    "teaches": "A Mars habitat would be buried under a metre of Martian soil to block cosmic rays.",
     "placeholder": true
   },
   {

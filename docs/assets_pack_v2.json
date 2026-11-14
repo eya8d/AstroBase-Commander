@@ -1,0 +1,89 @@
+{
+ "canvas": [
+  1092,
+  856
+ ],
+ "slots": {
+  "solar_panel": {
+   "icon_rect": [
+    102,
+    183,
+    238,
+    319
+   ]
+  },
+  "oxygen_generator": {
+   "icon_rect": [
+    353,
+    183,
+    490,
+    319
+   ]
+  },
+  "water_extraction": {
+   "icon_rect": [
+    603,
+    183,
+    740,
+    319
+   ]
+  },
+  "greenhouse": {
+   "icon_rect": [
+    855,
+    183,
+    993,
+    319
+   ]
+  },
+  "crew_habitat": {
+   "icon_rect": [
+    235,
+    502,
+    368,
+    632
+   ]
+  },
+  "shield_generator": {
+   "icon_rect": [
+    480,
+    502,
+    612,
+    632
+   ]
+  },
+  "research_lab": {
+   "icon_rect": [
+    724,
+    502,
+    857,
+    632
+   ]
+  }
+ },
+ "assets": {
+  "background_new_playable": "C:\\Users\\Scorpion\\Desktop\\aceetes\\game\\assets\\environment\\backgrounds\\mars_terrain_playable_map.png",
+  "background_distant_v2": "C:\\Users\\Scorpion\\Desktop\\aceetes\\game\\assets\\environment\\backgrounds\\distant_mars_v2.png",
+  "background_colony_topdown": "C:\\Users\\Scorpion\\Desktop\\aceetes\\game\\assets\\environment\\backgrounds\\colony_top_down.png",
+  "ground_tileset_v2": "C:\\Users\\Scorpion\\Desktop\\aceetes\\game\\assets\\environment\\ground\\mars_ground_tileset_v2.png",
+  "screen_main_menu": "C:\\Users\\Scorpion\\Desktop\\aceetes\\game\\assets\\ui\\screens\\main_menu.png",
+  "screen_loading": "C:\\Users\\Scorpion\\Desktop\\aceetes\\game\\assets\\ui\\screens\\loading.png",
+  "screen_start_mission": "C:\\Users\\Scorpion\\Desktop\\aceetes\\game\\assets\\ui\\screens\\start_mission.png",
+  "screen_mission_complete": "C:\\Users\\Scorpion\\Desktop\\aceetes\\game\\assets\\ui\\screens\\mission_complete.png",
+  "screen_mission_failed": "C:\\Users\\Scorpion\\Desktop\\aceetes\\game\\assets\\ui\\screens\\mission_failed.png",
+  "hud_sol_counter": "assets/ui/hud/sol_counter.png",
+  "hud_energy_meter": "assets/ui/hud/energy_meter.png",
+  "hud_oxygen_meter": "assets/ui/hud/oxygen_meter.png",
+  "hud_shield_meter": "assets/ui/hud/shield_meter.png",
+  "hud_power_budget": "assets/ui/hud/power_budget.png",
+  "hud_notification_toast": "assets/ui/hud/notification_toast.png",
+  "hud_interact_prompt": "assets/ui/hud/interact_prompt.png",
+  "panel_pause_menu": "assets/ui/panels/pause_menu.png",
+  "panel_building_info_panel": "assets/ui/panels/building_info_panel.png",
+  "panel_data_sources_panel": "assets/ui/panels/data_sources_panel.png",
+  "panel_weather_alert_panel": "assets/ui/panels/weather_alert_panel.png",
+  "hud_reference": "C:\\Users\\Scorpion\\Desktop\\aceetes\\game\\docs\\hud_reference_sheet.png",
+  "panel_build_menu": "assets/ui/panels/build_menu_panel.png"
+ },
+ "note": "icon_rect is in build_menu_panel.png pixel space (1092x856)"
+}

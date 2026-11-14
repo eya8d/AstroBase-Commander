@@ -17,7 +17,8 @@ extends Node2D
 @export var sol_seconds: float = 10.0
 
 @onready var debug_label: Label = $UILayer/DebugLabel
-@onready var event_label: Label = $UILayer/EventLabel
+@onready var event_panel: PanelContainer = $UILayer/EventPanel
+@onready var event_label: Label = $UILayer/EventPanel/EventLabel
 @onready var event_director: EventDirector = $EventDirector
 
 var _current_sol: int = 0
@@ -25,12 +26,19 @@ var _sol_timer: float = 0.0
 var _power_produced: int = 0
 var _power_needed: int = 0
 var _latest_event_notice: String = "No event yet."
+var _showing_event_briefing: bool = false
 ## WHY: we store the full event data when it starts so we can apply
 ##       gameplay effects when it finishes (the director clears its copy).
 var _current_event_data: Dictionary = {}
 
 
 func _ready() -> void:
+	AudioManager.enter_gameplay()
+	# The menu flow owns the mission settings (scripts/game_state.gd).
+	sol_seconds = GameState.sol_seconds
+	_current_sol = 1
+	if not GameState.mission_running:
+		GameState.begin_mission()
 	ResourceManager.resource_changed.connect(_on_resource_changed)
 	EventBus.item_collected.connect(_on_item_collected)
 	EventBus.day_changed.connect(_on_day_changed)
@@ -42,6 +50,8 @@ func _ready() -> void:
 	event_director.event_finished.connect(_on_event_finished)
 	_refresh_label()
 	_refresh_event_label()
+	# The text read-out is a debug tool now that the painted HUD exists (toggle F2).
+	debug_label.visible = GameState.show_debug_text
 
 	var buildings: Array = DataLoader.get_buildings()
 	print("DataLoader test: loaded %d building definitions." % buildings.size())
@@ -61,6 +71,10 @@ func _process(delta: float) -> void:
 ## This will be REMOVED in Section 8.
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_F2:
+			GameState.show_debug_text = not GameState.show_debug_text
+			debug_label.visible = GameState.show_debug_text
+			get_viewport().set_input_as_handled()
 		if event.keycode == KEY_F3:
 			print("DEBUG: F3 pressed — skipping to next Sol.")
 			_advance_sol()
@@ -86,6 +100,7 @@ func _advance_sol() -> void:
 	event_director.on_sol_completed(_current_sol)
 
 	_refresh_label()
+	_check_mission_end()
 
 
 func _process_buildings() -> void:
@@ -152,6 +167,7 @@ func _process_buildings() -> void:
 			print("Sol %d: '%s' shut down — cannot pay %s" % [
 				_current_sol, b.building_id, cost
 			])
+			EventBus.notice.emit("%s SHUT DOWN — NO POWER" % b.building_id.to_upper())
 
 	# --- Step 3: Shield decay ---
 	# WHY: shield decays each Sol whether the generator is ON or OFF.
@@ -216,6 +232,7 @@ func _apply_radiation_check(event_data: Dictionary) -> void:
 		ResourceManager.spend({"shield": shield_needed})
 		print("  → Shield absorbed radiation (-%d shield)" % shield_needed)
 		_latest_event_notice = "Shield held! Lost %d shield points." % shield_needed
+		EventBus.notice.emit("SHIELD HELD — LOST %d SHIELD" % shield_needed)
 	else:
 		# Exposed: crew must shelter, which costs oxygen.
 		var current_o2: int = ResourceManager.get_amount("oxygen")
@@ -226,6 +243,7 @@ func _apply_radiation_check(event_data: Dictionary) -> void:
 			shield_now, shield_needed, actual_penalty
 		])
 		_latest_event_notice = "Radiation exposure! Shield too low — lost %d oxygen!" % actual_penalty
+		EventBus.notice.emit("RADIATION EXPOSURE — LOST %d OXYGEN" % actual_penalty)
 	_refresh_event_label()
 
 
@@ -233,6 +251,9 @@ func _apply_radiation_check(event_data: Dictionary) -> void:
 
 func _on_resource_changed(_type: String, _new_total: int) -> void:
 	_refresh_label()
+	if _type == "oxygen":
+		# Below a quarter tank the suit starts recycling air audibly.
+		AudioManager.set_oxygen_critical(_new_total > 0 and _new_total <= 25)
 
 
 func _on_event_started(event: Dictionary) -> void:
@@ -266,6 +287,7 @@ func _on_space_weather_warning(event: Dictionary) -> void:
 ##       crew health impacts.  The briefing presents them as measurements
 ##       and does NOT claim a direct link to in-game damage.
 func _show_event_briefing(event: Dictionary) -> void:
+	_showing_event_briefing = true
 	_latest_event_notice = "%s\n%s" % [
 		str(event.get("title", "Event")),
 		str(event.get("lesson", ""))
@@ -302,6 +324,7 @@ func _on_event_finished(result: Dictionary) -> void:
 		_current_event_data = {}
 
 	_latest_event_notice = "No event."
+	_showing_event_briefing = false
 	_refresh_event_label()
 	# NOTE: game_event_ended is an ADDITION to the original shared
 	#       contract (added during first events integration).
@@ -342,17 +365,6 @@ func _refresh_label() -> void:
 	lines.append("Power: produced %d / needed %d" % [_power_produced, _power_needed])
 	lines.append("")
 
-	# WHY: show the active event in the debug HUD so the player knows
-	#       what is happening and can react accordingly.
-	var evt: Dictionary = event_director.get_active_event()
-	if not evt.is_empty():
-		var title: String = evt.get("title", "???")
-		var kid_text: String = evt.get("kid_text", evt.get("lesson", ""))
-		lines.append("!! %s" % title)
-		if kid_text != "":
-			lines.append("   %s" % kid_text)
-		lines.append("")
-
 	for key: String in all:
 		lines.append("  %s: %d" % [key.to_upper(), all[key]])
 	lines.append("")
@@ -363,3 +375,40 @@ func _refresh_label() -> void:
 func _refresh_event_label() -> void:
 	if is_instance_valid(event_label):
 		event_label.text = "EVENT BRIEFING\n" + _latest_event_notice
+	if is_instance_valid(event_panel):
+		# The painted SPACE WEATHER panel now shows the same briefing.
+		event_panel.visible = _showing_event_briefing and not _has_pack_ui()
+
+
+# ==================== Pack v2 interface ====================
+# Read-only accessors, so the painted HUD and panels never poke private state.
+
+func get_current_sol() -> int:
+	return _current_sol
+
+
+func get_power_stats() -> Dictionary:
+	return {
+		"produced": _power_produced,
+		"needed": _power_needed,
+		"sol": _current_sol,
+		"target": int(GameState.target_sols),
+	}
+
+
+func _has_pack_ui() -> bool:
+	return get_node_or_null("HudLayer") != null
+
+
+## Mission end rules: survive the target number of Sols, or run out of oxygen.
+## WHY checked after the Sol completes: the player gets the whole Sol to recover.
+func _check_mission_end() -> void:
+	if not GameState.mission_running:
+		return
+	if ResourceManager.get_amount("oxygen") <= 0:
+		GameState.end_mission("failed", "OXYGEN DEPLETED")
+		EventBus.mission_over.emit("failed", "OXYGEN DEPLETED")
+		return
+	if _current_sol >= int(GameState.target_sols):
+		GameState.end_mission("complete", "")
+		EventBus.mission_over.emit("complete", "")
