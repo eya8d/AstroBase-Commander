@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "victory": {
+    "id": "victory_30_sols",
+    "condition": "completed_sol >= 30 and all critical resources > 0",
+    "screen_file": "ui/victory.json"
+  },
+  "defeat": {
+    "id": "defeat_resource_or_base_failure",
+    "condition": "any configured loss condition becomes true",
+    "screen_file": "ui/defeat.json",
+    "failure_reason_map": {
+      "oxygen": "OXYGEN DEPLETED",
+      "water": "WATER DEPLETED",
+      "food": "FOOD DEPLETED",
+      "crew_health": "CREW HEALTH CRITICAL",
+      "base_integrity": "HABITAT DESTROYED"
+    }
+  },
+  "story_endings": [
+    {
+      "id": "mission_accomplished",
+      "title": "MISSION ACCOMPLISHED",
+      "text": "The colony achieves its major objectives, maintains stable life-support systems, and establishes a sustainable foundation for future Mars exploration.",
+      "requires": {
+        "completed_sol": 30,
+        "min_total_score": 700,
+        "min_category_score": 50,
+        "min_science_points": 45
+      }
+    },
+    {
+      "id": "mission_survived",
+      "title": "MISSION SURVIVED",
+      "text": "The crew survives the 30 days, but the base suffers significant resource shortages, infrastructure damage, or incomplete scientific objectives.",
+      "requires": {
+        "completed_sol": 30
+      }
+    },
+    {
+      "id": "mission_paused",
+      "title": "MISSION PAUSED",
+      "text": "Critical system failures or resource depletion force the crew to suspend operations and prioritize emergency survival procedures.",
+      "requires": {
+        "any_loss_condition": true
+      }
+    }
+  ],
+  "scoring": {
+    "categories": [
+      "resources",
+      "safety",
+      "wellbeing",
+      "science",
+      "infrastructure"
+    ],
+    "category_max": 100,
+    "total_max": 1000,
+    "decision_point_weight": 2,
+    "shortage_penalty_per_sol": 3,
+    "note": "Each category mixes the final state (70%) with the decisions taken (score deltas in story/campaign_30_sols.json). Game balance values.",
+    "added_for": "AstroBase story campaign (round 3)"
+  }
+}

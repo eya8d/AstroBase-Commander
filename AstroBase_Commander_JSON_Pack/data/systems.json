@@ -1,0 +1,73 @@
+{
+  "systems": [
+    {
+      "id": "solar_panel",
+      "name": "Solar Panels",
+      "produces": {
+        "energy": 18
+      },
+      "energy_cost": 0,
+      "can_be_damaged": true,
+      "description": "Converts sunlight into electrical energy."
+    },
+    {
+      "id": "oxygen_generator",
+      "name": "Oxygen Generator",
+      "produces": {
+        "oxygen": 8
+      },
+      "energy_cost": 5,
+      "requires": [
+        "energy"
+      ],
+      "description": "Produces oxygen for the habitat."
+    },
+    {
+      "id": "water_recycler",
+      "name": "Water Recycler",
+      "produces": {
+        "water": 7
+      },
+      "energy_cost": 4,
+      "requires": [
+        "energy"
+      ],
+      "description": "Reclaims and filters water."
+    },
+    {
+      "id": "greenhouse",
+      "name": "Greenhouse",
+      "produces": {
+        "food": 6
+      },
+      "energy_cost": 5,
+      "requires": [
+        "energy",
+        "water"
+      ],
+      "description": "Produces food using controlled growing conditions."
+    },
+    {
+      "id": "radiation_shield",
+      "name": "Radiation Shield",
+      "effect": "reduces_radiation_exposure",
+      "energy_cost": 3,
+      "shield_cost_per_activation": 10,
+      "description": "Uses energy and shielding capacity to protect the crew during radiation events."
+    },
+    {
+      "id": "habitat",
+      "name": "Habitat",
+      "effect": "crew_life_support",
+      "energy_cost": 0,
+      "can_be_damaged": true,
+      "description": "Provides the crew's living and protected environment."
+    }
+  ],
+  "operation_rules": {
+    "systems_must_be_enabled_to_operate": true,
+    "if_energy_cost_cannot_be_paid": "system_does_not_run",
+    "production_is_applied_after_system_costs": true,
+    "solar_panel_production_modifiers_stack_multiplicatively": true
+  }
+}

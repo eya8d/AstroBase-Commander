@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "data_kind": "historical_scenario_input",
+  "warning": "This is a historical 2017 event record for a scripted educational scenario. Do not present it as live Mars weather or as a direct measurement of radiation dose on the Martian surface.",
+  "events": [
+    {
+      "id": "donki_sep_13081",
+      "name": "September 2017 Solar Energetic Particle Event",
+      "source_type": "historical_nasa_event",
+      "date_start": "2017-09-10",
+      "date_end": "2017-09-12",
+      "reported_context": "Historical solar energetic particle event associated with elevated radiation measurements reported by the Curiosity Radiation Assessment Detector (RAD) during the period described by the project data.",
+      "linked_measurement_id": "curiosity_rad_sep_2017",
+      "gameplay_event_id": "radiation_burst",
+      "scenario_id": "scenario_historical_solar_event",
+      "source": {
+        "organization": "NASA CCMC",
+        "dataset": "DONKI Solar Energetic Particle events",
+        "url": "https://kauai.ccmc.gsfc.nasa.gov/DONKI/",
+        "related_instrument": "Curiosity RAD",
+        "related_source_url": "https://www.nasa.gov/mission_pages/msl/"
+      }
+    }
+  ]
+}

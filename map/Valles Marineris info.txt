@@ -1,0 +1,10 @@
+Valles Marineris
+Item Type	Nomenclature
+Name	Valles Marineris
+Diameter	3761.28
+Latitude	-14.00586857
+Longitude	-58.5877
+Origin	General name of the system of canyons honoring the scientific team of the Mariner 9 program.
+Ethnicity	Latin
+Type	Vallis, valles
+Additional Info	http://planetarynames.wr.usgs.gov/Feature/6288

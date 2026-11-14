@@ -1,458 +1,229 @@
-[gd_scene load_steps=42 format=3 uid="uid://bw1e5xmqxgpqy"]
+[gd_scene load_steps=19 format=3 uid="uid://bw1e5xmqxgpqy"]
 
-[ext_resource type="Script" path="res://scripts/main_debug.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/main_debug.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/resource_node.tscn" id="3_resource"]
 [ext_resource type="PackedScene" path="res://scenes/building.tscn" id="4_building"]
 [ext_resource type="PackedScene" path="res://scenes/farm_plot.tscn" id="5_farm"]
-[ext_resource type="PackedScene" path="res://scenes/event_director.tscn" id="6_events"]
-[ext_resource type="Texture2D" path="res://assets/environment/backgrounds/mars_terrain_playable_map.png" id="7_ground"]
-[ext_resource type="Texture2D" path="res://assets/environment/backgrounds/distant_mars_v2.png" id="8_horizon"]
-[ext_resource type="Texture2D" path="res://assets/environment/props/mesa_rock.png" id="9_mesa"]
-[ext_resource type="Texture2D" path="res://assets/environment/props/rock_pile.png" id="10_pile"]
-[ext_resource type="Texture2D" path="res://assets/environment/props/impact_crater.png" id="11_crater"]
-[ext_resource type="Texture2D" path="res://assets/environment/props/crystal_rock_cluster.png" id="12_crystals"]
-[ext_resource type="Texture2D" path="res://assets/environment/props/flat_rock.png" id="13_flat_rock"]
-[ext_resource type="Texture2D" path="res://assets/environment/props/withered_shrub.png" id="14_shrub"]
-[ext_resource type="Texture2D" path="res://assets/environment/props/satellite_debris.png" id="15_satellite"]
-[ext_resource type="Texture2D" path="res://assets/environment/props/meteorite.png" id="16_meteorite"]
-[ext_resource type="Texture2D" path="res://assets/environment/props/rover_console.png" id="17_console"]
-[ext_resource type="Texture2D" path="res://assets/environment/props/dune_ground_patch.png" id="18_dune"]
-[ext_resource type="Texture2D" path="res://assets/environment/props/small_impact_crater.png" id="19_small_crater"]
-[ext_resource type="Texture2D" path="res://assets/environment/props/pipe_wreckage.png" id="20_wreckage"]
-[ext_resource type="Texture2D" path="res://assets/buildings/off/crew_habitat.png" id="21_habitat"]
-[ext_resource type="Texture2D" path="res://assets/buildings/on/storage_facility.png" id="22_storage"]
-[ext_resource type="Texture2D" path="res://assets/buildings/off/water_extraction.png" id="23_waterworks"]
-[ext_resource type="Script" path="res://scripts/hud_layer.gd" id="30_hud"]
-[ext_resource type="Script" path="res://scripts/build_menu_layer.gd" id="31_build"]
-[ext_resource type="Script" path="res://scripts/pause_layer.gd" id="32_pause"]
-[ext_resource type="Script" path="res://scripts/panels_layer.gd" id="33_panels"]
-[ext_resource type="Script" path="res://scripts/mission_overlays.gd" id="34_overlays"]
-[ext_resource type="Script" path="res://scripts/decor_spawner.gd" id="35_decor"]
+[ext_resource type="Texture2D" path="res://map/acidalia_planitia_in_game_map._a_full_screen_16_9_widescreen_1920x1080_2d_top/screen.png" id="6_ground"]
+[ext_resource type="Texture2D" path="res://map/screen-removebg-preview (4).png" id="7_lander"]
+[ext_resource type="Texture2D" path="res://assets/buildings/on/storage_facility.png" id="8_storage"]
+[ext_resource type="Script" path="res://scripts/hud_layer.gd" id="10_hud"]
+[ext_resource type="Script" path="res://scripts/build_menu_layer.gd" id="11_build"]
+[ext_resource type="Script" path="res://scripts/pause_layer.gd" id="12_pause"]
+[ext_resource type="Script" path="res://scripts/panels_layer.gd" id="13_panels"]
+[ext_resource type="Script" path="res://scripts/story_dialog.gd" id="14_story"]
+[ext_resource type="Script" path="res://scripts/mission_overlays.gd" id="15_overlays"]
 
-[sub_resource type="RectangleShape2D" id="SubResource_walltop"]
-size = Vector2(2064, 32)
+[sub_resource type="RectangleShape2D" id="Wall_h"]
+size = Vector2(2128, 32)
 
-[sub_resource type="RectangleShape2D" id="SubResource_wallbottom"]
-size = Vector2(2064, 32)
+[sub_resource type="RectangleShape2D" id="Wall_v"]
+size = Vector2(32, 1216)
 
-[sub_resource type="RectangleShape2D" id="SubResource_wallleft"]
-size = Vector2(32, 1264)
+[sub_resource type="CircleShape2D" id="Lander_solid"]
+radius = 52
 
-[sub_resource type="RectangleShape2D" id="SubResource_wallright"]
-size = Vector2(32, 1264)
-
-[sub_resource type="RectangleShape2D" id="SubResource_obs1"]
-size = Vector2(64, 58)
-
-[sub_resource type="RectangleShape2D" id="SubResource_obs2"]
-size = Vector2(76, 34)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_event_panel"]
-bg_color = Color(0.035, 0.05, 0.07, 0.86)
-border_color = Color(0.45, 0.63, 0.72, 0.9)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-content_margin_left = 12.0
-content_margin_top = 10.0
-content_margin_right = 12.0
-content_margin_bottom = 10.0
-
-[sub_resource type="RectangleShape2D" id="SubResource_rockpile"]
-size = Vector2(44, 20)
-
-[sub_resource type="CircleShape2D" id="SubResource_meteorite"]
-radius = 14.0
-
-[sub_resource type="RectangleShape2D" id="SubResource_satellite_debris"]
-size = Vector2(38, 22)
-
-[sub_resource type="RectangleShape2D" id="SubResource_rover_console"]
-size = Vector2(34, 22)
-
-[sub_resource type="RectangleShape2D" id="SubResource_building_art"]
-size = Vector2(84, 34)
+[sub_resource type="RectangleShape2D" id="Storage_solid"]
+size = Vector2(74, 36)
 
 [node name="Main" type="Node2D"]
-script = ExtResource("1_script")
-
-[node name="MarsBaseColor" type="ColorRect" parent="."]
-offset_right = 2000.0
-offset_bottom = 1200.0
-color = Color(0.55, 0.22, 0.12, 1)
-z_index = -4
-
-[node name="DistantMarsLandscape" type="Sprite2D" parent="."]
-texture = ExtResource("8_horizon")
-position = Vector2(1000, 600)
-scale = Vector2(1.4535, 1.5625)
-texture_filter = 1
-z_index = -3
+script = ExtResource("1_main")
 
 [node name="Floor" type="Sprite2D" parent="."]
-z_index = -2
-position = Vector2(1000, 600)
-scale = Vector2(1.4535, 1.5625)
-texture = ExtResource("7_ground")
+z_index = -20
 texture_filter = 1
+texture = ExtResource("6_ground")
+centered = false
+scale = Vector2(1.5, 1.5)
 
-[node name="WallTop" type="StaticBody2D" parent="."]
-position = Vector2(1000, -16)
-collision_layer = 1
-collision_mask = 0
+[node name="Walls" type="Node2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WallTop"]
-shape = SubResource("SubResource_walltop")
+[node name="Top" type="StaticBody2D" parent="Walls"]
+position = Vector2(1032, -16)
 
-[node name="Visual" type="ColorRect" parent="WallTop"]
-offset_left = -1032.0
-offset_top = -16.0
-offset_right = 1032.0
-offset_bottom = 16.0
-color = Color(0.4, 0.2, 0.1, 1)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Top"]
+shape = SubResource("Wall_h")
 
-[node name="WallBottom" type="StaticBody2D" parent="."]
-position = Vector2(1000, 1216)
-collision_layer = 1
-collision_mask = 0
+[node name="Bottom" type="StaticBody2D" parent="Walls"]
+position = Vector2(1032, 1168)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WallBottom"]
-shape = SubResource("SubResource_wallbottom")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Bottom"]
+shape = SubResource("Wall_h")
 
-[node name="Visual" type="ColorRect" parent="WallBottom"]
-offset_left = -1032.0
-offset_top = -16.0
-offset_right = 1032.0
-offset_bottom = 16.0
-color = Color(0.4, 0.2, 0.1, 1)
+[node name="Left" type="StaticBody2D" parent="Walls"]
+position = Vector2(-16, 576)
 
-[node name="WallLeft" type="StaticBody2D" parent="."]
-position = Vector2(-16, 600)
-collision_layer = 1
-collision_mask = 0
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Left"]
+shape = SubResource("Wall_v")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WallLeft"]
-shape = SubResource("SubResource_wallleft")
+[node name="Right" type="StaticBody2D" parent="Walls"]
+position = Vector2(2080, 576)
 
-[node name="Visual" type="ColorRect" parent="WallLeft"]
-offset_left = -16.0
-offset_top = -632.0
-offset_right = 16.0
-offset_bottom = 632.0
-color = Color(0.4, 0.2, 0.1, 1)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Right"]
+shape = SubResource("Wall_v")
 
-[node name="WallRight" type="StaticBody2D" parent="."]
-position = Vector2(2016, 600)
-collision_layer = 1
-collision_mask = 0
+[node name="Lander" type="Node2D" parent="."]
+z_index = 1
+position = Vector2(463.5, 876)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WallRight"]
-shape = SubResource("SubResource_wallright")
-
-[node name="Visual" type="ColorRect" parent="WallRight"]
-offset_left = -16.0
-offset_top = -632.0
-offset_right = 16.0
-offset_bottom = 632.0
-color = Color(0.4, 0.2, 0.1, 1)
-
-[node name="Obstacle1" type="StaticBody2D" parent="."]
-position = Vector2(500, 350)
-collision_layer = 1
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle1"]
-shape = SubResource("SubResource_obs1")
-
-[node name="Visual" type="Sprite2D" parent="Obstacle1"]
-texture = ExtResource("9_mesa")
-scale = Vector2(0.28, 0.28)
+[node name="Art" type="Sprite2D" parent="Lander"]
 texture_filter = 1
+scale = Vector2(0.36, 0.36)
+texture = ExtResource("7_lander")
 
-[node name="Obstacle2" type="StaticBody2D" parent="."]
-position = Vector2(1400, 800)
-collision_layer = 1
-collision_mask = 0
+[node name="Solid" type="StaticBody2D" parent="Lander"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle2"]
-shape = SubResource("SubResource_obs2")
-
-[node name="Visual" type="Sprite2D" parent="Obstacle2"]
-texture = ExtResource("13_flat_rock")
-scale = Vector2(0.32, 0.32)
-texture_filter = 1
-
-[node name="RockPile" type="Sprite2D" parent="."]
-texture = ExtResource("10_pile")
-position = Vector2(250, 220)
-scale = Vector2(0.20, 0.20)
-texture_filter = 1
-
-[node name="RockPileSolid" type="StaticBody2D" parent="."]
-position = Vector2(250, 220)
-collision_layer = 1
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RockPileSolid"]
-position = Vector2(0, 6)
-shape = SubResource("SubResource_rockpile")
-
-[node name="ImpactCrater" type="Sprite2D" parent="."]
-texture = ExtResource("11_crater")
-position = Vector2(250, 800)
-scale = Vector2(0.30, 0.30)
-texture_filter = 1
-
-[node name="CrystalRockCluster" type="Sprite2D" parent="."]
-texture = ExtResource("12_crystals")
-position = Vector2(1800, 920)
-scale = Vector2(0.24, 0.24)
-texture_filter = 1
-
-[node name="WitheredShrub" type="Sprite2D" parent="."]
-texture = ExtResource("14_shrub")
-position = Vector2(300, 650)
-scale = Vector2(0.30, 0.30)
-texture_filter = 1
-
-[node name="SatelliteDebris" type="Sprite2D" parent="."]
-texture = ExtResource("15_satellite")
-position = Vector2(1740, 250)
-scale = Vector2(0.24, 0.24)
-texture_filter = 1
-
-[node name="SatelliteDebrisSolid" type="StaticBody2D" parent="."]
-position = Vector2(1740, 250)
-collision_layer = 1
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SatelliteDebrisSolid"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Lander/Solid"]
 position = Vector2(0, 8)
-shape = SubResource("SubResource_satellite_debris")
+shape = SubResource("Lander_solid")
 
-[node name="Meteorite" type="Sprite2D" parent="."]
-texture = ExtResource("16_meteorite")
-position = Vector2(1200, 300)
-scale = Vector2(0.34, 0.34)
+[node name="StorageDepot" type="Node2D" parent="."]
+z_index = 1
+position = Vector2(1833, 849)
+
+[node name="Art" type="Sprite2D" parent="StorageDepot"]
 texture_filter = 1
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("8_storage")
 
-[node name="MeteoriteSolid" type="StaticBody2D" parent="."]
-position = Vector2(1200, 300)
-collision_layer = 1
-collision_mask = 0
+[node name="Solid" type="StaticBody2D" parent="StorageDepot"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MeteoriteSolid"]
-position = Vector2(0, 3)
-shape = SubResource("SubResource_meteorite")
-
-[node name="RoverConsole" type="Sprite2D" parent="."]
-texture = ExtResource("17_console")
-position = Vector2(1600, 700)
-scale = Vector2(0.22, 0.22)
-texture_filter = 1
-
-[node name="RoverConsoleSolid" type="StaticBody2D" parent="."]
-position = Vector2(1600, 700)
-collision_layer = 1
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoverConsoleSolid"]
-position = Vector2(0, 7)
-shape = SubResource("SubResource_rover_console")
-
-[node name="DuneGroundPatch" type="Sprite2D" parent="."]
-texture = ExtResource("18_dune")
-position = Vector2(1300, 450)
-scale = Vector2(0.35, 0.35)
-texture_filter = 1
-z_index = -1
-
-[node name="SmallImpactCrater" type="Sprite2D" parent="."]
-texture = ExtResource("19_small_crater")
-position = Vector2(1200, 920)
-scale = Vector2(0.32, 0.32)
-texture_filter = 1
-
-[node name="PipeWreckage" type="Sprite2D" parent="."]
-texture = ExtResource("20_wreckage")
-position = Vector2(1500, 820)
-scale = Vector2(0.20, 0.20)
-texture_filter = 1
-
-[node name="CrewHabitatArt" type="Sprite2D" parent="."]
-texture = ExtResource("21_habitat")
-position = Vector2(350, 380)
-scale = Vector2(0.17, 0.17)
-texture_filter = 1
-
-[node name="CrewHabitatSolid" type="StaticBody2D" parent="."]
-position = Vector2(350, 380)
-collision_layer = 1
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CrewHabitatSolid"]
-position = Vector2(0, 26)
-shape = SubResource("SubResource_building_art")
-
-[node name="StorageFacilityArt" type="Sprite2D" parent="."]
-texture = ExtResource("22_storage")
-position = Vector2(1700, 560)
-scale = Vector2(0.17, 0.17)
-texture_filter = 1
-
-[node name="StorageFacilitySolid" type="StaticBody2D" parent="."]
-position = Vector2(1700, 560)
-collision_layer = 1
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StorageFacilitySolid"]
-position = Vector2(0, 26)
-shape = SubResource("SubResource_building_art")
-
-[node name="WaterExtractionArt" type="Sprite2D" parent="."]
-texture = ExtResource("23_waterworks")
-position = Vector2(1650, 880)
-scale = Vector2(0.17, 0.17)
-texture_filter = 1
-
-[node name="WaterExtractionSolid" type="StaticBody2D" parent="."]
-position = Vector2(1650, 880)
-collision_layer = 1
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WaterExtractionSolid"]
-position = Vector2(0, 26)
-shape = SubResource("SubResource_building_art")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StorageDepot/Solid"]
+position = Vector2(0, 14)
+shape = SubResource("Storage_solid")
 
 [node name="OreRock1" parent="." instance=ExtResource("3_resource")]
-position = Vector2(300, 500)
+position = Vector2(1080, 333)
 resource_type = "ore"
 amount_per_collect = 3
 total_amount = 9
-respawn_time = 15.0
+respawn_time = 25.0
 sprite_color = Color(0.65, 0.5, 0.35, 1)
 
 [node name="OreRock2" parent="." instance=ExtResource("3_resource")]
-position = Vector2(800, 200)
+position = Vector2(678, 714)
 resource_type = "ore"
 amount_per_collect = 2
-total_amount = 6
-respawn_time = 15.0
+total_amount = 8
+respawn_time = 25.0
 sprite_color = Color(0.65, 0.5, 0.35, 1)
 
 [node name="OreRock3" parent="." instance=ExtResource("3_resource")]
-position = Vector2(1600, 400)
+position = Vector2(783, 1077)
 resource_type = "ore"
-amount_per_collect = 5
-total_amount = 10
-respawn_time = 15.0
+amount_per_collect = 3
+total_amount = 9
+respawn_time = 25.0
+sprite_color = Color(0.65, 0.5, 0.35, 1)
+
+[node name="OreRock4" parent="." instance=ExtResource("3_resource")]
+position = Vector2(1299, 72)
+resource_type = "ore"
+amount_per_collect = 4
+total_amount = 8
+respawn_time = 25.0
 sprite_color = Color(0.65, 0.5, 0.35, 1)
 
 [node name="WaterIce1" parent="." instance=ExtResource("3_resource")]
-position = Vector2(400, 900)
+position = Vector2(225, 675)
 resource_type = "water"
 amount_per_collect = 2
 total_amount = 8
-respawn_time = 15.0
-sprite_color = Color(0.6, 0.85, 1.0, 1)
+respawn_time = 25.0
+sprite_color = Color(0.6, 0.85, 1, 1)
 
 [node name="WaterIce2" parent="." instance=ExtResource("3_resource")]
-position = Vector2(1500, 1000)
+position = Vector2(262.5, 393)
 resource_type = "water"
 amount_per_collect = 3
 total_amount = 6
-respawn_time = 15.0
-sprite_color = Color(0.6, 0.85, 1.0, 1)
+respawn_time = 25.0
+sprite_color = Color(0.6, 0.85, 1, 1)
 
 [node name="SolarPanel1" parent="." instance=ExtResource("4_building")]
-position = Vector2(700, 550)
+position = Vector2(1500, 192)
 building_id = "solar_panel"
 start_on = true
 
 [node name="SolarPanel2" parent="." instance=ExtResource("4_building")]
-position = Vector2(850, 550)
+position = Vector2(1650, 240)
 building_id = "solar_panel"
 start_on = true
 
 [node name="OxygenGenerator" parent="." instance=ExtResource("4_building")]
-position = Vector2(700, 700)
+position = Vector2(939, 576)
 building_id = "oxygen_generator"
+start_on = true
 
-[node name="Greenhouse" parent="." instance=ExtResource("4_building")]
-position = Vector2(850, 700)
-building_id = "greenhouse"
-
-[node name="ShieldGenerator" parent="." instance=ExtResource("4_building")]
-position = Vector2(700, 850)
-building_id = "shield_generator"
+[node name="CrewHabitat" parent="." instance=ExtResource("4_building")]
+position = Vector2(1035, 558)
+building_id = "crew_habitat"
+start_on = true
 
 [node name="ResearchLab" parent="." instance=ExtResource("4_building")]
-position = Vector2(850, 850)
+position = Vector2(1128, 579)
 building_id = "research_lab"
+start_on = true
+
+[node name="ShieldGenerator" parent="." instance=ExtResource("4_building")]
+position = Vector2(1360.5, 570)
+building_id = "shield_generator"
+start_on = true
+
+[node name="Greenhouse" parent="." instance=ExtResource("4_building")]
+position = Vector2(1068, 810)
+building_id = "greenhouse"
+start_on = true
+
+[node name="WaterExtraction" parent="." instance=ExtResource("4_building")]
+position = Vector2(252, 504)
+building_id = "water_extraction"
+start_on = true
 
 [node name="FarmPlot1" parent="." instance=ExtResource("5_farm")]
-position = Vector2(1100, 650)
+position = Vector2(891, 774)
 
 [node name="FarmPlot2" parent="." instance=ExtResource("5_farm")]
-position = Vector2(1200, 650)
+position = Vector2(958.5, 774)
 
 [node name="FarmPlot3" parent="." instance=ExtResource("5_farm")]
-position = Vector2(1100, 750)
+position = Vector2(891, 846)
 
 [node name="FarmPlot4" parent="." instance=ExtResource("5_farm")]
-position = Vector2(1200, 750)
-
-[node name="EventDirector" parent="." instance=ExtResource("6_events")]
+position = Vector2(958.5, 846)
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
-position = Vector2(1000, 600)
+position = Vector2(592.5, 918)
 
 [node name="UILayer" type="CanvasLayer" parent="."]
 
 [node name="DebugLabel" type="Label" parent="UILayer"]
-offset_left = 12.0
 visible = false
-offset_top = 470.0
-offset_right = 560.0
+offset_left = 12.0
+offset_top = 420.0
+offset_right = 620.0
 offset_bottom = 712.0
+theme_override_colors/font_color = Color(0.85, 1, 0.9, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 13
 text = "Loading..."
 
-[node name="EventPanel" type="PanelContainer" parent="UILayer"]
-offset_left = 680.0
-offset_top = 20.0
-offset_right = 1260.0
-offset_bottom = 280.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_event_panel")
-
-[node name="EventLabel" type="Label" parent="UILayer/EventPanel"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_colors/font_color = Color(0.94, 0.97, 1, 1)
-text = "Loading event data..."
-autowrap_mode = 3
-clip_text = true
-
 [node name="HudLayer" type="Node" parent="."]
-script = ExtResource("30_hud")
+script = ExtResource("10_hud")
 
 [node name="BuildMenuLayer" type="Node" parent="."]
-script = ExtResource("31_build")
+script = ExtResource("11_build")
 
 [node name="PauseLayer" type="Node" parent="."]
-script = ExtResource("32_pause")
+script = ExtResource("12_pause")
 
 [node name="PanelsLayer" type="Node" parent="."]
-script = ExtResource("33_panels")
+script = ExtResource("13_panels")
+
+[node name="StoryDialog" type="CanvasLayer" parent="."]
+script = ExtResource("14_story")
 
 [node name="MissionOverlays" type="Node" parent="."]
-script = ExtResource("34_overlays")
-
-[node name="Decor" type="Node2D" parent="."]
-script = ExtResource("35_decor")
+script = ExtResource("15_overlays")

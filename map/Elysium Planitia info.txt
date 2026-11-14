@@ -1,0 +1,10 @@
+Elysium Planitia
+Item Type	Nomenclature
+Name	Elysium Planitia
+Diameter	3000.79
+Latitude	2.979034632
+Longitude	154.7372
+Origin	Classical albedo feature name.
+Ethnicity	Greek
+Type	Planitia, planitiae
+Additional Info	http://planetarynames.wr.usgs.gov/Feature/1784

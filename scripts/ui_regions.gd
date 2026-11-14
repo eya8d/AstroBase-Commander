@@ -16,6 +16,58 @@ class_name UiRegions
 const HOVER_MODULATE := Color(1.3, 1.3, 1.4, 1.0)
 
 
+## Labels that live in the game world are drawn through the zoom-2 camera, so a font
+## size of 7 reads as 14 px on screen.  An optional dark plate keeps them readable on
+## the painted ground and over the astronaut.
+static func style_world_label(label: Label, font_size: int, plate: bool) -> void:
+	if label == null:
+		return
+	label.add_theme_font_size_override("font_size", font_size)
+	label.add_theme_color_override("font_outline_color", Color(0.02, 0.03, 0.05, 0.95))
+	label.add_theme_constant_override("outline_size", 2)
+	label.add_theme_constant_override("line_spacing", 0)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.z_index = 30
+	label.clip_text = false
+	if plate:
+		var box := StyleBoxFlat.new()
+		box.bg_color = Color(0.03, 0.05, 0.08, 0.84)
+		box.border_color = Color(0.45, 0.85, 0.95, 0.55)
+		box.set_border_width_all(1)
+		box.set_corner_radius_all(2)
+		box.content_margin_left = 3
+		box.content_margin_right = 3
+		box.content_margin_top = 1
+		box.content_margin_bottom = 1
+		label.add_theme_stylebox_override("normal", box)
+
+
+## Sizes a world label to its text and centres it on x = 0 with its bottom edge at
+## `bottom_y`.  width <= 0 keeps one line; otherwise the text wraps at that width.
+## Cards grow upwards, so they never cover the astronaut standing in front of the object.
+static func place_world_label(label: Label, bottom_y: float, width: float = 0.0) -> void:
+	if label == null:
+		return
+	var font: Font = label.get_theme_font("font")
+	var font_size: int = label.get_theme_font_size("font_size")
+	var margin := Vector2(6, 2)
+	var need: Vector2
+	if width <= 0.0:
+		label.autowrap_mode = TextServer.AUTOWRAP_OFF
+		need = font.get_multiline_string_size(label.text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size) + margin
+	else:
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		need = font.get_multiline_string_size(label.text, HORIZONTAL_ALIGNMENT_CENTER,
+			width - margin.x, font_size, -1,
+			TextServer.BREAK_MANDATORY | TextServer.BREAK_WORD_BOUND) + margin
+		need.x = width
+	label.custom_minimum_size = Vector2.ZERO
+	label.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	label.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	label.size = need
+	label.position = Vector2(-need.x * 0.5, bottom_y - need.y)
+
+
 ## Uniform scale factor that maps artwork pixels onto `surface`.
 static func scale_for(surface: Control, art_size: Vector2) -> Vector2:
 	if art_size.x <= 0.0 or art_size.y <= 0.0:

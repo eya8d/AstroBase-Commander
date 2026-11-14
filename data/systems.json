@@ -1,0 +1,106 @@
+{
+  "systems": [
+    {
+      "id": "solar_panel",
+      "name": "Solar Panels",
+      "produces": {
+        "energy": 18
+      },
+      "energy_cost": 0,
+      "can_be_damaged": true,
+      "description": "Converts sunlight into electrical energy.",
+      "building_id": "solar_panel"
+    },
+    {
+      "id": "oxygen_generator",
+      "name": "Oxygen Generator",
+      "produces": {
+        "oxygen": 8
+      },
+      "energy_cost": 5,
+      "requires": [
+        "energy"
+      ],
+      "description": "Produces oxygen for the habitat.",
+      "building_id": "oxygen_generator"
+    },
+    {
+      "id": "water_recycler",
+      "name": "Water Recycler",
+      "produces": {
+        "water": 7
+      },
+      "energy_cost": 4,
+      "requires": [
+        "energy"
+      ],
+      "description": "Reclaims and filters water.",
+      "building_id": "water_extraction"
+    },
+    {
+      "id": "greenhouse",
+      "name": "Greenhouse",
+      "produces": {
+        "food": 6
+      },
+      "energy_cost": 5,
+      "requires": [
+        "energy",
+        "water"
+      ],
+      "description": "Produces food using controlled growing conditions.",
+      "building_id": "greenhouse",
+      "water_cost": 2
+    },
+    {
+      "id": "radiation_shield",
+      "name": "Radiation Shield",
+      "effect": "reduces_radiation_exposure",
+      "energy_cost": 3,
+      "shield_cost_per_activation": 10,
+      "description": "Uses energy and shielding capacity to protect the crew during radiation events.",
+      "building_id": "shield_generator",
+      "recharge_per_sol": 2
+    },
+    {
+      "id": "habitat",
+      "name": "Habitat",
+      "effect": "crew_life_support",
+      "energy_cost": 0,
+      "can_be_damaged": true,
+      "description": "Provides the crew's living and protected environment.",
+      "building_id": "crew_habitat",
+      "crew_health_recovery_per_sol": 1
+    },
+    {
+      "id": "research_lab",
+      "name": "Research Lab",
+      "produces": {
+        "science_points": 2
+      },
+      "energy_cost": 6,
+      "requires": [
+        "energy"
+      ],
+      "building_id": "research_lab",
+      "description": "Studies Martian rocks and soil. Earns science points.",
+      "added_for": "AstroBase story campaign (round 3)"
+    }
+  ],
+  "operation_rules": {
+    "systems_must_be_enabled_to_operate": true,
+    "if_energy_cost_cannot_be_paid": "system_does_not_run",
+    "production_is_applied_after_system_costs": true,
+    "solar_panel_production_modifiers_stack_multiplicatively": true
+  },
+  "added_fields_note": "building_id links a system to its world building in buildings.json. water_cost (greenhouse), recharge_per_sol (radiation_shield), crew_health_recovery_per_sol (habitat) and the research_lab system are game additions for the story campaign. All values are game balance, not engineering data.",
+  "processing_order": [
+    "solar_panel",
+    "habitat",
+    "oxygen_generator",
+    "water_recycler",
+    "greenhouse",
+    "radiation_shield",
+    "research_lab"
+  ]
+}

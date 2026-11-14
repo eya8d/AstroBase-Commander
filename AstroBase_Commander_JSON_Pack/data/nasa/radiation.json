@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "measurements": [
+    {
+      "id": "curiosity_rad_sep_2017",
+      "instrument": "Curiosity Radiation Assessment Detector (RAD)",
+      "location_context": "Mars surface, Curiosity rover location",
+      "period_start": "2017-09-10",
+      "period_end": "2017-09-12",
+      "unit": "µGy/hour",
+      "values": [
+        {
+          "date": "2017-09-10",
+          "value": 7.68
+        },
+        {
+          "date": "2017-09-12",
+          "value": 17.87
+        }
+      ],
+      "interpretation": "The supplied project data records an increase from 7.68 to 17.87 µGy/hour over the stated dates. Preserve the source's measurement context when displaying it.",
+      "source_url": "https://www.nasa.gov/mission_pages/msl/"
+    }
+  ]
+}

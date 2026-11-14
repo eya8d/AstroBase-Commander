@@ -22,12 +22,13 @@ const WATER_SPRITE_SCALE := Vector2(0.24, 0.24)
 @export_group("Respawn")
 ## Seconds before the resource reappears after depletion. 0 = never.
 @export var respawn_time: float = 15.0
-## If true, the resource reappears at a random spot inside the spawn area.
-@export var respawn_random_position: bool = true
+## If true, the resource reappears at a random spot inside the spawn area.  Off by
+## default: deposits are painted on the site map, so they regrow in place.
+@export var respawn_random_position: bool = false
 ## Top-left corner of the area where the resource can respawn.
 @export var spawn_area_min: Vector2 = Vector2(50, 50)
 ## Bottom-right corner of the area where the resource can respawn.
-@export var spawn_area_max: Vector2 = Vector2(1950, 1150)
+@export var spawn_area_max: Vector2 = Vector2(2014, 1102)
 
 var _depleted: bool = false
 var _remaining: int = 0
@@ -40,6 +41,9 @@ var _remaining: int = 0
 
 
 func _ready() -> void:
+	if resource_type == "water":
+		# Day 0 site rule: bigger or smaller ice deposits (game design value, not NASA data).
+		total_amount = maxi(1, roundi(float(total_amount) * GameState.get_site_modifier("water_ice_yield", 1.0)))
 	_remaining = total_amount
 	prompt_label.visible = false
 	add_to_group("interactable")
@@ -51,6 +55,12 @@ func _ready() -> void:
 	if type_label:
 		type_label.text = resource_type.to_upper()
 		type_label.visible = false
+	# World labels: small, on a dark plate, stacked above the deposit (zoom-2 camera).
+	UiRegions.style_world_label(type_label, 7, true)
+	UiRegions.style_world_label(prompt_label, 7, true)
+	if type_label:
+		type_label.add_theme_color_override("font_color",
+			Color(0.55, 0.85, 1.0) if resource_type == "water" else Color(1.0, 0.72, 0.4))
 	_set_solid_collision_enabled(resource_type == "ore")
 
 
@@ -67,6 +77,21 @@ func show_prompt() -> void:
 		prompt_label.visible = true
 		if type_label:
 			type_label.visible = true
+		_refresh_labels()
+
+
+func _refresh_labels() -> void:
+	var noun: String = "WATER ICE" if resource_type == "water" else resource_type.to_upper()
+	if type_label:
+		type_label.text = "%s · %d LEFT" % [noun, _remaining]
+	prompt_label.text = "[E] %s +%d" % ["Collect" if resource_type == "water" else "Mine",
+		mini(amount_per_collect, _remaining)]
+	var top: float = -24.0
+	if sprite != null and sprite.texture != null:
+		top = sprite.position.y - float(sprite.texture.get_height()) * sprite.scale.y * 0.5 + 6.0
+	UiRegions.place_world_label(prompt_label, top)
+	if type_label:
+		UiRegions.place_world_label(type_label, top - prompt_label.size.y - 2.0)
 
 
 func hide_prompt() -> void:
@@ -107,6 +132,8 @@ func _collect(player: Node) -> void:
 
 	if _remaining <= 0:
 		_deplete()
+	elif prompt_label.visible:
+		_refresh_labels()
 
 
 func _deplete() -> void:

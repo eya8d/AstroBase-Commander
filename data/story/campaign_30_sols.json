@@ -1,0 +1,1173 @@
+{
+  "schema_version": "1.0",
+  "id": "campaign_30_sols",
+  "title": "30-Sol Mars Survival Mission",
+  "scenario_id": "scenario_30_sol_campaign",
+  "description": "Story layer for the 30-Sol campaign. Days reference events, systems and resources from the central registries by id. Costs, penalties and scores are game-balance values, not engineering specifications.",
+  "effect_reference": {
+    "resource_operation": "{target: resource_id, operation: add|subtract, value}",
+    "per_sol": "{target: resource_id, operation: subtract_per_sol|add_per_sol, value, duration_sols, tag}",
+    "system_property": "{target: system_id|all_systems, property: production_multiplier|energy_cost_multiplier|water_cost_multiplier|enabled, value, duration_sols|permanent, tag}",
+    "resource_property": "{target: resource_id, property: consumption_multiplier|capacity_multiplier, value, duration_sols|permanent, tag}",
+    "solar_dust": "{target: solar_panel, property: dust, value: true|false} - covers or cleans every panel in the world",
+    "remove_modifier": "{remove_modifier: tag}",
+    "special": "{operation: redistribute|boost_lowest, value}",
+    "conditions": "any effect, dialogue line or choice may carry if_flag, unless_flag, if_system_enabled, unless_system_enabled"
+  },
+  "speakers": {
+    "NOVA": { "name": "NOVA", "role": "Base AI", "color": "#7FE3FF" },
+    "LAYLA": { "name": "Layla", "role": "Earth Control Center", "color": "#9CF08A" },
+    "PLAYER": { "name": "Commander", "role": "You", "color": "#FFB45C" },
+    "LOG": { "name": "Mission Log", "role": "", "color": "#C9C2B8" }
+  },
+  "day0": {
+    "title": "Landing Site Selection",
+    "dialogue": [
+      { "speaker": "NOVA", "text": "Landing orbit successfully aligned. Choose your settlement location carefully, Commander. Every coordinate comes with its own environmental challenges." }
+    ],
+    "note": "This build has three landing sites: Acidalia Planitia, Valles Marineris and Elysium Planitia (team decision)."
+  },
+  "campaign_start_state": {
+    "disabled_systems": ["greenhouse", "research_lab"],
+    "note": "The farm and the lab start powered down so that the Day 1 and Day 2 decisions decide when they come online."
+  },
+  "weeks": [
+    { "week": 1, "title": "Initial Settlement & Early Crises", "sol_start": 1, "sol_end": 7 },
+    { "week": 2, "title": "Communication Delays & System Failures", "sol_start": 8, "sol_end": 14 },
+    { "week": 3, "title": "Scientific Expansion & Emerging Risks", "sol_start": 15, "sol_end": 21 },
+    { "week": 4, "title": "Sustainability Challenge & Final Evaluation", "sol_start": 22, "sol_end": 30 }
+  ],
+  "days": [
+    {
+      "day": 1,
+      "title": "Solar Dust Problem",
+      "location": "External Power Station",
+      "scene": "A layer of reddish Martian dust blocks sunlight from reaching the solar panels.",
+      "alert": "yellow",
+      "start_effects": [
+        { "target": "solar_panel", "property": "dust", "value": true }
+      ],
+      "dialogue": [
+        { "speaker": "NOVA", "text": "Warning! Solar panel efficiency has decreased due to dust accumulation. Current energy levels are insufficient to operate all systems." },
+        { "speaker": "LAYLA", "text": "We've received your report. You have two options, Commander. Consider the consequences of each decision." }
+      ],
+      "choices": [
+        {
+          "id": "clean_panels",
+          "label": "Clean the solar panels",
+          "detail": "Run the cleaning cycle now. The whole array returns to full output.",
+          "cost": { "energy": 8 },
+          "effects": [ { "target": "solar_panel", "property": "dust", "value": false } ],
+          "scores": { "infrastructure": 3, "resources": 1 },
+          "flags": ["panels_cleaned_d1"],
+          "consequence": "The array is clean and full solar output is back. Every system can run."
+        },
+        {
+          "id": "lab_first",
+          "label": "Activate the science lab, postpone cleaning",
+          "detail": "The lab starts work at once (+4 science). Panels stay at half output until someone cleans them by hand.",
+          "effects": [
+            { "target": "research_lab", "property": "enabled", "value": true },
+            { "target": "science_points", "operation": "add", "value": 4 }
+          ],
+          "scores": { "science": 3, "resources": -2, "infrastructure": -1 },
+          "flags": ["cleaning_postponed"],
+          "consequence": "The lab is logging its first soil data, but power will stay tight. Walk to each dusty panel and press E to clean it by hand."
+        }
+      ],
+      "insight": { "text": "By early 2009, dust on NASA's Spirit rover let only about 25% of sunlight reach its solar cells. A lucky gust of wind cleaned the array and raised Spirit's daily energy from about 210 to 240 watt-hours.", "source_id": "jpl_spirit_cleaning" }
+    },
+    {
+      "day": 2,
+      "title": "Initial Food Crisis",
+      "location": "Vertical Farming Unit",
+      "scene": "Inside the enclosed greenhouse, the food inventory indicators have turned yellow.",
+      "alert": "yellow",
+      "dialogue": [
+        { "speaker": "NOVA", "text": "Food supplies are decreasing. The agricultural system is ready to operate, but it requires energy and water." },
+        { "speaker": "LAYLA", "text": "Space farming isn't simply about planting seeds. It requires precise environmental conditions and lighting." }
+      ],
+      "choices": [
+        {
+          "id": "activate_greenhouse",
+          "label": "Activate the greenhouse",
+          "detail": "Start-up uses 6 water and 4 energy. After that it costs 5 energy and 2 water per Sol and grows 6 food per Sol.",
+          "cost": { "water": 6, "energy": 4 },
+          "effects": [ { "target": "greenhouse", "property": "enabled", "value": true } ],
+          "scores": { "resources": 3, "wellbeing": 2 },
+          "flags": ["greenhouse_started_d2"],
+          "consequence": "The seed trays are in. The first fresh harvest is expected in about two weeks."
+        },
+        {
+          "id": "stored_rations",
+          "label": "Rely on stored food rations",
+          "detail": "Saves energy and water now. The farm stays locked until Sol 8 while rations drop by 4 per Sol.",
+          "effects": [ { "target": "greenhouse", "property": "enabled", "value": false, "duration_sols": 6, "tag": "farm_on_hold" } ],
+          "scores": { "resources": -2, "wellbeing": -2 },
+          "flags": ["rations_only"],
+          "consequence": "Rations are holding for now, but nothing is growing. There will be no early harvest."
+        }
+      ],
+      "insight": { "text": "In 2015, astronauts on the International Space Station grew and ate red romaine lettuce for the first time, as part of NASA's Veggie experiment.", "source_id": "nasa_veggie" }
+    },
+    {
+      "day": 3,
+      "title": "Infrastructure Stability",
+      "location": "Power & Battery Storage Room",
+      "scene": "The central power room hums quietly. Today is a routine maintenance day.",
+      "alert": "green",
+      "dialogue": [
+        { "speaker": "LOG", "text": "Routine maintenance day. No direct communication with Earth Control is scheduled." },
+        { "speaker": "NOVA", "text": "No uplink window today, Commander. Maintenance priorities are your call." }
+      ],
+      "choices": [
+        {
+          "id": "battery_inspection",
+          "label": "Perform a routine battery efficiency inspection",
+          "detail": "Costs 4 energy. Weak cells are found early, so a future battery fault will do less damage.",
+          "cost": { "energy": 4 },
+          "effects": [],
+          "scores": { "infrastructure": 3, "safety": 1 },
+          "flags": ["battery_inspected"],
+          "consequence": "Two weak cells were flagged and bypassed. The battery bank is healthier for the long run."
+        },
+        {
+          "id": "balance_loads",
+          "label": "Balance electrical loads across the base",
+          "detail": "The base load drops by 25% for the next 5 Sols.",
+          "effects": [ { "target": "energy", "property": "consumption_multiplier", "value": 0.75, "duration_sols": 5, "tag": "loads_balanced" } ],
+          "scores": { "resources": 3 },
+          "flags": ["loads_balanced"],
+          "consequence": "Loads are spread evenly. The base burns less power for the rest of the week."
+        }
+      ],
+      "insight": { "text": "Spirit needed about 180 watt-hours a day just for basic survival and communications. Only the energy above that could be spent on driving and science.", "source_id": "jpl_spirit_cleaning" }
+    },
+    {
+      "day": 4,
+      "title": "Solar Activity Threat",
+      "location": "Space Weather Observatory",
+      "scene": "An orange alert appears. It is built from NASA DONKI solar activity records and warns of an incoming solar storm.",
+      "alert": "orange",
+      "event_id": "radiation_burst",
+      "historical_ref": "donki_sep_13081",
+      "dialogue": [
+        { "speaker": "NOVA", "text": "Space alert! A solar activity event has been detected. Review the current threat level." },
+        { "speaker": "LAYLA", "text": "We've received the same alert. I recommend establishing priorities and determining the base's protection status." },
+        { "speaker": "LOG", "text": "Training scenario based on the archived DONKI SEP event of September 2017. This is historical data, not a live alert." }
+      ],
+      "choices": [
+        {
+          "id": "raise_shield",
+          "label": "Raise the radiation shield",
+          "detail": "Needs the shield generator online and at least 15 shield points. Uses 10 energy and 10 shield.",
+          "event_choice": "activate_shield",
+          "event_resolution": "protected",
+          "scores": { "safety": 4, "infrastructure": 1 },
+          "flags": ["radiation_protected"],
+          "consequence": "The shield absorbs the particle storm. The crew is protected."
+        },
+        {
+          "id": "shelter",
+          "label": "Enter the radiation shelter and postpone research",
+          "detail": "The crew waits it out in the shelter (-5 crew health, 3 energy). The lab pauses for 1 Sol.",
+          "event_choice": "shelter",
+          "extra_effects": [ { "target": "research_lab", "property": "enabled", "value": false, "duration_sols": 1, "tag": "shelter_pause" } ],
+          "scores": { "safety": 3, "science": -1 },
+          "flags": ["radiation_sheltered"],
+          "consequence": "The crew is safe in the shelter. Today's research is lost."
+        },
+        {
+          "id": "continue_research",
+          "label": "Continue research despite the radiation risk",
+          "detail": "+8 science from storm measurements, but the crew is unprotected (-20 crew health).",
+          "event_resolution": "unprotected",
+          "extra_effects": [ { "target": "science_points", "operation": "add", "value": 8 } ],
+          "scores": { "science": 3, "safety": -5 },
+          "flags": ["radiation_unprotected"],
+          "consequence": "Valuable storm data was recorded, but the crew's radiation risk indicator has risen sharply."
+        }
+      ],
+      "insight": { "text": "During 10-12 September 2017, Curiosity's RAD instrument measured radiation on the Martian surface more than doubling. Its daily mean on 11 September was 17.87 µGy/hour, compared with 7.68 µGy/hour on 6 September.", "source_id": "nasa_osdr_radlab" }
+    },
+    {
+      "day": 5,
+      "title": "Storm Damage Assessment",
+      "location": "External Diagnostic Screens",
+      "scene": "Diagnostic screens show the condition of the base's equipment after the solar radiation event.",
+      "alert": "yellow",
+      "dialogue": [
+        { "speaker": "NOVA", "text": "External solar activity has subsided. Inspecting potentially affected circuits and equipment." },
+        { "speaker": "NOVA", "text": "Crew dosimeters logged elevated exposure yesterday. The medical bay recommends a quiet Sol.", "if_flag": "radiation_unprotected" }
+      ],
+      "choices": [
+        {
+          "id": "redirect_power",
+          "label": "Redirect power toward essential systems",
+          "detail": "The lab and the shield generator pause for 1 Sol to save energy.",
+          "effects": [
+            { "target": "research_lab", "property": "enabled", "value": false, "duration_sols": 1, "tag": "redirect_d5" },
+            { "target": "radiation_shield", "property": "enabled", "value": false, "duration_sols": 1, "tag": "redirect_d5" }
+          ],
+          "scores": { "resources": 2, "science": -1 },
+          "flags": ["power_redirected_d5"],
+          "consequence": "Only life support is drawing power today. The battery bank recovers faster."
+        },
+        {
+          "id": "verify_circuits",
+          "label": "Verify electrical circuits and critical equipment",
+          "detail": "Costs 6 energy. Finds and fixes hidden storm damage (+4 base integrity).",
+          "cost": { "energy": 6 },
+          "effects": [ { "target": "base_integrity", "operation": "add", "value": 4 } ],
+          "scores": { "infrastructure": 3, "safety": 1 },
+          "flags": ["circuits_verified"],
+          "consequence": "A scorched relay was found and replaced before it could fail."
+        }
+      ],
+      "insight": { "text": "Mars has no global magnetic field today, so charged particles from the Sun reach the surface far more easily than on Earth.", "source_id": "nasa_mars_facts" }
+    },
+    {
+      "day": 6,
+      "title": "Random Emergency: Minor Meteorite Impact",
+      "location": "Outer Base Wall",
+      "scene": "Local emergency sirens sound after a sudden impact and vibration.",
+      "alert": "red",
+      "event_id": "meteorite_impact",
+      "start_effects": [
+        { "target": "oxygen", "operation": "subtract", "value": 4 },
+        { "target": "oxygen", "operation": "subtract_per_sol", "value": 3, "duration_sols": 3, "tag": "hull_leak" }
+      ],
+      "dialogue": [
+        { "speaker": "NOVA", "text": "Warning! A small meteorite has struck the external structure. A minor loss of internal air pressure has been detected." }
+      ],
+      "choices": [
+        {
+          "id": "repair_robot",
+          "label": "Deploy the autonomous emergency repair robot",
+          "detail": "Uses stored energy to patch the hull (+5 integrity) and seal the air leak.",
+          "event_choice": "patch_hull",
+          "extra_effects": [ { "remove_modifier": "hull_leak" } ],
+          "scores": { "infrastructure": 3, "safety": 3 },
+          "flags": ["hull_patched_d6"],
+          "consequence": "The robot sealed the breach in minutes. Cabin pressure is stable again."
+        },
+        {
+          "id": "inspect_first",
+          "label": "Inspect the damage before repairing",
+          "detail": "Cheaper and yields impact data (+3 science), but the slow air leak continues for 3 Sols.",
+          "event_choice": "inspect_damage",
+          "scores": { "science": 2, "safety": -2, "infrastructure": -2 },
+          "flags": ["hull_unrepaired"],
+          "consequence": "The impact data is valuable, but oxygen keeps leaking and the hull stays weakened."
+        }
+      ],
+      "insight": { "text": "Mars' thin atmosphere offers little protection from meteorites, so a surface base must plan for impacts and fast hull repairs.", "source_id": "nasa_mars_facts" }
+    },
+    {
+      "day": 7,
+      "title": "Weekly Review",
+      "location": "Communications Station",
+      "scene": "The weekly reporting interface opens on the communications station.",
+      "alert": "green",
+      "summary": "week",
+      "dialogue": [
+        { "speaker": "LAYLA", "text": "You've successfully completed your first week, Commander. Send us your performance report so we can evaluate the overall situation." }
+      ],
+      "choices": [
+        {
+          "id": "detailed_report",
+          "label": "Send a detailed performance report",
+          "detail": "Costs 6 energy of transmission time. +5 science, and Earth's engineers stay fully briefed.",
+          "cost": { "energy": 6 },
+          "effects": [ { "target": "science_points", "operation": "add", "value": 5 } ],
+          "scores": { "science": 3, "resources": -1 },
+          "flags": ["detailed_report_w1"],
+          "consequence": "Earth Control now has a full picture of the base. Their engineers will be ready if something breaks."
+        },
+        {
+          "id": "update_strategy",
+          "label": "Update the operational strategy for next week",
+          "detail": "Re-tune the life-support loops: oxygen and water output +25% for 7 Sols.",
+          "effects": [
+            { "target": "oxygen_generator", "property": "production_multiplier", "value": 1.25, "duration_sols": 7, "tag": "strategy_w2" },
+            { "target": "water_recycler", "property": "production_multiplier", "value": 1.25, "duration_sols": 7, "tag": "strategy_w2" }
+          ],
+          "scores": { "resources": 3 },
+          "flags": ["strategy_w2"],
+          "consequence": "A short report went out. The crew spent the time optimising the life-support loops."
+        }
+      ],
+      "insight": { "text": "Crews in NASA's HERA analog missions practise working with communication delays of up to five minutes each way, to help design procedures for deep-space missions.", "source_id": "nasa_hrp_distance" }
+    },
+    {
+      "day": 8,
+      "title": "Crop Monitoring & Biological Growth",
+      "location": "Vertical Farm",
+      "scene": "The farming unit glows under red and blue LED lights.",
+      "alert": "green",
+      "dialogue": [
+        { "speaker": "NOVA", "text": "Plant growth is progressing at a normal rate. Water consumption remains within safe limits.", "if_system_enabled": "greenhouse" },
+        { "speaker": "NOVA", "text": "The vertical farm is dark. The seed trays are ready whenever you power the LED arrays.", "unless_system_enabled": "greenhouse" }
+      ],
+      "choices": [
+        {
+          "id": "inspect_lighting",
+          "label": "Inspect lighting intensity and irrigation rates",
+          "detail": "Costs 3 energy. The farm runs, and it needs half the water for the rest of the mission.",
+          "cost": { "energy": 3 },
+          "effects": [
+            { "remove_modifier": "farm_on_hold" },
+            { "target": "greenhouse", "property": "enabled", "value": true },
+            { "target": "greenhouse", "property": "water_cost_multiplier", "value": 0.5, "permanent": true, "tag": "irrigation_tuned" }
+          ],
+          "scores": { "resources": 3 },
+          "flags": ["irrigation_tuned"],
+          "consequence": "The drip lines are re-tuned. The greenhouse now uses half as much water."
+        },
+        {
+          "id": "stabilize_harvest",
+          "label": "Ensure the health and stability of the coming harvest",
+          "detail": "Costs 4 water. The farm runs, and its yield is +25% for the rest of the mission.",
+          "cost": { "water": 4 },
+          "effects": [
+            { "remove_modifier": "farm_on_hold" },
+            { "target": "greenhouse", "property": "enabled", "value": true },
+            { "target": "greenhouse", "property": "production_multiplier", "value": 1.25, "permanent": true, "tag": "harvest_stabilized" }
+          ],
+          "scores": { "resources": 2, "wellbeing": 1 },
+          "flags": ["harvest_stabilized"],
+          "consequence": "The nutrient mix is balanced. The plants look stronger already."
+        }
+      ],
+      "insight": { "text": "Plants reflect a lot of green light and use more red and blue wavelengths, so NASA's Veggie plant chamber on the ISS usually glows magenta pink.", "source_id": "nasa_growing_plants" }
+    },
+    {
+      "day": 9,
+      "title": "Random Emergency: Martian Cold Wave",
+      "location": "External Temperature Sensors",
+      "scene": "External indicators record an unusually sharp drop in nighttime temperature.",
+      "alert": "orange",
+      "event_id": "cold_wave",
+      "dialogue": [
+        { "speaker": "NOVA", "text": "Warning! A severe temperature drop threatens to freeze the external pipelines." }
+      ],
+      "choices": [
+        {
+          "id": "backup_heating",
+          "label": "Activate the backup heating system",
+          "detail": "Costs extra energy, but the water lines stay liquid and the recycler keeps running.",
+          "event_choice": "backup_heating",
+          "scores": { "infrastructure": 2, "safety": 2 },
+          "flags": ["heating_used"],
+          "consequence": "The heaters held the pipes above freezing through the night."
+        },
+        {
+          "id": "insulate",
+          "label": "Insulate the pipes and ride it out",
+          "detail": "Saves energy, but frozen lines burst: -8 water and -3 base integrity.",
+          "event_choice": "insulate_and_wait",
+          "scores": { "resources": -2, "infrastructure": -2 },
+          "flags": ["pipes_froze"],
+          "consequence": "Two joints split in the cold. The crew mopped up the frozen water at dawn."
+        }
+      ],
+      "insight": { "text": "Mars can reach about 20 °C at noon on the equator and fall to about -153 °C. Its thin atmosphere lets the Sun's heat escape quickly after sunset.", "source_id": "nasa_mars_facts" }
+    },
+    {
+      "day": 10,
+      "title": "Water Unit Failure & Communication Delay",
+      "location": "Water Recycling Unit",
+      "scene": "The water recycler malfunctions and starts to leak. The communication screen shows a 12-minute signal travel time to Earth.",
+      "alert": "red",
+      "event_id": "water_contamination",
+      "comm_delay_minutes": 12,
+      "start_effects": [
+        { "target": "water_recycler", "property": "enabled", "value": false, "duration_sols": 3, "tag": "recycler_leak" },
+        { "target": "water", "operation": "subtract_per_sol", "value": 3, "duration_sols": 3, "tag": "water_leak" }
+      ],
+      "dialogue": [
+        { "speaker": "NOVA", "text": "Critical warning! A leak has been detected in the water processing unit. We need an immediate decision." },
+        { "speaker": "PLAYER", "text": "Earth Control, we urgently need your assistance in dealing with the water processing unit failure." },
+        { "speaker": "LOG", "text": "One-way signal time to Earth: 12 minutes. No reply can arrive before the next communication window." }
+      ],
+      "choices": [
+        {
+          "id": "distress",
+          "label": "Send an emergency distress message",
+          "detail": "Costs 5 energy for a high-power transmission. Earth's engineers will prioritise a recovery procedure.",
+          "cost": { "energy": 5 },
+          "effects": [],
+          "scores": { "safety": 2, "resources": -1 },
+          "flags": ["distress_sent"],
+          "consequence": "Priority message sent. It will reach Earth in 12 minutes; the answer will come in the next window."
+        },
+        {
+          "id": "wait_window",
+          "label": "Wait for Earth's response with the realistic delay",
+          "detail": "No energy spent. Earth will answer in the normal schedule without a tailored procedure.",
+          "effects": [],
+          "scores": { "resources": 1, "safety": -1 },
+          "flags": ["waited_for_earth"],
+          "consequence": "The status update is queued for the next scheduled window. Until then, the crew is on its own."
+        }
+      ],
+      "insight": { "text": "NASA lists the communication delay between Mars and Earth as up to 20 minutes one way. Crews on Mars must be ready to solve emergencies without waiting for help.", "source_id": "nasa_hrp_distance" }
+    },
+    {
+      "day": 11,
+      "title": "Independent Local Decision-Making",
+      "location": "Main Control Room",
+      "scene": "The crew waits for an answer from Earth while the leak continues.",
+      "alert": "orange",
+      "dialogue": [
+        { "speaker": "NOVA", "text": "The signal is on its way, but the local situation requires immediate intervention." }
+      ],
+      "choices": [
+        {
+          "id": "manual_repair",
+          "label": "Perform a quick manual repair",
+          "detail": "Replace the filter yourselves: 4 energy, +3 water, the recycler restarts. The rushed work costs 2 crew health.",
+          "event_id": "water_contamination",
+          "event_choice": "replace_filter",
+          "extra_effects": [
+            { "remove_modifier": "recycler_leak" },
+            { "remove_modifier": "water_leak" },
+            { "target": "crew_health", "operation": "subtract", "value": 2 }
+          ],
+          "counters": { "life_support_system_repaired": 1 },
+          "scores": { "infrastructure": 3, "safety": 1 },
+          "flags": ["manual_repair_d11"],
+          "consequence": "Filter replaced and seals tightened. The recycler is back online."
+        },
+        {
+          "id": "conservation_mode",
+          "label": "Activate water conservation mode",
+          "detail": "Close the valves to stop the leak and halve crew water use for 2 Sols. The recycler stays down until Earth replies.",
+          "effects": [
+            { "remove_modifier": "water_leak" },
+            { "target": "water", "property": "consumption_multiplier", "value": 0.5, "duration_sols": 2, "tag": "water_conservation" },
+            { "target": "crew_morale", "operation": "subtract", "value": 5 }
+          ],
+          "scores": { "resources": 2, "wellbeing": -2 },
+          "flags": ["water_conservation_d11"],
+          "consequence": "Showers are cancelled and every drop is logged. The leak has stopped, but the recycler is still offline."
+        }
+      ],
+      "insight": { "text": "Life support on the ISS now recovers about 98% of its water. Before the Brine Processor Assembly, recovery was 93-94%.", "source_id": "nasa_iss_water_recovery" }
+    },
+    {
+      "day": 12,
+      "title": "Earth Control Center Response",
+      "location": "Communications Screen",
+      "scene": "A delayed message arrives after crossing millions of kilometres.",
+      "alert": "green",
+      "start_effects": [
+        { "target": "water", "operation": "add", "value": 8, "if_flag": "distress_sent" }
+      ],
+      "dialogue": [
+        { "speaker": "LAYLA", "text": "We've received your message, Commander. Implementing local procedures is the best solution to ensure your survival, given the communication delay." },
+        { "speaker": "LAYLA", "text": "Our engineers attached a recovery procedure for the contaminated tank. Follow it and you can reclaim part of the lost water.", "if_flag": "distress_sent" },
+        { "speaker": "LOG", "text": "Recovery procedure applied: +8 water reclaimed.", "if_flag": "distress_sent" }
+      ],
+      "choices": [
+        {
+          "id": "confirm_protocols",
+          "label": "Confirm independent maintenance protocols",
+          "detail": "The crew adopts the local repair protocols. The recycler is restored if it is still down, and morale rises (+5).",
+          "effects": [
+            { "remove_modifier": "recycler_leak" },
+            { "target": "crew_morale", "operation": "add", "value": 5 }
+          ],
+          "scores": { "infrastructure": 2, "wellbeing": 2 },
+          "flags": ["autonomy_protocols"],
+          "consequence": "The crew is now officially cleared to make repair decisions without waiting for Earth."
+        },
+        {
+          "id": "update_life_support",
+          "label": "Update the status of all life-support systems",
+          "detail": "Costs 4 energy. A full audit restores the recycler, and the oxygen generator gets +15% output for the rest of the mission.",
+          "cost": { "energy": 4 },
+          "effects": [
+            { "remove_modifier": "recycler_leak" },
+            { "target": "oxygen_generator", "property": "production_multiplier", "value": 1.15, "permanent": true, "tag": "ls_audit" },
+            { "target": "science_points", "operation": "add", "value": 2 }
+          ],
+          "scores": { "safety": 2, "science": 1, "infrastructure": 1 },
+          "flags": ["life_support_audited"],
+          "consequence": "Every life-support loop has been re-certified. The oxygen generator is running more efficiently."
+        }
+      ],
+      "insight": { "text": "NASA's Human Research Program lists distance from Earth as a core hazard. Planning and self-sufficiency will be essential on Mars.", "source_id": "nasa_hrp_distance" }
+    },
+    {
+      "day": 13,
+      "title": "Random Emergency: Satellite Interference",
+      "location": "Navigation Radar",
+      "scene": "Radar screens detect interference in the orbital communication frequencies.",
+      "alert": "yellow",
+      "event_id": "communication_blackout",
+      "dialogue": [
+        { "speaker": "NOVA", "text": "Temporary interference detected in local satellite signals. Delaying large data transmissions is recommended." }
+      ],
+      "choices": [
+        {
+          "id": "postpone_transmissions",
+          "label": "Postpone non-essential data transmissions",
+          "detail": "Saves the processing energy (+3 energy) and sends the data in the next clean window (+2 science).",
+          "event_choice": "wait_for_window",
+          "extra_effects": [ { "target": "energy", "operation": "add", "value": 3 } ],
+          "scores": { "resources": 2 },
+          "flags": ["transmissions_postponed"],
+          "consequence": "Large uploads are paused. Only telemetry goes out until the interference clears."
+        },
+        {
+          "id": "repair_relay",
+          "label": "Repair the relay and keep transmitting",
+          "detail": "Costs 4 energy, but the full science package reaches Earth today (+5 science).",
+          "event_choice": "relay_repair",
+          "scores": { "science": 2, "resources": -1 },
+          "flags": ["relay_repaired"],
+          "consequence": "The relay is re-aligned. The science package went out on time."
+        }
+      ],
+      "insight": { "text": "Game lesson: every transmission costs power and time, so large uploads are best saved for clean communication windows.", "source_id": "" }
+    },
+    {
+      "day": 14,
+      "title": "Mid-Mission Assessment",
+      "location": "Main Control Room",
+      "scene": "The main display shows graphs of resource use over the past two weeks.",
+      "alert": "green",
+      "summary": "history",
+      "dialogue": [
+        { "speaker": "NOVA", "text": "Mission midpoint reached. Current resource levels require adjustments for the remaining operational period." },
+        { "speaker": "LOG", "text": "Projection at current rates - food: {food_days} Sols, water: {water_days} Sols, oxygen: {oxygen_days} Sols." }
+      ],
+      "choices": [
+        {
+          "id": "comprehensive_review",
+          "label": "Review energy, water and food reserves in detail",
+          "detail": "+3 science. Wasteful routines are found: water and food use -10% for 7 Sols.",
+          "effects": [
+            { "target": "science_points", "operation": "add", "value": 3 },
+            { "target": "water", "property": "consumption_multiplier", "value": 0.9, "duration_sols": 7, "tag": "midpoint_review" },
+            { "target": "food", "property": "consumption_multiplier", "value": 0.9, "duration_sols": 7, "tag": "midpoint_review" }
+          ],
+          "scores": { "resources": 2, "science": 1 },
+          "flags": ["midpoint_review"],
+          "consequence": "Small leaks and wasteful habits were found and fixed."
+        },
+        {
+          "id": "redistribute",
+          "label": "Redistribute resources and adjust priorities",
+          "detail": "Move 12 units from the fullest reserve to the emptiest one.",
+          "effects": [ { "operation": "redistribute", "value": 12 } ],
+          "scores": { "resources": 3 },
+          "flags": ["midpoint_redistribute"],
+          "consequence": "Stock levels are rebalanced toward the weakest reserve."
+        }
+      ],
+      "insight": { "text": "Because resupply from Earth is slow, NASA's deep-space food systems are designed for minimal resources and minimal waste.", "source_id": "nasa_hrp_distance" }
+    },
+    {
+      "day": 15,
+      "title": "Major Research Breakthrough",
+      "location": "Geology Research Laboratory",
+      "scene": "New Martian soil samples are examined under the microscopes.",
+      "alert": "green",
+      "dialogue": [
+        { "speaker": "NOVA", "text": "An opportunity has emerged to increase laboratory workloads and extract valuable data about rare minerals." }
+      ],
+      "choices": [
+        {
+          "id": "intensive_research",
+          "label": "Increase lab workloads for intensive research",
+          "detail": "+4 science now and 2.5x lab output for 3 Sols. The lab uses twice the energy, and the crew tires (-6 morale).",
+          "effects": [
+            { "target": "research_lab", "property": "enabled", "value": true },
+            { "target": "science_points", "operation": "add", "value": 4 },
+            { "target": "research_lab", "property": "production_multiplier", "value": 2.5, "duration_sols": 3, "tag": "intensive_research" },
+            { "target": "research_lab", "property": "energy_cost_multiplier", "value": 2.0, "duration_sols": 3, "tag": "intensive_research" },
+            { "target": "crew_morale", "operation": "subtract", "value": 6 }
+          ],
+          "scores": { "science": 4, "wellbeing": -2, "resources": -1 },
+          "flags": ["intensive_research"],
+          "consequence": "The microscopes run day and night. The mineral survey is moving fast."
+        },
+        {
+          "id": "maintain_research",
+          "label": "Maintain current research levels",
+          "detail": "+1 science. Resources stay secure for the final weeks.",
+          "effects": [ { "target": "science_points", "operation": "add", "value": 1 } ],
+          "scores": { "resources": 2 },
+          "flags": ["research_steady"],
+          "consequence": "The samples are catalogued for later study. The power budget is safe."
+        }
+      ],
+      "insight": { "text": "NASA's Curiosity rover has been studying the geology of Gale Crater since 2012, analysing rocks and soil for signs of Mars' wetter past.", "source_id": "nasa_mars_program" }
+    },
+    {
+      "day": 16,
+      "title": "Crew Fatigue Management",
+      "location": "Crew Living Quarters",
+      "scene": "Stress and fatigue indicators are rising after weeks of isolation.",
+      "alert": "orange",
+      "dialogue": [
+        { "speaker": "NOVA", "text": "Alert! Crew fatigue levels have exceeded normal limits. Scheduling rest periods is recommended." },
+        { "speaker": "NOVA", "text": "The extra lab shifts are clearly showing in the medical logs.", "if_flag": "intensive_research" }
+      ],
+      "choices": [
+        {
+          "id": "rest_schedule",
+          "label": "Organise work shifts and rest schedules",
+          "detail": "+15 morale and +6 crew health. All systems run at 85% output for 2 Sols.",
+          "effects": [
+            { "target": "crew_morale", "operation": "add", "value": 15 },
+            { "target": "crew_health", "operation": "add", "value": 6 },
+            { "target": "all_systems", "property": "production_multiplier", "value": 0.85, "duration_sols": 2, "tag": "rest_shifts" }
+          ],
+          "scores": { "wellbeing": 4, "safety": 2, "resources": -1 },
+          "flags": ["rest_schedule"],
+          "consequence": "Crew safety and well-being improve. Productivity is temporarily reduced."
+        },
+        {
+          "id": "push_through",
+          "label": "Keep the current workload",
+          "detail": "+3 science, but -10 morale and -4 crew health.",
+          "effects": [
+            { "target": "science_points", "operation": "add", "value": 3 },
+            { "target": "crew_morale", "operation": "subtract", "value": 10 },
+            { "target": "crew_health", "operation": "subtract", "value": 4 }
+          ],
+          "scores": { "wellbeing": -4, "safety": -2, "science": 1 },
+          "flags": ["pushed_through"],
+          "consequence": "The work continues, but tempers are short and mistakes are creeping in."
+        }
+      ],
+      "insight": { "text": "NASA's CHAPEA analog missions keep crews in a simulated Mars habitat for a year to study health and performance during long isolation.", "source_id": "nasa_hrp_distance" }
+    },
+    {
+      "day": 17,
+      "title": "Random Emergency: Local Dust Devil",
+      "location": "External Cameras",
+      "scene": "External cameras track a dust devil moving toward the base's outer sensors.",
+      "alert": "yellow",
+      "event_id": "dust_devil",
+      "dialogue": [
+        { "speaker": "NOVA", "text": "A local dust devil has been detected passing near the external sensors." }
+      ],
+      "choices": [
+        {
+          "id": "ignore",
+          "label": "Ignore the minor dust storm",
+          "detail": "No cost, but the solar panels are coated again and must be cleaned by hand.",
+          "event_choice": "ignore_dust_devil",
+          "scores": { "infrastructure": -1, "resources": -1 },
+          "flags": ["dust_devil_ignored"],
+          "consequence": "The whirlwind passed right over the array. The panels are dusty again."
+        },
+        {
+          "id": "deploy_rover",
+          "label": "Deploy a rover to clean the external sensors",
+          "detail": "Costs 3 energy. The sensors stay clean and the rover films the dust devil (+3 science).",
+          "event_choice": "deploy_rover",
+          "scores": { "infrastructure": 2, "science": 1 },
+          "flags": ["dust_devil_filmed"],
+          "consequence": "The rover cleared the sensors and recorded the whole dust devil for the geologists."
+        }
+      ],
+      "insight": { "text": "NASA's Spirit rover filmed dust devils crossing Gusev Crater on sol 525 (25 June 2005). Wind gusts sometimes cleaned Spirit's solar panels and gave it more power.", "source_id": "nasa_spirit_dust_devils" }
+    },
+    {
+      "day": 18,
+      "title": "First Agricultural Harvest",
+      "location": "Greenhouse",
+      "scene": "The crew gathers in the greenhouse for the first harvest grown inside the base.",
+      "alert": "green",
+      "dialogue": [
+        { "speaker": "NOVA", "text": "The first agricultural cycle has been successfully completed. Fresh food reserves have increased.", "if_flag": "greenhouse_started_d2" },
+        { "speaker": "NOVA", "text": "The late-planted trays produced a small first harvest. Fresh food reserves have increased slightly.", "unless_flag": "greenhouse_started_d2", "if_system_enabled": "greenhouse" },
+        { "speaker": "NOVA", "text": "The greenhouse is offline, so there is no harvest this cycle. The crew stays on stored rations.", "unless_system_enabled": "greenhouse" }
+      ],
+      "harvest": [
+        { "target": "food", "operation": "add", "value": 16, "if_flag": "greenhouse_started_d2" },
+        { "target": "food", "operation": "add", "value": 6, "unless_flag": "greenhouse_started_d2", "if_system_enabled": "greenhouse" },
+        { "target": "food", "operation": "add", "value": 6, "if_flag": "harvest_stabilized" }
+      ],
+      "choices": [
+        {
+          "id": "store_crops",
+          "label": "Store the harvested crops",
+          "detail": "The harvest goes into storage, and fresh food lifts the crew (+4 morale).",
+          "effects": [ { "include": "harvest" }, { "target": "crew_morale", "operation": "add", "value": 4 } ],
+          "scores": { "resources": 2, "wellbeing": 2 },
+          "flags": ["harvest_stored"],
+          "consequence": "Fresh crops are in the store, and the crew enjoyed its first salad on Mars."
+        },
+        {
+          "id": "calculate_surplus",
+          "label": "Calculate the food surplus for future operations",
+          "detail": "Store the harvest and plan rations (+2 science). Food use is 15% lower for 8 Sols.",
+          "effects": [
+            { "include": "harvest" },
+            { "target": "science_points", "operation": "add", "value": 2 },
+            { "target": "food", "property": "consumption_multiplier", "value": 0.85, "duration_sols": 8, "tag": "ration_plan" }
+          ],
+          "scores": { "resources": 3, "science": 1 },
+          "flags": ["surplus_planned"],
+          "consequence": "Every gram is logged. The new ration plan stretches the food reserve to Sol 30 and beyond."
+        }
+      ],
+      "insight": { "text": "NASA picked radishes for space-farming tests because they grow in just 27 days. Astronauts grew them on the ISS in the Advanced Plant Habitat in 2020.", "source_id": "nasa_veggie" }
+    },
+    {
+      "day": 19,
+      "title": "Psychological Support & Communication with Earth",
+      "location": "Private Voice Communication Room",
+      "scene": "A quiet booth for personal calls with Earth.",
+      "alert": "green",
+      "dialogue": [
+        { "speaker": "LAYLA", "text": "How is the crew's morale at the base, Commander? Remember, Earth is always supporting you." },
+        { "speaker": "PLAYER", "text": "We are holding strong. Conditions inside the base remain stable." },
+        { "speaker": "NOVA", "text": "Choose a message for the crew briefing." }
+      ],
+      "choices": [
+        {
+          "id": "msg_families",
+          "label": "\"Your families watched today's sunrise over our base. They are proud of you.\"",
+          "detail": "+12 morale. The video link uses 3 energy.",
+          "cost": { "energy": 3 },
+          "effects": [ { "target": "crew_morale", "operation": "add", "value": 12 } ],
+          "scores": { "wellbeing": 4 },
+          "flags": ["msg_families"],
+          "consequence": "Several crew members stayed in the comms room long after the call ended. The mood is warm."
+        },
+        {
+          "id": "msg_mission",
+          "label": "\"Every sample we log is a page that future crews will read.\"",
+          "detail": "+7 morale and +2 science as the crew re-focuses on the mission.",
+          "effects": [
+            { "target": "crew_morale", "operation": "add", "value": 7 },
+            { "target": "science_points", "operation": "add", "value": 2 }
+          ],
+          "scores": { "wellbeing": 2, "science": 1 },
+          "flags": ["msg_mission"],
+          "consequence": "The crew went back to work with a clear sense of purpose."
+        },
+        {
+          "id": "msg_brief",
+          "label": "\"Stay sharp. Eleven Sols to go.\"",
+          "detail": "+3 morale. Short, honest and cheap.",
+          "effects": [ { "target": "crew_morale", "operation": "add", "value": 3 } ],
+          "scores": { "wellbeing": 1, "resources": 1 },
+          "flags": ["msg_brief"],
+          "consequence": "A few nods around the table. Nobody expected a speech."
+        }
+      ],
+      "insight": { "text": "NASA's Human Research Program treats isolation and distance from Earth as hazards of human spaceflight, alongside radiation.", "source_id": "nasa_hrp_distance" }
+    },
+    {
+      "day": 20,
+      "title": "Air Filter & Ventilation Maintenance",
+      "location": "Base Corridors",
+      "scene": "The base corridors and oxygen circulation outlets are due for service.",
+      "alert": "green",
+      "dialogue": [
+        { "speaker": "NOVA", "text": "Executing the scheduled air filtration maintenance cycle to ensure oxygen purity." }
+      ],
+      "choices": [
+        {
+          "id": "maintain_filters",
+          "label": "Spend maintenance resources on the ventilation network",
+          "detail": "Costs 5 energy and 3 water. Cleaner air gives +4 crew health.",
+          "cost": { "energy": 5, "water": 3 },
+          "effects": [ { "target": "crew_health", "operation": "add", "value": 4 } ],
+          "scores": { "safety": 3, "infrastructure": 2 },
+          "flags": ["filters_maintained"],
+          "consequence": "The filters are replaced and the ducts flushed. Oxygen purity is back to nominal."
+        },
+        {
+          "id": "defer_filters",
+          "label": "Defer the maintenance cycle",
+          "detail": "Free today, but clogged filters cut oxygen generator output by 25% until they are serviced.",
+          "effects": [ { "target": "oxygen_generator", "property": "production_multiplier", "value": 0.75, "permanent": true, "tag": "clogged_filters" } ],
+          "scores": { "safety": -3, "infrastructure": -2 },
+          "flags": ["filters_deferred"],
+          "consequence": "Maintenance is postponed. The oxygen generator is already working harder."
+        }
+      ],
+      "insight": { "text": "NASA's MOXIE experiment made 122 grams of oxygen from Mars' carbon-dioxide air, at up to 12 grams an hour and 98% purity or better.", "source_id": "nasa_moxie" }
+    },
+    {
+      "day": 21,
+      "title": "Third Weekly Review",
+      "location": "Central Monitoring Screen",
+      "scene": "The central screen compares results against the original mission objectives.",
+      "alert": "green",
+      "summary": "science",
+      "dialogue": [
+        { "speaker": "NOVA", "text": "The third week's objectives have been completed with an acceptable level of success. Preparing for the final sustainability phase." },
+        { "speaker": "LOG", "text": "Science progress: {science} of {science_target} points expected by the end of the mission." }
+      ],
+      "choices": [
+        {
+          "id": "submit_comparison",
+          "label": "Compare the science results with the agency objectives and report",
+          "detail": "Costs 4 energy. The comparison itself is a deliverable (+4 science).",
+          "cost": { "energy": 4 },
+          "effects": [ { "target": "science_points", "operation": "add", "value": 4 } ],
+          "scores": { "science": 2 },
+          "flags": ["science_compared"],
+          "consequence": "Earth Control confirmed which objectives are complete and which still need data."
+        },
+        {
+          "id": "refocus_science",
+          "label": "Refocus the final phase on the missing objectives",
+          "detail": "The lab produces 50% more science for the rest of the mission. The crew feels the pressure (-4 morale).",
+          "effects": [
+            { "target": "research_lab", "property": "production_multiplier", "value": 1.5, "permanent": true, "tag": "science_refocus" },
+            { "target": "crew_morale", "operation": "subtract", "value": 4 }
+          ],
+          "scores": { "science": 2, "wellbeing": -1 },
+          "flags": ["science_refocus"],
+          "consequence": "The research plan for the final week is rewritten around the gaps."
+        }
+      ],
+      "insight": { "text": "NASA missions measure success against objectives set before launch. Curiosity, for example, set out to determine whether Gale Crater was ever habitable.", "source_id": "nasa_mars_program" }
+    },
+    {
+      "day": 22,
+      "title": "Declining Emergency Reserves",
+      "location": "Storage Facilities",
+      "scene": "The base begins to rely on its final emergency food and resource reserves.",
+      "alert": "orange",
+      "dialogue": [
+        { "speaker": "NOVA", "text": "Alert! The base has started consuming its strategic reserves. A strict resource conservation policy is recommended." },
+        { "speaker": "LOG", "text": "Lowest reserve: {lowest_resource} at {lowest_value}." }
+      ],
+      "choices": [
+        {
+          "id": "max_conservation",
+          "label": "Activate maximum resource conservation mode",
+          "detail": "Water and food use -30% and base power use -20% for 4 Sols. Strict rules cost 6 morale.",
+          "effects": [
+            { "target": "water", "property": "consumption_multiplier", "value": 0.7, "duration_sols": 4, "tag": "max_conservation" },
+            { "target": "food", "property": "consumption_multiplier", "value": 0.7, "duration_sols": 4, "tag": "max_conservation" },
+            { "target": "energy", "property": "consumption_multiplier", "value": 0.8, "duration_sols": 4, "tag": "max_conservation" },
+            { "target": "crew_morale", "operation": "subtract", "value": 6 }
+          ],
+          "scores": { "resources": 4, "wellbeing": -2 },
+          "flags": ["max_conservation"],
+          "consequence": "Conservation mode is active. Every system reports its consumption every hour."
+        },
+        {
+          "id": "normal_rations",
+          "label": "Keep normal rations and routines",
+          "detail": "The crew stays comfortable (+2 morale), but the reserves keep falling at the normal rate.",
+          "effects": [ { "target": "crew_morale", "operation": "add", "value": 2 } ],
+          "scores": { "resources": -2, "wellbeing": 1 },
+          "flags": ["normal_rations"],
+          "consequence": "Routines are unchanged. The reserves have to last on their own."
+        }
+      ],
+      "insight": { "text": "NASA lists rationing food and supplies as a critical need on Mars, because no quick resupply is possible from Earth.", "source_id": "nasa_hrp_distance" }
+    },
+    {
+      "day": 23,
+      "title": "Random Emergency: Main Battery Failure",
+      "location": "Power Station",
+      "scene": "A small electrical spark appears inside one of the main battery storage units.",
+      "alert": "red",
+      "event_id": "battery_failure",
+      "start_effects": [
+        { "target": "energy", "property": "capacity_multiplier", "value": 0.8, "permanent": true, "tag": "battery_damage", "unless_flag": "battery_inspected" },
+        { "target": "energy", "property": "capacity_multiplier", "value": 0.9, "permanent": true, "tag": "battery_damage", "if_flag": "battery_inspected" }
+      ],
+      "dialogue": [
+        { "speaker": "NOVA", "text": "Emergency warning! The main battery's capacity has decreased by 20% due to an internal malfunction." },
+        { "speaker": "NOVA", "text": "Correction: the cells bypassed during the Sol 3 inspection contained the fault. Actual capacity loss is only 10%.", "if_flag": "battery_inspected" }
+      ],
+      "choices": [
+        {
+          "id": "isolate_battery",
+          "label": "Immediately isolate the damaged battery",
+          "detail": "Cut the faulty unit out of the bank before the fault can spread.",
+          "event_choice": "isolate_battery",
+          "scores": { "infrastructure": 3, "safety": 1 },
+          "flags": ["battery_isolated"],
+          "consequence": "The damaged unit is isolated. The rest of the bank is stable."
+        },
+        {
+          "id": "emergency_mode",
+          "label": "Keep it online in emergency mode",
+          "detail": "Squeeze the last charge out of the unit. It may discharge again and the spark damaged the housing (-5 integrity).",
+          "event_choice": "emergency_mode",
+          "extra_effects": [ { "target": "base_integrity", "operation": "subtract", "value": 5 } ],
+          "scores": { "infrastructure": -3, "safety": -2 },
+          "flags": ["battery_unstable"],
+          "consequence": "The unit is still connected. NOVA keeps a sensor on it around the clock."
+        }
+      ],
+      "insight": { "text": "Game lesson: batteries carry a solar base through the night. Lost storage capacity means less margin in the darkest and coldest hours.", "source_id": "" }
+    },
+    {
+      "day": 24,
+      "title": "Critical Energy Crisis",
+      "location": "Main Control Panel",
+      "scene": "The control panel turns red as the overall energy supply drops sharply.",
+      "alert": "red",
+      "start_effects": [
+        { "target": "energy", "operation": "subtract", "value": 10, "if_flag": "battery_unstable" }
+      ],
+      "dialogue": [
+        { "speaker": "NOVA", "text": "Critical warning! Current energy consumption indicates that the entire power reserve may be depleted before Day 30." },
+        { "speaker": "NOVA", "text": "The unstable battery unit discharged overnight. Another 10 kWh is gone.", "if_flag": "battery_unstable" },
+        { "speaker": "LOG", "text": "Energy reserve: {energy} kWh. Net change last Sol: {energy_trend} kWh." }
+      ],
+      "choices": [
+        {
+          "id": "shutdown_nonessential",
+          "label": "Shut down non-essential electrical systems",
+          "detail": "The lab and the shield generator are offline for 2 Sols. Dim corridors cost 3 morale.",
+          "effects": [
+            { "target": "research_lab", "property": "enabled", "value": false, "duration_sols": 2, "tag": "energy_crisis" },
+            { "target": "radiation_shield", "property": "enabled", "value": false, "duration_sols": 2, "tag": "energy_crisis" },
+            { "target": "crew_morale", "operation": "subtract", "value": 3 }
+          ],
+          "scores": { "resources": 3, "science": -1, "safety": -1 },
+          "flags": ["nonessential_off"],
+          "consequence": "Only life support and the farm are drawing power."
+        },
+        {
+          "id": "suspend_research",
+          "label": "Completely suspend scientific research",
+          "detail": "The lab is offline for 4 Sols and its backup cells are drained into the grid (+6 energy).",
+          "effects": [
+            { "target": "research_lab", "property": "enabled", "value": false, "duration_sols": 4, "tag": "energy_crisis" },
+            { "target": "energy", "operation": "add", "value": 6 }
+          ],
+          "scores": { "resources": 3, "science": -3 },
+          "flags": ["research_suspended"],
+          "consequence": "The microscopes are dark. Every kilowatt-hour is reserved for survival."
+        }
+      ],
+      "insight": { "text": "Spirit and Opportunity were planned as three-month missions and were still working more than five years later. Energy was usually their limiting factor.", "source_id": "jpl_spirit_cleaning" }
+    },
+    {
+      "day": 25,
+      "title": "Life-Support-Only Mode",
+      "location": "Whole Base",
+      "scene": "The base enters full power-saving mode. All unnecessary lights and systems are switched off.",
+      "alert": "orange",
+      "dialogue": [
+        { "speaker": "NOVA", "text": "Basic life-support protocol activated. Essential systems required to sustain the crew remain operational." }
+      ],
+      "choices": [
+        {
+          "id": "monitor_indicators",
+          "label": "Carefully monitor essential life-support indicators",
+          "detail": "Costs 2 energy. Early warnings catch small problems (+3 crew health).",
+          "cost": { "energy": 2 },
+          "effects": [ { "target": "crew_health", "operation": "add", "value": 3 } ],
+          "scores": { "safety": 3 },
+          "flags": ["ls_monitored"],
+          "consequence": "A minor CO2 scrubber drift was caught and corrected before anyone felt it."
+        },
+        {
+          "id": "avoid_eva",
+          "label": "Avoid all unnecessary external missions and activities",
+          "detail": "Saves 4 energy. The crew stays indoors (-3 morale).",
+          "effects": [
+            { "target": "energy", "operation": "add", "value": 4 },
+            { "target": "crew_morale", "operation": "subtract", "value": 3 }
+          ],
+          "scores": { "resources": 2, "safety": 1, "wellbeing": -1 },
+          "flags": ["no_eva"],
+          "consequence": "All airlocks are sealed for the day. Suits stay on the racks."
+        }
+      ],
+      "insight": { "text": "The Space Station's life-support system is built to run for long periods with little maintenance or spare parts. That is the kind of reliability a Mars base will need.", "source_id": "nasa_iss_water_recovery" }
+    },
+    {
+      "day": 26,
+      "title": "Comprehensive Equipment Inspection",
+      "location": "Main Control Room",
+      "scene": "A complete diagnostic inspection of sensors and emergency systems is under way.",
+      "alert": "green",
+      "summary": "faults",
+      "dialogue": [
+        { "speaker": "NOVA", "text": "Performing a comprehensive inspection of all base systems to ensure no unexpected failures remain." }
+      ],
+      "choices": [
+        {
+          "id": "repair_minor",
+          "label": "Repair every minor malfunction found",
+          "detail": "Costs 6 energy. +8 base integrity, and clogged filters are serviced.",
+          "cost": { "energy": 6 },
+          "effects": [
+            { "target": "base_integrity", "operation": "add", "value": 8 },
+            { "remove_modifier": "clogged_filters" }
+          ],
+          "counters": { "life_support_system_repaired": 1 },
+          "scores": { "infrastructure": 4, "safety": 1 },
+          "flags": ["final_repairs"],
+          "consequence": "Every open fault ticket is closed. The base is in its best shape since landing."
+        },
+        {
+          "id": "log_faults",
+          "label": "Log the faults for the next crew",
+          "detail": "No cost, but every open fault stays in the base.",
+          "effects": [],
+          "scores": { "infrastructure": -3 },
+          "flags": ["faults_logged"],
+          "consequence": "The fault list is saved for the next mission. The problems are still there."
+        }
+      ],
+      "insight": { "text": "Astronauts bound for Mars would be away from Earth for roughly three years, so most repairs will have to be done on site.", "source_id": "nasa_hrp_distance" }
+    },
+    {
+      "day": 27,
+      "title": "Random Emergency: False Fire Alarm",
+      "location": "Greenhouse",
+      "scene": "Emergency sirens sound in the greenhouse after a sensor wrongly detects smoke.",
+      "alert": "red",
+      "event_id": "false_fire_alarm",
+      "dialogue": [
+        { "speaker": "NOVA", "text": "Smoke detected in the agricultural unit... Verifying... Sensor malfunction confirmed. No fire detected." }
+      ],
+      "choices": [
+        {
+          "id": "cancel_alarm",
+          "label": "Cancel the false alarm",
+          "detail": "The farm restarts at once, but the faulty sensor stays in place.",
+          "event_choice": "cancel_alarm",
+          "extra_effects": [ { "target": "crew_morale", "operation": "subtract", "value": 2 } ],
+          "scores": { "safety": -1 },
+          "flags": ["sensor_faulty"],
+          "consequence": "The sirens are off. Nobody slept well after that."
+        },
+        {
+          "id": "recalibrate_sensor",
+          "label": "Recalibrate the faulty sensor",
+          "detail": "Costs 3 energy. The sensor is fixed and its error data is logged (+1 science).",
+          "event_choice": "recalibrate_sensor",
+          "scores": { "safety": 2, "infrastructure": 1 },
+          "flags": ["sensor_recalibrated"],
+          "consequence": "The smoke detector is recalibrated and tested. The farm is back in normal operation."
+        }
+      ],
+      "insight": { "text": "Game lesson: in a sealed habitat every alarm must be verified quickly. A faulty sensor wastes crew time and can hide a real emergency.", "source_id": "" }
+    },
+    {
+      "day": 28,
+      "title": "Final Report Preparation",
+      "location": "Communications Station",
+      "scene": "The communications station shows several options for the final mission report.",
+      "alert": "green",
+      "dialogue": [
+        { "speaker": "NOVA", "text": "We've reached the final stages of the mission, Commander. Select the type and level of detail for the final report to Earth." }
+      ],
+      "choices": [
+        {
+          "id": "scientific_report",
+          "label": "Prepare a comprehensive scientific report",
+          "detail": "Costs 10 energy of transmission time. +10 science.",
+          "cost": { "energy": 10 },
+          "effects": [ { "target": "science_points", "operation": "add", "value": 10 } ],
+          "scores": { "science": 4, "resources": -1 },
+          "flags": ["scientific_report"],
+          "consequence": "Every sample, graph and log is packed into the report. Earth's scientists are thrilled."
+        },
+        {
+          "id": "operational_report",
+          "label": "Prepare a basic operational status report",
+          "detail": "Costs 3 energy. +3 science.",
+          "cost": { "energy": 3 },
+          "effects": [ { "target": "science_points", "operation": "add", "value": 3 } ],
+          "scores": { "resources": 1, "science": 1 },
+          "flags": ["operational_report"],
+          "consequence": "A short status report is ready. The power budget stays safe."
+        }
+      ],
+      "insight": { "text": "Rovers send most of their data through orbiters that relay it to Earth. Bandwidth and power decide how much science gets home.", "source_id": "nasa_mars_program" }
+    },
+    {
+      "day": 29,
+      "title": "The Calm Before the End",
+      "location": "Whole Base",
+      "scene": "The base is unusually quiet. All indicators are stable but close to their minimum safe levels.",
+      "alert": "green",
+      "start_effects": [
+        { "target": "greenhouse", "property": "enabled", "value": false, "duration_sols": 1, "tag": "sensor_lockout", "if_flag": "sensor_faulty" }
+      ],
+      "dialogue": [
+        { "speaker": "NOVA", "text": "The final hours of the mission are progressing smoothly. All critical vulnerabilities have been secured.", "unless_flag": "sensor_faulty" },
+        { "speaker": "NOVA", "text": "The final hours are progressing smoothly, except for one thing: the greenhouse smoke sensor tripped again overnight, and the farm is locked out for this Sol.", "if_flag": "sensor_faulty" }
+      ],
+      "choices": [
+        {
+          "id": "seal_vulnerabilities",
+          "label": "Seal all remaining structural vulnerabilities",
+          "detail": "Costs 5 energy. +6 base integrity.",
+          "cost": { "energy": 5 },
+          "effects": [ { "target": "base_integrity", "operation": "add", "value": 6 } ],
+          "scores": { "infrastructure": 3 },
+          "flags": ["final_seal"],
+          "consequence": "Every seal and hatch is checked one last time."
+        },
+        {
+          "id": "conserve_energy",
+          "label": "Conserve energy",
+          "detail": "Base power use is cut in half for the last 2 Sols.",
+          "effects": [ { "target": "energy", "property": "consumption_multiplier", "value": 0.5, "duration_sols": 2, "tag": "final_conserve" } ],
+          "scores": { "resources": 2 },
+          "flags": ["final_conserve"],
+          "consequence": "Non-critical lights are off. The batteries will finish the mission comfortably."
+        },
+        {
+          "id": "above_critical",
+          "label": "Keep every resource above its critical threshold",
+          "detail": "Costs 6 energy. The lowest of oxygen, water and food gets +10.",
+          "cost": { "energy": 6 },
+          "effects": [ { "operation": "boost_lowest", "value": 10 } ],
+          "scores": { "resources": 2, "safety": 1 },
+          "flags": ["final_buffer"],
+          "consequence": "The weakest reserve gets an emergency top-up. Every life-support number is out of the red."
+        }
+      ],
+      "insight": { "text": "NASA says life-support systems need to recover close to 98% of the water a crew brings at the start of a long journey.", "source_id": "nasa_iss_water_recovery" }
+    }
+  ],
+  "final": {
+    "day": 30,
+    "title": "Final Evaluation & Mission Endings",
+    "location": "Main Control Room",
+    "scene": "The main display marks the end of the 30-day mission and opens the final evaluation.",
+    "dialogue": [
+      { "speaker": "NOVA", "text": "The 30-day mission has been successfully completed. Transmitting the final report to Earth Control." },
+      { "speaker": "LAYLA", "text": "You've accomplished a historic mission, Commander. Here is your base performance evaluation." }
+    ],
+    "dialogue_paused": [
+      { "speaker": "NOVA", "text": "Critical failure. Life-support reserves can no longer sustain normal operations. Suspending the mission." },
+      { "speaker": "LAYLA", "text": "Commander, crew survival comes first. Begin emergency procedures. We will review every decision together." }
+    ],
+    "button": "OPEN FINAL EVALUATION"
+  },
+  "evaluation": {
+    "science_target": 60,
+    "categories": [
+      { "id": "resources", "name": "Resource Management", "covers": "Energy, Water, Food and Oxygen" },
+      { "id": "safety", "name": "Crew Safety & Health", "covers": "Crew health, radiation protection, life-support response" },
+      { "id": "wellbeing", "name": "Psychological Well-Being", "covers": "Crew morale, rest and support" },
+      { "id": "science", "name": "Scientific Progress", "covers": "Science points against the agency target" },
+      { "id": "infrastructure", "name": "Infrastructure & Maintenance", "covers": "Base integrity, repairs and inspections" }
+    ],
+    "insights": [
+      { "text": "Dust on solar panels steadily cuts power. Spirit's team counted every watt-hour.", "source_id": "jpl_spirit_cleaning" },
+      { "text": "Curiosity's RAD measured surface radiation more than doubling during the September 2017 solar event.", "source_id": "nasa_osdr_radlab" },
+      { "text": "Messages between Mars and Earth can take up to 20 minutes one way, so the crew has to decide locally.", "source_id": "nasa_hrp_distance" },
+      { "text": "The ISS recovers about 98% of its water. Recycling is what makes long missions possible.", "source_id": "nasa_iss_water_recovery" },
+      { "text": "MOXIE showed that oxygen can be made from Mars' own carbon-dioxide atmosphere.", "source_id": "nasa_moxie" }
+    ]
+  }
+}

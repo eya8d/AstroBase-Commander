@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "mission_length_sols": 30,
+  "phases": [
+    {
+      "id": "phase_landing",
+      "name": "Landing and Setup",
+      "sol_start": 1,
+      "sol_end": 5,
+      "focus": "Learn the base systems and establish stable production."
+    },
+    {
+      "id": "phase_stabilization",
+      "name": "Stabilization",
+      "sol_start": 6,
+      "sol_end": 10,
+      "focus": "Build resource reserves and prepare for environmental events."
+    },
+    {
+      "id": "phase_operations",
+      "name": "Long-Term Operations",
+      "sol_start": 11,
+      "sol_end": 20,
+      "focus": "Balance energy, life support, maintenance, and science."
+    },
+    {
+      "id": "phase_final",
+      "name": "Final Survival Window",
+      "sol_start": 21,
+      "sol_end": 30,
+      "focus": "Protect critical resources and complete the mission."
+    }
+  ],
+  "milestones": [
+    {
+      "id": "milestone_sol_5",
+      "sol": 5,
+      "reward": {
+        "science_points": 3
+      }
+    },
+    {
+      "id": "milestone_sol_10",
+      "sol": 10,
+      "reward": {
+        "science_points": 5
+      }
+    },
+    {
+      "id": "milestone_sol_20",
+      "sol": 20,
+      "reward": {
+        "science_points": 10
+      }
+    },
+    {
+      "id": "milestone_sol_30",
+      "sol": 30,
+      "reward": {
+        "science_points": 15
+      }
+    }
+  ]
+}

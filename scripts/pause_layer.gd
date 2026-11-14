@@ -11,8 +11,12 @@ const SCALE := 0.66
 const BTN_RESUME := Rect2(250, 258, 360, 102)
 const BTN_RESTART := Rect2(255, 398, 357, 102)
 const BTN_MAIN := Rect2(248, 528, 377, 134)
-## The "[ TACTICAL SUSPENSION // SOL -- ]" band whose number was flattened.
-const SOL_RECT := Rect2(588, 184, 104, 48)
+## The painted "01" inside "[ TACTICAL SUSPENSION // SOL 01 ]" (measured glyph
+## columns x 655-686, rows 157-187).  It is covered with the band colour and the
+## live Sol number is printed in the same place and style.
+const SOL_RECT := Rect2(651, 152, 46, 40)
+const BAND_COLOR := Color(0.165, 0.208, 0.278)
+const BAND_TEXT := Color(0.49, 0.88, 0.88)
 
 var _layer: CanvasLayer
 var _dim: ColorRect
@@ -46,7 +50,15 @@ func _ready() -> void:
 	_holder.position = (Vector2(1280, 720) - Vector2(art.get_width(), art.get_height()) * SCALE) * 0.5
 	_holder.visible = false
 
-	_sol_label = UiRegions.add_label(_holder, SOL_RECT, 34, Color(0.45, 0.85, 0.95))
+	var cover := ColorRect.new()
+	cover.color = BAND_COLOR
+	cover.position = SOL_RECT.position
+	cover.size = SOL_RECT.size
+	cover.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_holder.add_child(cover)
+	_sol_label = UiRegions.add_label(_holder, SOL_RECT, 30, BAND_TEXT,
+			HORIZONTAL_ALIGNMENT_CENTER, VERTICAL_ALIGNMENT_CENTER, false, false)
+	_sol_label.add_theme_constant_override("outline_size", 0)
 
 	var resume := UiRegions.add_region_button(_holder, art, BTN_RESUME, "Resume")
 	if resume != null:

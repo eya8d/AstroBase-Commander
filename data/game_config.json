@@ -1,0 +1,69 @@
+{
+  "game_id": "astrobase_commander",
+  "game_title": "AstroBase-Commander",
+  "version": "1.0.0",
+  "engine": "Godot",
+  "engine_version": "4.6",
+  "game_mode": "2D",
+  "setting": "Mars",
+  "mission_length_sols": 30,
+  "starting_sol": 1,
+  "event_roll": {
+    "timing": "end_of_sol",
+    "chance": 0.35,
+    "max_random_events_per_sol": 1,
+    "historical_scenario_events_are_scripted": true,
+    "note": "Chance is the total chance of one random event per Sol, not 35% per event."
+  },
+  "difficulty": {
+    "default": "normal",
+    "levels": {
+      "easy": {
+        "resource_multiplier": 0.8,
+        "event_chance_multiplier": 0.75
+      },
+      "normal": {
+        "resource_multiplier": 1.0,
+        "event_chance_multiplier": 1.0
+      },
+      "hard": {
+        "resource_multiplier": 1.2,
+        "event_chance_multiplier": 1.25
+      }
+    },
+    "applies_to": "resource_multiplier scales daily consumption and event damage; event_chance_multiplier scales the 0.35 roll."
+  },
+  "win_condition": "Reach the end of Sol 30 with all critical survival resources above zero.",
+  "loss_conditions": [
+    "oxygen <= 0",
+    "water <= 0",
+    "food <= 0",
+    "crew_health <= 0",
+    "base_integrity <= 0"
+  ],
+  "resource_ids": [
+    "energy",
+    "oxygen",
+    "water",
+    "food",
+    "shield",
+    "science_points"
+  ],
+  "system_ids": [
+    "solar_panel",
+    "oxygen_generator",
+    "water_recycler",
+    "greenhouse",
+    "radiation_shield",
+    "habitat"
+  ],
+  "story_pacing": {
+    "random_events_in_story_campaign": true,
+    "max_random_events_per_week": 1,
+    "no_random_events_before_sol": 3,
+    "skip_roll_when_next_day_is_scripted": true,
+    "note": "Keeps the 30-day script readable: the 0.35 roll still applies, but only on quiet days and at most once per story week.",
+    "added_for": "AstroBase story campaign (round 3)"
+  },
+  "sol_length_seconds_default": 90
+}

@@ -1,20 +1,30 @@
-[
-  {
-    "event_id": "donki_sep_13081",
-    "id": "donki_sep_13081",
-    "type": "radiation_warning",
-    "donki_type": "SEP",
-    "date": "2017-09-06T23:30:00Z",
-    "mars_event_start": "2017-09-10T19:50:00Z",
-    "title": "Solar particle storm warning",
-    "description": "Archived SEP event first recorded near Earth on 6 September 2017. NASA's Curiosity rover measured the strongest solar-particle radiation increase on Mars since landing during 10–12 September 2017.",
-    "lesson": "Solar particles can travel across space and raise radiation at Mars. The crew must decide whether to spend power on the Shield Generator.",
-    "chance_weight": 2,
-    "duration_sols": 1,
-    "source": "NASA CCMC DONKI SEP; NASA/JPL Curiosity RAD report",
-    "source_url": "https://kauai.ccmc.gsfc.nasa.gov/DONKI/view/SEP/13081/1",
-    "mars_effect_source_url": "https://www.jpl.nasa.gov/news/large-solar-storm-sparks-global-aurora-and-doubles-radiation-levels-on-the-martian-surface/",
-    "retrieved_date": "2026-11-13",
-    "data_note": "The DONKI observation date and the later Mars surface measurement are both archived. RadLab dose-rate samples for the Mars event are stored separately in radiation.json."
-  }
-]
+{
+  "schema_version": "1.0",
+  "data_kind": "historical_scenario_input",
+  "warning": "This is a historical 2017 event record for a scripted educational scenario. Do not present it as live Mars weather or as a direct measurement of radiation dose on the Martian surface.",
+  "events": [
+    {
+      "id": "donki_sep_13081",
+      "name": "September 2017 Solar Energetic Particle Event",
+      "source_type": "historical_nasa_event",
+      "donki_type": "SEP",
+      "donki_observed_near_earth": "2017-09-06T23:30:00Z",
+      "date_start": "2017-09-10",
+      "date_end": "2017-09-12",
+      "reported_context": "Historical solar energetic particle event associated with elevated radiation measurements reported by the Curiosity Radiation Assessment Detector (RAD) during 10-12 September 2017. NASA reported that radiation on the Martian surface more than doubled, the strongest solar-particle event RAD had measured since Curiosity landed in 2012.",
+      "linked_measurement_id": "curiosity_rad_sep_2017",
+      "gameplay_event_id": "radiation_burst",
+      "scenario_id": "scenario_historical_solar_event",
+      "story_day": 4,
+      "source": {
+        "organization": "NASA CCMC",
+        "dataset": "DONKI Solar Energetic Particle events",
+        "url": "https://kauai.ccmc.gsfc.nasa.gov/DONKI/view/SEP/13081/1",
+        "database_url": "https://kauai.ccmc.gsfc.nasa.gov/DONKI/",
+        "related_instrument": "Curiosity RAD",
+        "related_source_url": "https://www.jpl.nasa.gov/news/large-solar-storm-sparks-global-aurora-and-doubles-radiation-levels-on-the-martian-surface/"
+      },
+      "retrieved_date": "2026-11-13"
+    }
+  ]
+}

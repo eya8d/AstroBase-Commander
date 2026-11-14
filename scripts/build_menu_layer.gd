@@ -172,12 +172,19 @@ func _refresh_card_text(id: String) -> void:
 	if label == null:
 		return
 	var row: Dictionary = _building_data[id]
-	var cost: Dictionary = row.get("build_cost", {}) as Dictionary
+	var cost: Dictionary = GameState.adjust_build_cost(row.get("build_cost", {}) as Dictionary)
 	var parts := PackedStringArray()
 	for res: String in cost:
 		parts.append("%d %s" % [int(cost[res]), String(RES_ABBR.get(res, res.to_upper()))])
-	var power: int = int(row.get("power_per_sol", 0))
-	var power_text: String = ("+%d kW/Sol" % power) if power > 0 else ("%d kW/Sol" % power)
+	# Energy per Sol for ONE more building, from systems.json (what Mission will apply).
+	var nums: Dictionary = Mission.building_numbers(id)
+	var energy_out: int = int((nums.get("produces", {}) as Dictionary).get("energy", 0))
+	var energy_in: int = int(nums.get("energy_cost", 0))
+	var power_text: String = "0"
+	if energy_out > 0:
+		power_text = "+%d / Sol" % energy_out
+	elif energy_in > 0:
+		power_text = "-%d / Sol" % energy_in
 	var cost_text: String = " · ".join(parts) if not parts.is_empty() else "FREE"
 	label.text = "COST: %s\nPOWER: %s" % [cost_text, power_text]
 	var affordable: bool = ResourceManager.has_enough(cost)
@@ -369,11 +376,12 @@ func _update_ghost_position() -> void:
 ## Legal = inside the arena, not overlapping a wall / rock / building, and affordable.
 func _cell_is_legal(center: Vector2, cells: Vector2i) -> bool:
 	var size := Vector2(cells) * CELL
-	var bounds := Rect2(Vector2(size.x * 0.5, size.y * 0.5), Vector2(2000, 1200) - size)
+	# World = the 1376x768 site map scaled x1.5 (see main.tscn / player camera limits).
+	var bounds := Rect2(Vector2(size.x * 0.5, size.y * 0.5), Vector2(2064, 1152) - size)
 	if not bounds.has_point(center):
 		return false
 	var row: Dictionary = _building_data.get(_placing_id, {}) as Dictionary
-	var cost: Dictionary = row.get("build_cost", {}) as Dictionary
+	var cost: Dictionary = GameState.adjust_build_cost(row.get("build_cost", {}) as Dictionary)
 	if not ResourceManager.has_enough(cost):
 		return false
 
@@ -403,7 +411,7 @@ func _try_place() -> void:
 		EventBus.notice.emit("CANNOT BUILD HERE")
 		return
 
-	var cost: Dictionary = row.get("build_cost", {}) as Dictionary
+	var cost: Dictionary = GameState.adjust_build_cost(row.get("build_cost", {}) as Dictionary)
 	if not ResourceManager.spend(cost):
 		_refresh_all_cards()
 		EventBus.notice.emit("NOT ENOUGH RESOURCES")

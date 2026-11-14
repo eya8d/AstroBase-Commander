@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "thresholds": [
+    {
+      "id": "historical_sep_shield_threshold",
+      "applies_to_event_id": "donki_sep_13081",
+      "shield_required": 15,
+      "crew_health_penalty_if_unprotected": 20,
+      "duration_sols": 1,
+      "note": "These are gameplay balancing values, not real-world engineering specifications or medical dose limits."
+    }
+  ]
+}

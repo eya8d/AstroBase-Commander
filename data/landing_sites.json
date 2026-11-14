@@ -1,0 +1,272 @@
+{
+  "_readme": "Day 0 landing-site catalogue. 'nasa_data' holds only values copied from the USGS Gazetteer of Planetary Nomenclature (and NASA JPL where noted). 'gameplay' holds GAME DESIGN rules invented for balance; they are NOT measurements and the UI labels them that way. Coordinates are planetocentric, +East, -180..180.",
+  "map": {
+    "texture": "res://map/full map no gridlines no names.png",
+    "reference_labelled_copy": "res://map/full map whit gridlines and names.png",
+    "projection_note": "Supplied global mosaic, shown unmodified. The game treats it as equirectangular from 90W to 180E and 90N to 90S; this was calibrated against the labelled copy of the same image (Valles Marineris, Acidalia and Elysium labels line up within a few pixels). Positions are approximate, not a geodetic product.",
+    "lon_west": -90.0,
+    "lon_east": 180.0,
+    "lat_north": 90.0,
+    "lat_south": -90.0,
+    "view_modes": [
+      {
+        "id": "clean",
+        "caption": "CLEAN + GRID",
+        "texture": "res://map/full map no gridlines no names.png",
+        "code_grid": true
+      },
+      {
+        "id": "grid",
+        "caption": "GRID",
+        "texture": "res://map/full map whit no names and whit gridlines.png",
+        "code_grid": false
+      },
+      {
+        "id": "named",
+        "caption": "NAMES",
+        "texture": "res://map/full map whit gridlines and names.png",
+        "code_grid": false
+      }
+    ]
+  },
+  "base_layout_note": "The three in-game maps share one base layout (pads, solar field, craters, rock clusters). Shared obstacles live in scripts/site_world.gd; site-only terrain is listed per site in map pixels (1376x768) as circle [x,y,r], rect [x,y,w,h] or segment [x1,y1,x2,y2,half_width].",
+  "default_starting_resources": {
+    "ore": 0,
+    "energy": 100,
+    "oxygen": 100,
+    "water": 100,
+    "food": 70,
+    "shield": 30
+  },
+  "sites": [
+    {
+      "id": "elysium",
+      "name": "Elysium Planitia",
+      "available": true,
+      "panel_texture": "res://map/a_centered_clean_and_readable_2d_retro_pixel_art_landing_site_information_panel_1-removebg-preview.png",
+      "orbital_texture": "res://map/Elysium Planitia real map.png",
+      "ground_texture": "res://map/elysium_planitia_in_game_map._a_full_screen_16_9_widescreen_1920x1080_2d_top/screen.png",
+      "terrain_obstacles": [
+        {
+          "circle": [
+            245,
+            160,
+            70
+          ]
+        },
+        {
+          "circle": [
+            60,
+            355,
+            62
+          ]
+        },
+        {
+          "circle": [
+            1070,
+            345,
+            34
+          ]
+        },
+        {
+          "segment": [
+            805,
+            190,
+            1000,
+            300,
+            22
+          ]
+        }
+      ],
+      "nasa_data": {
+        "feature_type": "Planitia, planitiae",
+        "latitude": 2.979034632,
+        "longitude": 154.7372,
+        "diameter_km": 3000.79,
+        "origin": "Classical albedo feature name.",
+        "ethnicity": "Greek",
+        "usgs_feature_id": 1784,
+        "source": "https://planetarynames.wr.usgs.gov/Feature/1784",
+        "extra_fact": "NASA's InSight lander touched down in western Elysium Planitia (4.5N, 135.9E) in November 2018.",
+        "extra_fact_source": "https://www.jpl.nasa.gov/news/press_kits/insight/launch/mission/landing-site/"
+      },
+      "gameplay": {
+        "label": "Game design values - not NASA data",
+        "solar_output": 1.0,
+        "water_ice_yield": 0.8,
+        "build_ore_cost": 0.8,
+        "starting_resources": {
+          "ore": 0,
+          "energy": 110,
+          "oxygen": 100,
+          "water": 80,
+          "food": 70,
+          "shield": 30
+        },
+        "advantages": [
+          "Near the equator: sunlight rated HIGH (full solar output).",
+          "Open plain: buildings cost 20% less ore.",
+          "Starts with extra energy (110 kWh)."
+        ],
+        "challenges": [
+          "Ice deposits hold 20% less water.",
+          "Starts with less water (80)."
+        ],
+        "scale_note": "Same scale as resources.json (crew health, integrity, morale and science use the resources.json defaults)."
+      }
+    },
+    {
+      "id": "valles",
+      "name": "Valles Marineris",
+      "available": true,
+      "panel_texture": "res://map/a_centered_clean_and_readable_2d_retro_pixel_art_landing_site_information_panel_2-removebg-preview.png",
+      "orbital_texture": "res://map/Valles Marineris real map .png",
+      "ground_texture": "res://map/valles_marineris_in_game_map._a_full_screen_16_9_widescreen_1920x1080_2d_top/screen.png",
+      "terrain_obstacles": [
+        {
+          "segment": [
+            700,
+            0,
+            585,
+            280,
+            34
+          ]
+        },
+        {
+          "circle": [
+            60,
+            355,
+            62
+          ]
+        },
+        {
+          "segment": [
+            805,
+            190,
+            1000,
+            300,
+            22
+          ]
+        },
+        {
+          "segment": [
+            1000,
+            300,
+            1050,
+            400,
+            22
+          ]
+        }
+      ],
+      "nasa_data": {
+        "feature_type": "Vallis, valles",
+        "latitude": -14.00586857,
+        "longitude": -58.5877,
+        "diameter_km": 3761.28,
+        "origin": "General name of the system of canyons honoring the scientific team of the Mariner 9 program.",
+        "ethnicity": "Latin",
+        "usgs_feature_id": 6288,
+        "source": "https://planetarynames.wr.usgs.gov/Feature/6288"
+      },
+      "gameplay": {
+        "label": "Game design values - not NASA data",
+        "solar_output": 0.85,
+        "water_ice_yield": 1.0,
+        "build_ore_cost": 1.25,
+        "starting_resources": {
+          "ore": 10,
+          "energy": 95,
+          "oxygen": 100,
+          "water": 100,
+          "food": 70,
+          "shield": 30
+        },
+        "advantages": [
+          "Exposed canyon rock: lands with 10 ore.",
+          "Normal-size ice deposits."
+        ],
+        "challenges": [
+          "Canyon walls shade panels: solar -15%.",
+          "Rough ground: buildings cost 25% more ore."
+        ],
+        "scale_note": "Same scale as resources.json (crew health, integrity, morale and science use the resources.json defaults)."
+      }
+    },
+    {
+      "id": "acidalia",
+      "name": "Acidalia Planitia",
+      "available": true,
+      "panel_texture": "res://map/a_centered_clean_and_readable_2d_retro_pixel_art_landing_site_information_panel_3-removebg-preview.png",
+      "orbital_texture": "res://map/Acidalia Planitia real map.png",
+      "ground_texture": "res://map/acidalia_planitia_in_game_map._a_full_screen_16_9_widescreen_1920x1080_2d_top/screen.png",
+      "terrain_obstacles": [
+        {
+          "circle": [
+            55,
+            355,
+            66
+          ]
+        },
+        {
+          "rect": [
+            188,
+            140,
+            130,
+            90
+          ]
+        },
+        {
+          "segment": [
+            805,
+            190,
+            1000,
+            300,
+            22
+          ]
+        },
+        {
+          "segment": [
+            1000,
+            300,
+            1050,
+            400,
+            22
+          ]
+        }
+      ],
+      "nasa_data": {
+        "feature_type": "Planitia, planitiae",
+        "latitude": 49.75562931,
+        "longitude": -20.736,
+        "diameter_km": 3362.97,
+        "origin": "From classical albedo feature at 44N, 21W.",
+        "ethnicity": "Greek",
+        "usgs_feature_id": 38,
+        "source": "https://planetarynames.wr.usgs.gov/Feature/38"
+      },
+      "gameplay": {
+        "label": "Game design values - not NASA data",
+        "solar_output": 0.75,
+        "water_ice_yield": 1.5,
+        "build_ore_cost": 1.0,
+        "starting_resources": {
+          "ore": 0,
+          "energy": 85,
+          "oxygen": 100,
+          "water": 130,
+          "food": 70,
+          "shield": 30
+        },
+        "advantages": [
+          "Ice deposits hold 50% more water.",
+          "Starts with full water tanks (130)."
+        ],
+        "challenges": [
+          "High latitude: sunlight rated REDUCED (solar -25%).",
+          "Starts with less energy (85 kWh)."
+        ],
+        "scale_note": "Same scale as resources.json (crew health, integrity, morale and science use the resources.json defaults)."
+      }
+    }
+  ]
+}

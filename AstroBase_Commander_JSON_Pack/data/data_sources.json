@@ -1,0 +1,56 @@
+{
+  "sources": [
+    {
+      "id": "nasa_mars_program",
+      "organization": "NASA",
+      "title": "Mars Exploration Program",
+      "url": "https://mars.nasa.gov/",
+      "used_for": [
+        "dust_storm",
+        "solar_panel_damage",
+        "meteorite_impact"
+      ]
+    },
+    {
+      "id": "nasa_donki",
+      "organization": "NASA CCMC",
+      "title": "DONKI Space Weather Database",
+      "url": "https://kauai.ccmc.gsfc.nasa.gov/DONKI/",
+      "used_for": [
+        "radiation_burst",
+        "donki_sep_13081"
+      ]
+    },
+    {
+      "id": "nasa_iss_life_support",
+      "organization": "NASA",
+      "title": "International Space Station",
+      "url": "https://www.nasa.gov/international-space-station/",
+      "used_for": [
+        "oxygen_leak"
+      ]
+    },
+    {
+      "id": "nasa_human_spaceflight",
+      "organization": "NASA",
+      "title": "Human Spaceflight",
+      "url": "https://www.nasa.gov/humans-in-space/",
+      "used_for": [
+        "habitat_pressure_drop"
+      ]
+    },
+    {
+      "id": "nasa_space_technology",
+      "organization": "NASA",
+      "title": "Space Technology",
+      "url": "https://www.nasa.gov/",
+      "used_for": [
+        "battery_failure",
+        "equipment_malfunction",
+        "water_contamination",
+        "food_production_failure",
+        "communication_blackout"
+      ]
+    }
+  ]
+}

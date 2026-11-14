@@ -1,43 +1,750 @@
-[
-  {
-    "id": "dust_storm",
-    "type": "dust_storm",
-    "title": "Dust Storm!",
-    "kid_text": "A dust storm is covering the solar panels! They make less electricity until the storm passes.",
-    "lesson": "Dust blocks sunlight, so the panels make less electricity. Real Martian dust storms can cover the whole planet!",
-    "power_output_multiplier": 0.5,
-    "affected_building_id": "solar_panel",
-    "duration_sols": 2,
-    "chance_weight": 5,
-    "source": "NASA Mars Exploration",
-    "source_url": "https://mars.nasa.gov/",
-    "simplification_note": "Real Martian dust storms can last for months. We shortened it to 2 Sols for gameplay."
-  },
-  {
-    "id": "oxygen_leak",
-    "type": "oxygen_leak",
-    "title": "Oxygen Leak!",
-    "kid_text": "Oh no! There is a small crack in the habitat. Oxygen is leaking out!",
-    "lesson": "A leak wastes oxygen. In space, every molecule of air is precious because there is no atmosphere to breathe outside.",
-    "oxygen_loss_per_sol": 8,
-    "duration_sols": 1,
-    "chance_weight": 5,
-    "source": "NASA ISS Life Support",
-    "source_url": "https://www.nasa.gov/mission_pages/station/research/experiments/explorer/Investigation.html",
-    "simplification_note": "ISS astronauts train for rapid leak detection. Real leaks are patched immediately."
-  },
-  {
-    "id": "radiation_burst",
-    "type": "radiation_warning",
-    "title": "Radiation Warning!",
-    "kid_text": "The Sun just sent dangerous particles our way! Your shield generator can protect the crew.",
-    "lesson": "Solar energetic particles are invisible but dangerous. Without shielding, astronauts get harmful radiation.",
-    "shield_needed": 10,
-    "oxygen_penalty": 15,
-    "duration_sols": 1,
-    "chance_weight": 3,
-    "source": "NASA CCMC DONKI",
-    "source_url": "https://kauai.ccmc.gsfc.nasa.gov/DONKI/",
-    "simplification_note": "Based on real Solar Energetic Particle events. The game simplifies radiation exposure into a shield check — real radiation effects are more complex."
-  }
-]
+{
+  "schema_version": "1.0",
+  "description": "Central gameplay event registry. Event IDs are unique; scenarios reference these IDs instead of copying event definitions.",
+  "events": [
+    {
+      "id": "dust_storm",
+      "name": "Regional Dust Storm",
+      "category": "environmental",
+      "source_type": "gameplay_event",
+      "trigger": "random_event",
+      "duration_sols": 2,
+      "chance_weight": 5,
+      "effects": [
+        {
+          "target": "solar_panel",
+          "property": "production_multiplier",
+          "value": 0.5
+        }
+      ],
+      "player_choices": [
+        {
+          "id": "wait",
+          "label": "Wait out the storm",
+          "effects": []
+        },
+        {
+          "id": "clean_panels",
+          "label": "Schedule panel cleaning",
+          "cost": {
+            "energy": 3
+          },
+          "effects": [
+            {
+              "target": "solar_panel",
+              "property": "production_multiplier",
+              "value": 0.75,
+              "duration_sols": 1
+            }
+          ]
+        }
+      ],
+      "lesson": "Dust in the Martian atmosphere can reduce the sunlight reaching solar panels and lower power generation.",
+      "source": {
+        "organization": "NASA",
+        "title": "Mars Exploration Program",
+        "url": "https://mars.nasa.gov/"
+      },
+      "severity": "medium"
+    },
+    {
+      "id": "oxygen_leak",
+      "name": "Habitat Oxygen Leak",
+      "category": "life_support",
+      "source_type": "gameplay_event",
+      "trigger": "random_event",
+      "duration_sols": 1,
+      "chance_weight": 5,
+      "effects": [
+        {
+          "target": "oxygen",
+          "operation": "subtract_per_sol",
+          "value": 8
+        }
+      ],
+      "player_choices": [
+        {
+          "id": "repair_now",
+          "label": "Repair the leak immediately",
+          "cost": {
+            "energy": 5
+          },
+          "effects": [
+            {
+              "target": "oxygen",
+              "operation": "subtract",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "temporary_seal",
+          "label": "Apply a temporary seal",
+          "cost": {
+            "energy": 2
+          },
+          "effects": [
+            {
+              "target": "oxygen",
+              "operation": "subtract",
+              "value": 5
+            }
+          ]
+        }
+      ],
+      "lesson": "A habitat must maintain pressure and carefully monitor its life-support systems.",
+      "source": {
+        "organization": "NASA",
+        "title": "International Space Station Life Support",
+        "url": "https://www.nasa.gov/international-space-station/"
+      },
+      "severity": "high"
+    },
+    {
+      "id": "radiation_burst",
+      "name": "Solar Radiation Alert",
+      "category": "space_weather",
+      "source_type": "gameplay_event",
+      "trigger": "random_event",
+      "duration_sols": 1,
+      "chance_weight": 3,
+      "requirements": {
+        "system_enabled": "radiation_shield",
+        "energy": 10,
+        "shield": 10
+      },
+      "effects_if_protected": [
+        {
+          "target": "shield",
+          "operation": "subtract",
+          "value": 10
+        }
+      ],
+      "effects_if_unprotected": [
+        {
+          "target": "crew_health",
+          "operation": "subtract",
+          "value": 15
+        }
+      ],
+      "player_choices": [
+        {
+          "id": "activate_shield",
+          "label": "Activate radiation shield",
+          "cost": {
+            "energy": 10,
+            "shield": 10
+          },
+          "effects": [
+            {
+              "target": "crew_health",
+              "operation": "subtract",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": "shelter",
+          "label": "Move crew to shelter",
+          "cost": {
+            "energy": 3
+          },
+          "effects": [
+            {
+              "target": "crew_health",
+              "operation": "subtract",
+              "value": 5
+            }
+          ]
+        }
+      ],
+      "lesson": "Radiation exposure is a crew-safety concern. Shielding and protected shelter can reduce exposure.",
+      "source": {
+        "organization": "NASA",
+        "title": "CCMC DONKI",
+        "url": "https://kauai.ccmc.gsfc.nasa.gov/DONKI/"
+      },
+      "severity": "high"
+    },
+    {
+      "id": "water_contamination",
+      "name": "Water Filter Contamination",
+      "category": "life_support",
+      "source_type": "gameplay_event",
+      "trigger": "random_event",
+      "duration_sols": 1,
+      "chance_weight": 4,
+      "effects": [
+        {
+          "target": "water",
+          "operation": "subtract",
+          "value": 12
+        }
+      ],
+      "player_choices": [
+        {
+          "id": "replace_filter",
+          "label": "Replace the filter",
+          "cost": {
+            "energy": 4
+          },
+          "effects": [
+            {
+              "target": "water",
+              "operation": "add",
+              "value": 3
+            }
+          ]
+        },
+        {
+          "id": "ration_water",
+          "label": "Ration water",
+          "effects": [
+            {
+              "target": "water",
+              "operation": "subtract",
+              "value": 4
+            }
+          ]
+        }
+      ],
+      "lesson": "Water recovery systems need filtration, monitoring, and backup supplies.",
+      "source": {
+        "organization": "NASA",
+        "title": "NASA Life Support Research",
+        "url": "https://www.nasa.gov/"
+      },
+      "severity": "medium"
+    },
+    {
+      "id": "battery_failure",
+      "name": "Battery Storage Failure",
+      "category": "power",
+      "source_type": "gameplay_event",
+      "trigger": "random_event",
+      "duration_sols": 1,
+      "chance_weight": 4,
+      "effects": [
+        {
+          "target": "energy",
+          "operation": "subtract",
+          "value": 15
+        }
+      ],
+      "player_choices": [
+        {
+          "id": "isolate_battery",
+          "label": "Isolate damaged battery",
+          "cost": {
+            "energy": 2
+          },
+          "effects": [
+            {
+              "target": "energy",
+              "operation": "subtract",
+              "value": 3
+            }
+          ]
+        },
+        {
+          "id": "emergency_mode",
+          "label": "Switch to emergency mode",
+          "effects": [
+            {
+              "target": "energy",
+              "operation": "subtract",
+              "value": 8
+            }
+          ]
+        }
+      ],
+      "lesson": "A Mars base needs energy storage and backup procedures because solar generation is not constant.",
+      "source": {
+        "organization": "NASA",
+        "title": "NASA Space Technology",
+        "url": "https://www.nasa.gov/"
+      },
+      "severity": "high"
+    },
+    {
+      "id": "habitat_pressure_drop",
+      "name": "Habitat Pressure Drop",
+      "category": "habitat",
+      "source_type": "gameplay_event",
+      "trigger": "random_event",
+      "duration_sols": 1,
+      "chance_weight": 3,
+      "effects": [
+        {
+          "target": "oxygen",
+          "operation": "subtract",
+          "value": 6
+        },
+        {
+          "target": "base_integrity",
+          "operation": "subtract",
+          "value": 8
+        }
+      ],
+      "player_choices": [
+        {
+          "id": "seal_module",
+          "label": "Seal the affected module",
+          "cost": {
+            "energy": 5
+          },
+          "effects": [
+            {
+              "target": "oxygen",
+              "operation": "add",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "evacuate_module",
+          "label": "Evacuate and isolate module",
+          "cost": {
+            "energy": 2
+          },
+          "effects": [
+            {
+              "target": "base_integrity",
+              "operation": "subtract",
+              "value": 2
+            }
+          ]
+        }
+      ],
+      "lesson": "Habitat pressure must be monitored, and damaged sections should be isolated quickly.",
+      "source": {
+        "organization": "NASA",
+        "title": "NASA Human Spaceflight",
+        "url": "https://www.nasa.gov/humans-in-space/"
+      },
+      "severity": "high"
+    },
+    {
+      "id": "equipment_malfunction",
+      "name": "Life-Support Equipment Malfunction",
+      "category": "maintenance",
+      "source_type": "gameplay_event",
+      "trigger": "random_event",
+      "duration_sols": 1,
+      "chance_weight": 4,
+      "effects": [
+        {
+          "target": "oxygen_generator",
+          "property": "enabled",
+          "value": false
+        }
+      ],
+      "player_choices": [
+        {
+          "id": "repair_generator",
+          "label": "Repair the generator",
+          "cost": {
+            "energy": 6
+          },
+          "effects": [
+            {
+              "target": "oxygen_generator",
+              "property": "enabled",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "use_reserve",
+          "label": "Use reserve oxygen",
+          "effects": [
+            {
+              "target": "oxygen",
+              "operation": "subtract",
+              "value": 7
+            }
+          ]
+        }
+      ],
+      "lesson": "Critical systems need maintenance plans and backup supplies.",
+      "source": {
+        "organization": "NASA",
+        "title": "NASA Life Support Research",
+        "url": "https://www.nasa.gov/"
+      },
+      "severity": "high"
+    },
+    {
+      "id": "solar_panel_damage",
+      "name": "Solar Panel Dust and Damage",
+      "category": "power",
+      "source_type": "gameplay_event",
+      "trigger": "random_event",
+      "duration_sols": 2,
+      "chance_weight": 3,
+      "effects": [
+        {
+          "target": "solar_panel",
+          "property": "production_multiplier",
+          "value": 0.6
+        }
+      ],
+      "player_choices": [
+        {
+          "id": "repair_panels",
+          "label": "Repair the panels",
+          "cost": {
+            "energy": 5
+          },
+          "effects": [
+            {
+              "target": "solar_panel",
+              "property": "production_multiplier",
+              "value": 1.0
+            }
+          ]
+        },
+        {
+          "id": "conserve_power",
+          "label": "Conserve power",
+          "effects": [
+            {
+              "target": "energy",
+              "operation": "subtract",
+              "value": 0
+            }
+          ]
+        }
+      ],
+      "lesson": "Power generation hardware needs inspection and cleaning in a dusty environment.",
+      "source": {
+        "organization": "NASA",
+        "title": "Mars Exploration Program",
+        "url": "https://mars.nasa.gov/"
+      },
+      "severity": "medium"
+    },
+    {
+      "id": "communication_blackout",
+      "name": "Communication Blackout",
+      "category": "communications",
+      "source_type": "gameplay_event",
+      "trigger": "random_event",
+      "duration_sols": 1,
+      "chance_weight": 3,
+      "effects": [
+        {
+          "target": "science_points",
+          "operation": "add",
+          "value": 0
+        }
+      ],
+      "player_choices": [
+        {
+          "id": "wait_for_window",
+          "label": "Wait for the next communication window",
+          "effects": [
+            {
+              "target": "science_points",
+              "operation": "add",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "relay_repair",
+          "label": "Repair the relay",
+          "cost": {
+            "energy": 4
+          },
+          "effects": [
+            {
+              "target": "science_points",
+              "operation": "add",
+              "value": 5
+            }
+          ]
+        }
+      ],
+      "lesson": "Communication with Earth can be delayed or interrupted, so a crew must be able to operate autonomously.",
+      "source": {
+        "organization": "NASA",
+        "title": "NASA Deep Space Communications",
+        "url": "https://www.nasa.gov/"
+      },
+      "severity": "low"
+    },
+    {
+      "id": "food_production_failure",
+      "name": "Greenhouse Crop Failure",
+      "category": "food",
+      "source_type": "gameplay_event",
+      "trigger": "random_event",
+      "duration_sols": 2,
+      "chance_weight": 4,
+      "effects": [
+        {
+          "target": "greenhouse",
+          "property": "enabled",
+          "value": false
+        }
+      ],
+      "player_choices": [
+        {
+          "id": "restore_greenhouse",
+          "label": "Restore greenhouse conditions",
+          "cost": {
+            "energy": 5,
+            "water": 3
+          },
+          "effects": [
+            {
+              "target": "greenhouse",
+              "property": "enabled",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "use_food_reserve",
+          "label": "Use stored food",
+          "effects": [
+            {
+              "target": "food",
+              "operation": "subtract",
+              "value": 8
+            }
+          ]
+        }
+      ],
+      "lesson": "Food production in a closed habitat depends on reliable environmental controls and stored reserves.",
+      "source": {
+        "organization": "NASA",
+        "title": "NASA Space Crop Production",
+        "url": "https://www.nasa.gov/"
+      },
+      "severity": "medium"
+    },
+    {
+      "id": "meteorite_impact",
+      "name": "Small Meteorite Impact",
+      "category": "environmental",
+      "source_type": "gameplay_event",
+      "trigger": "random_event",
+      "duration_sols": 1,
+      "chance_weight": 2,
+      "effects": [
+        {
+          "target": "base_integrity",
+          "operation": "subtract",
+          "value": 12
+        }
+      ],
+      "player_choices": [
+        {
+          "id": "patch_hull",
+          "label": "Patch the outer hull",
+          "cost": {
+            "energy": 6
+          },
+          "effects": [
+            {
+              "target": "base_integrity",
+              "operation": "add",
+              "value": 5
+            }
+          ]
+        },
+        {
+          "id": "inspect_damage",
+          "label": "Inspect the damage first",
+          "cost": {
+            "energy": 2
+          },
+          "effects": [
+            {
+              "target": "science_points",
+              "operation": "add",
+              "value": 3
+            }
+          ]
+        }
+      ],
+      "lesson": "A habitat needs structural protection and regular inspections against environmental hazards.",
+      "source": {
+        "organization": "NASA",
+        "title": "NASA Mars Exploration",
+        "url": "https://mars.nasa.gov/"
+      },
+      "severity": "high"
+    },
+    {
+      "id": "cold_wave",
+      "name": "Martian Cold Wave",
+      "category": "environmental",
+      "source_type": "gameplay_event",
+      "trigger": "random_event",
+      "duration_sols": 1,
+      "chance_weight": 3,
+      "effects": [
+        {
+          "target": "water_recycler",
+          "property": "enabled",
+          "value": false
+        },
+        {
+          "target": "energy",
+          "operation": "subtract",
+          "value": 4
+        }
+      ],
+      "player_choices": [
+        {
+          "id": "backup_heating",
+          "label": "Activate backup heating",
+          "cost": {
+            "energy": 8
+          },
+          "effects": [
+            {
+              "target": "water_recycler",
+              "property": "enabled",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "insulate_and_wait",
+          "label": "Insulate the pipes and wait",
+          "effects": [
+            {
+              "target": "water",
+              "operation": "subtract",
+              "value": 8
+            },
+            {
+              "target": "base_integrity",
+              "operation": "subtract",
+              "value": 3
+            }
+          ]
+        }
+      ],
+      "lesson": "Mars can fall to about -153 °C and its thin atmosphere lets heat escape quickly, so exposed water lines need heating.",
+      "source": {
+        "organization": "NASA",
+        "title": "Mars Facts",
+        "url": "https://science.nasa.gov/mars/facts/"
+      },
+      "severity": "medium",
+      "added_for": "AstroBase story campaign (round 3) - Day 9"
+    },
+    {
+      "id": "dust_devil",
+      "name": "Local Dust Devil",
+      "category": "environmental",
+      "source_type": "gameplay_event",
+      "trigger": "random_event",
+      "duration_sols": 1,
+      "chance_weight": 3,
+      "effects": [
+        {
+          "target": "solar_panel",
+          "property": "production_multiplier",
+          "value": 0.9
+        }
+      ],
+      "player_choices": [
+        {
+          "id": "ignore_dust_devil",
+          "label": "Ignore the dust devil",
+          "effects": [
+            {
+              "target": "solar_panel",
+              "property": "dust",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "deploy_rover",
+          "label": "Deploy a rover to clean the sensors",
+          "cost": {
+            "energy": 3
+          },
+          "effects": [
+            {
+              "target": "science_points",
+              "operation": "add",
+              "value": 3
+            }
+          ]
+        }
+      ],
+      "lesson": "NASA's Spirit rover filmed dust devils crossing Gusev Crater. Wind can coat solar panels with dust, and sometimes clean them.",
+      "source": {
+        "organization": "NASA",
+        "title": "Dust Devils at Gusev, Sol 525",
+        "url": "https://science.nasa.gov/photojournal/dust-devils-at-gusev-sol-525/"
+      },
+      "severity": "low",
+      "added_for": "AstroBase story campaign (round 3) - Day 17"
+    },
+    {
+      "id": "false_fire_alarm",
+      "name": "False Fire Alarm",
+      "category": "habitat",
+      "source_type": "gameplay_event",
+      "trigger": "random_event",
+      "duration_sols": 1,
+      "chance_weight": 2,
+      "effects": [
+        {
+          "target": "greenhouse",
+          "property": "enabled",
+          "value": false
+        }
+      ],
+      "player_choices": [
+        {
+          "id": "cancel_alarm",
+          "label": "Cancel the false alarm",
+          "effects": [
+            {
+              "target": "greenhouse",
+              "property": "enabled",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "recalibrate_sensor",
+          "label": "Recalibrate the faulty sensor",
+          "cost": {
+            "energy": 3
+          },
+          "effects": [
+            {
+              "target": "greenhouse",
+              "property": "enabled",
+              "value": true
+            },
+            {
+              "target": "science_points",
+              "operation": "add",
+              "value": 1
+            }
+          ]
+        }
+      ],
+      "lesson": "Game lesson: in a sealed habitat every alarm must be verified quickly; a faulty sensor can hide a real emergency.",
+      "source": {
+        "organization": "NASA",
+        "title": "International Space Station",
+        "url": "https://www.nasa.gov/international-space-station/"
+      },
+      "severity": "low",
+      "added_for": "AstroBase story campaign (round 3) - Day 27"
+    }
+  ]
+}

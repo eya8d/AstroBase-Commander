@@ -1,0 +1,214 @@
+{
+  "schema_version": "1.0",
+  "description": "Scenario definitions reference shared systems, events, and resources by ID. They do not duplicate event payloads.",
+  "scenarios": [
+    {
+      "id": "scenario_tutorial_first_sol",
+      "title": "First Sol on Mars",
+      "type": "tutorial",
+      "start_sol": 1,
+      "end_sol": 3,
+      "starting_resource_overrides": {},
+      "enabled_system_ids": [
+        "solar_panel",
+        "oxygen_generator",
+        "water_recycler",
+        "greenhouse",
+        "radiation_shield",
+        "habitat"
+      ],
+      "scripted_event_ids": [],
+      "random_events_enabled": false,
+      "objectives": [
+        {
+          "id": "tutorial_check_resources",
+          "description": "Inspect energy, oxygen, water, and food reserves",
+          "complete_when": "player_opens_resource_panel"
+        },
+        {
+          "id": "tutorial_run_systems",
+          "description": "Keep the life-support systems operating",
+          "complete_when": "all_critical_systems_enabled"
+        },
+        {
+          "id": "tutorial_finish_three_sols",
+          "description": "Survive until the end of Sol 3",
+          "complete_when": "current_sol >= 4"
+        }
+      ],
+      "completion_reward": {
+        "science_points": 5
+      }
+    },
+    {
+      "id": "scenario_dust_storm_preparation",
+      "title": "Dust Storm Preparation",
+      "type": "challenge",
+      "start_sol": 4,
+      "end_sol": 8,
+      "starting_resource_overrides": {
+        "energy": 65,
+        "oxygen": 75,
+        "water": 70,
+        "food": 70
+      },
+      "enabled_system_ids": [
+        "solar_panel",
+        "oxygen_generator",
+        "water_recycler",
+        "greenhouse",
+        "radiation_shield",
+        "habitat"
+      ],
+      "scripted_event_ids": [
+        "dust_storm"
+      ],
+      "random_events_enabled": false,
+      "objectives": [
+        {
+          "id": "storm_keep_power",
+          "description": "Maintain enough energy while solar output is reduced",
+          "complete_when": "energy > 10"
+        },
+        {
+          "id": "storm_survive",
+          "description": "Survive the storm period",
+          "complete_when": "current_sol > 8"
+        }
+      ],
+      "completion_reward": {
+        "science_points": 10
+      }
+    },
+    {
+      "id": "scenario_historical_solar_event",
+      "title": "Historical Solar Event: September 2017",
+      "type": "historical_data_scenario",
+      "start_sol": 9,
+      "end_sol": 10,
+      "starting_resource_overrides": {
+        "energy": 70,
+        "oxygen": 80,
+        "water": 75,
+        "food": 75,
+        "shield": 20
+      },
+      "enabled_system_ids": [
+        "solar_panel",
+        "oxygen_generator",
+        "water_recycler",
+        "greenhouse",
+        "radiation_shield",
+        "habitat"
+      ],
+      "scripted_event_ids": [
+        "radiation_burst"
+      ],
+      "historical_data_ref": "donki_sep_13081",
+      "random_events_enabled": false,
+      "objectives": [
+        {
+          "id": "historical_review_data",
+          "description": "Review the historical radiation measurements",
+          "complete_when": "player_opened_historical_data"
+        },
+        {
+          "id": "historical_protect_crew",
+          "description": "Choose a protection response for the crew",
+          "complete_when": "radiation_response_selected"
+        }
+      ],
+      "completion_reward": {
+        "science_points": 15
+      }
+    },
+    {
+      "id": "scenario_life_support_crisis",
+      "title": "Life Support Under Pressure",
+      "type": "survival_challenge",
+      "start_sol": 11,
+      "end_sol": 18,
+      "starting_resource_overrides": {
+        "energy": 55,
+        "oxygen": 45,
+        "water": 45,
+        "food": 55,
+        "shield": 15
+      },
+      "enabled_system_ids": [
+        "solar_panel",
+        "oxygen_generator",
+        "water_recycler",
+        "greenhouse",
+        "radiation_shield",
+        "habitat"
+      ],
+      "scripted_event_ids": [
+        "oxygen_leak",
+        "water_contamination",
+        "equipment_malfunction"
+      ],
+      "random_events_enabled": false,
+      "objectives": [
+        {
+          "id": "life_support_restore_oxygen",
+          "description": "Keep oxygen above zero and restore oxygen generation",
+          "complete_when": "oxygen > 0 and oxygen_generator_enabled"
+        },
+        {
+          "id": "life_support_keep_water",
+          "description": "Keep water reserves above zero",
+          "complete_when": "water > 0"
+        },
+        {
+          "id": "life_support_reach_sol_18",
+          "description": "Survive through Sol 18",
+          "complete_when": "current_sol > 18"
+        }
+      ],
+      "completion_reward": {
+        "science_points": 20
+      }
+    },
+    {
+      "id": "scenario_30_sol_campaign",
+      "title": "30-Sol Colony Survival",
+      "type": "main_campaign",
+      "start_sol": 1,
+      "end_sol": 30,
+      "starting_resource_overrides": {},
+      "enabled_system_ids": [
+        "solar_panel",
+        "oxygen_generator",
+        "water_recycler",
+        "greenhouse",
+        "radiation_shield",
+        "habitat"
+      ],
+      "scripted_event_ids": [],
+      "random_events_enabled": true,
+      "random_event_registry": "events.json",
+      "random_event_roll_ref": "game_config.event_roll",
+      "objectives": [
+        {
+          "id": "campaign_survive_10",
+          "description": "Survive the first 10 Sols",
+          "complete_when": "current_sol > 10"
+        },
+        {
+          "id": "campaign_survive_20",
+          "description": "Survive the first 20 Sols",
+          "complete_when": "current_sol > 20"
+        },
+        {
+          "id": "campaign_survive_30",
+          "description": "Complete all 30 Sols",
+          "complete_when": "current_sol > 30"
+        }
+      ],
+      "completion_reward": {
+        "science_points": 30
+      }
+    }
+  ]
+}

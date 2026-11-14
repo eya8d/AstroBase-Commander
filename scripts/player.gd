@@ -4,14 +4,17 @@
 ## On E press, the NEAREST one gets its interact(player) called.
 extends CharacterBody2D
 
-@export var speed: float = 250.0
+## 180 px/s at 2x zoom: about 12 s to cross the 2064 px site.
+@export var speed: float = 180.0
 @export var can_move: bool = true
 
 @export_group("Camera Limits")
 @export var camera_limit_left: int = 0
 @export var camera_limit_top: int = 0
-@export var camera_limit_right: int = 2000
-@export var camera_limit_bottom: int = 1200
+@export var camera_limit_right: int = 2064
+@export var camera_limit_bottom: int = 1152
+## Tighter point of view: 2x shows 640x360 world pixels (3 screen px per map px).
+@export var camera_zoom: float = 2.0
 
 @onready var sprite: AnimatedSprite2D = $Sprite2D
 @onready var camera: Camera2D = $Camera2D
@@ -59,6 +62,7 @@ func _ready() -> void:
 		sprite.animation_finished.connect(_on_sprite_animation_finished)
 
 	if camera:
+		camera.zoom = Vector2(camera_zoom, camera_zoom)
 		camera.limit_left = camera_limit_left
 		camera.limit_top = camera_limit_top
 		camera.limit_right = camera_limit_right
@@ -272,3 +276,8 @@ func _update_interaction_target() -> void:
 ## driven by the same state the E key uses.
 func has_interaction_target() -> bool:
 	return _current_target != null and is_instance_valid(_current_target)
+
+
+## The object E would act on right now (null when nothing is in reach).
+func get_interaction_target() -> Node:
+	return _current_target if has_interaction_target() else null

@@ -1,0 +1,62 @@
+{
+  "screen_id": "victory",
+  "title": "MISSION COMPLETE!",
+  "subtitle": "Amazing work, Astronaut! You survived 30 Sols on Mars!",
+  "sols_survived": "{sols_survived}/30",
+  "stats": [
+    {
+      "id": "final_energy",
+      "label": "Final Energy",
+      "resource_id": "energy"
+    },
+    {
+      "id": "final_oxygen",
+      "label": "Final Oxygen",
+      "resource_id": "oxygen"
+    },
+    {
+      "id": "final_shield",
+      "label": "Final Shield",
+      "resource_id": "shield"
+    },
+    {
+      "id": "remaining_food",
+      "label": "Remaining Food",
+      "resource_id": "food"
+    },
+    {
+      "id": "remaining_water",
+      "label": "Remaining Water",
+      "resource_id": "water"
+    },
+    {
+      "id": "science_points",
+      "label": "Science Points Earned",
+      "resource_id": "science_points"
+    }
+  ],
+  "achievements_source": "achievements.json",
+  "education": [
+    "Energy is limited on Mars.",
+    "Oxygen and water are essential for survival.",
+    "Radiation shielding protects astronauts.",
+    "Every resource-management decision matters."
+  ],
+  "buttons": [
+    {
+      "id": "play_again",
+      "label": "PLAY AGAIN",
+      "action": "restart_game"
+    },
+    {
+      "id": "data_sources",
+      "label": "DATA SOURCES",
+      "action": "open_data_sources"
+    },
+    {
+      "id": "main_menu",
+      "label": "MAIN MENU",
+      "action": "go_to_main_menu"
+    }
+  ]
+}

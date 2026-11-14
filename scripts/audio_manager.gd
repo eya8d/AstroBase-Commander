@@ -175,6 +175,16 @@ func play_ui_error() -> void:
 	_play_sfx(UI_ERROR, -12.0)
 
 
+## Day 0: the landing site was confirmed.
+func play_mission_confirm() -> void:
+	_play_sfx(MISSION_CONFIRM, -10.0)
+
+
+## Day 0: a site marker was scanned on the landing map.
+func play_interface_zoom() -> void:
+	_play_sfx(INTERFACE_ZOOM, -20.0)
+
+
 # ---------------------------------------------------------------- internals
 
 

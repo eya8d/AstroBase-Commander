@@ -1,0 +1,84 @@
+{
+  "screen_id": "defeat",
+  "title": "MISSION FAILED",
+  "subtitle": "Your Mars colony could not survive this mission.",
+  "failure_sol": "{failure_sol}",
+  "failure_reason": "{failure_reason}",
+  "reason_explanation": "{reason_explanation}",
+  "stats": [
+    {
+      "id": "sols_survived",
+      "label": "Sols Survived",
+      "value": "{sols_survived}/30"
+    },
+    {
+      "id": "final_energy",
+      "label": "Final Energy",
+      "resource_id": "energy"
+    },
+    {
+      "id": "final_oxygen",
+      "label": "Final Oxygen",
+      "resource_id": "oxygen"
+    },
+    {
+      "id": "final_shield",
+      "label": "Final Shield",
+      "resource_id": "shield"
+    },
+    {
+      "id": "remaining_food",
+      "label": "Remaining Food",
+      "resource_id": "food"
+    },
+    {
+      "id": "remaining_water",
+      "label": "Remaining Water",
+      "resource_id": "water"
+    },
+    {
+      "id": "science_points",
+      "label": "Science Points",
+      "resource_id": "science_points"
+    }
+  ],
+  "learning_tips_by_failure": {
+    "oxygen": [
+      "Monitor oxygen production and consumption.",
+      "Repair leaks and keep the oxygen generator operational."
+    ],
+    "water": [
+      "Monitor water reserves.",
+      "Keep the water recycler operational and avoid unnecessary consumption."
+    ],
+    "food": [
+      "Keep the greenhouse operational.",
+      "Maintain enough stored food for emergencies."
+    ],
+    "crew_health": [
+      "Monitor radiation alerts.",
+      "Use shielding or protected shelter during radiation events."
+    ],
+    "base_integrity": [
+      "Inspect habitat damage.",
+      "Repair structural failures before they become critical."
+    ]
+  },
+  "buttons": [
+    {
+      "id": "try_again",
+      "label": "TRY AGAIN",
+      "action": "restart_game"
+    },
+    {
+      "id": "data_sources",
+      "label": "DATA SOURCES",
+      "action": "open_data_sources"
+    },
+    {
+      "id": "main_menu",
+      "label": "MAIN MENU",
+      "action": "go_to_main_menu"
+    }
+  ]
+}

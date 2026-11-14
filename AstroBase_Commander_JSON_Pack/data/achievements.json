@@ -1,0 +1,67 @@
+{
+  "achievements": [
+    {
+      "id": "first_sunrise",
+      "name": "First Sunrise",
+      "description": "Complete Sol 1.",
+      "condition": "completed_sol >= 1",
+      "reward": {
+        "science_points": 1
+      }
+    },
+    {
+      "id": "storm_survivor",
+      "name": "Storm Survivor",
+      "description": "Survive a dust storm event.",
+      "condition": "event_survived:dust_storm",
+      "reward": {
+        "science_points": 5
+      }
+    },
+    {
+      "id": "life_support_engineer",
+      "name": "Life-Support Engineer",
+      "description": "Repair or restore a life-support system.",
+      "condition": "life_support_system_repaired >= 1",
+      "reward": {
+        "science_points": 5
+      }
+    },
+    {
+      "id": "radiation_ready",
+      "name": "Radiation Ready",
+      "description": "Protect the crew during a radiation event.",
+      "condition": "radiation_event_protected >= 1",
+      "reward": {
+        "science_points": 8
+      }
+    },
+    {
+      "id": "water_saver",
+      "name": "Every Drop Counts",
+      "description": "Finish a Sol with at least 50 water units.",
+      "condition": "end_of_sol_water >= 50",
+      "reward": {
+        "science_points": 3
+      }
+    },
+    {
+      "id": "red_planet_scientist",
+      "name": "Red Planet Scientist",
+      "description": "Earn 50 Science Points.",
+      "condition": "science_points >= 50",
+      "reward": {
+        "science_points": 5
+      }
+    },
+    {
+      "id": "thirty_sol_legend",
+      "name": "Thirty-Sol Legend",
+      "description": "Complete all 30 Sols.",
+      "condition": "completed_sol >= 30",
+      "reward": {
+        "science_points": 15
+      }
+    }
+  ]
+}

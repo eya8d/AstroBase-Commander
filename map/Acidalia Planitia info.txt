@@ -1,0 +1,10 @@
+Acidalia Planitia
+Item Type	Nomenclature
+Name	Acidalia Planitia
+Diameter	3362.97
+Latitude	49.75562931
+Longitude	-20.7360
+Origin	From classical albedo feature at 44N, 21W.
+Ethnicity	Greek
+Type	Planitia, planitiae
+Additional Info	http://planetarynames.wr.usgs.gov/Feature/38

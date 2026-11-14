@@ -1,0 +1,172 @@
+{
+  "sources": [
+    {
+      "id": "nasa_mars_program",
+      "organization": "NASA",
+      "title": "Mars Exploration Program",
+      "url": "https://mars.nasa.gov/",
+      "used_for": [
+        "dust_storm",
+        "solar_panel_damage",
+        "meteorite_impact"
+      ]
+    },
+    {
+      "id": "nasa_donki",
+      "organization": "NASA CCMC",
+      "title": "DONKI Space Weather Database",
+      "url": "https://kauai.ccmc.gsfc.nasa.gov/DONKI/",
+      "used_for": [
+        "radiation_burst",
+        "donki_sep_13081"
+      ]
+    },
+    {
+      "id": "nasa_iss_life_support",
+      "organization": "NASA",
+      "title": "International Space Station",
+      "url": "https://www.nasa.gov/international-space-station/",
+      "used_for": [
+        "oxygen_leak"
+      ]
+    },
+    {
+      "id": "nasa_human_spaceflight",
+      "organization": "NASA",
+      "title": "Human Spaceflight",
+      "url": "https://www.nasa.gov/humans-in-space/",
+      "used_for": [
+        "habitat_pressure_drop"
+      ]
+    },
+    {
+      "id": "nasa_space_technology",
+      "organization": "NASA",
+      "title": "Space Technology",
+      "url": "https://www.nasa.gov/",
+      "used_for": [
+        "battery_failure",
+        "equipment_malfunction",
+        "water_contamination",
+        "food_production_failure",
+        "communication_blackout"
+      ]
+    },
+    {
+      "id": "nasa_osdr_radlab",
+      "organization": "NASA OSDR",
+      "title": "RadLab - Curiosity MSL-RAD surface measurements",
+      "url": "https://visualization.osdr.nasa.gov/radlab/",
+      "used_for": [
+        "curiosity_rad_sep_2017",
+        "story_day_4"
+      ]
+    },
+    {
+      "id": "jpl_rad_sep_2017",
+      "organization": "NASA JPL",
+      "title": "Large Solar Storm Sparks Global Aurora and Doubles Radiation Levels on the Martian Surface",
+      "url": "https://www.jpl.nasa.gov/news/large-solar-storm-sparks-global-aurora-and-doubles-radiation-levels-on-the-martian-surface/",
+      "used_for": [
+        "donki_sep_13081",
+        "story_day_4"
+      ]
+    },
+    {
+      "id": "jpl_spirit_cleaning",
+      "organization": "NASA JPL",
+      "title": "Spirit Gets Energy Boost from Cleaner Solar Panels (2009)",
+      "url": "https://www.jpl.nasa.gov/news/spirit-gets-energy-boost-from-cleaner-solar-panels/",
+      "used_for": [
+        "story_day_1",
+        "story_day_3",
+        "story_day_24"
+      ]
+    },
+    {
+      "id": "nasa_mars_facts",
+      "organization": "NASA",
+      "title": "Mars Facts",
+      "url": "https://science.nasa.gov/mars/facts/",
+      "used_for": [
+        "cold_wave",
+        "meteorite_impact",
+        "story_day_5"
+      ]
+    },
+    {
+      "id": "nasa_hrp_distance",
+      "organization": "NASA Human Research Program",
+      "title": "Hazard: Distance From Earth",
+      "url": "https://www.nasa.gov/hrp/hazard-distance-from-earth/",
+      "used_for": [
+        "story_day_10",
+        "story_day_12",
+        "story_day_16",
+        "story_day_19",
+        "story_day_22"
+      ]
+    },
+    {
+      "id": "nasa_iss_water_recovery",
+      "organization": "NASA",
+      "title": "NASA Achieves Water Recovery Milestone on International Space Station",
+      "url": "https://www.nasa.gov/missions/station/iss-research/nasa-achieves-water-recovery-milestone-on-international-space-station/",
+      "used_for": [
+        "water_contamination",
+        "story_day_11",
+        "story_day_25",
+        "story_day_29"
+      ]
+    },
+    {
+      "id": "nasa_moxie",
+      "organization": "NASA",
+      "title": "NASA's Oxygen-Generating Experiment MOXIE Completes Mars Mission",
+      "url": "https://www.nasa.gov/missions/mars-2020-perseverance/perseverance-rover/nasas-oxygen-generating-experiment-moxie-completes-mars-mission/",
+      "used_for": [
+        "oxygen_generator",
+        "story_day_20"
+      ]
+    },
+    {
+      "id": "nasa_spirit_dust_devils",
+      "organization": "NASA",
+      "title": "Dust Devils at Gusev, Sol 525",
+      "url": "https://science.nasa.gov/photojournal/dust-devils-at-gusev-sol-525/",
+      "used_for": [
+        "dust_devil",
+        "story_day_17"
+      ]
+    },
+    {
+      "id": "nasa_veggie",
+      "organization": "NASA",
+      "title": "Veggie - ISS plant growth investigation",
+      "url": "https://www.nasa.gov/mission_pages/station/research/experiments/explorer/Investigation.html?#id=383",
+      "used_for": [
+        "greenhouse",
+        "story_day_2",
+        "story_day_18"
+      ]
+    },
+    {
+      "id": "nasa_growing_plants",
+      "organization": "NASA",
+      "title": "Growing Plants in Space",
+      "url": "https://www.nasa.gov/exploration-research-and-technology/growing-plants-in-space/",
+      "used_for": [
+        "story_day_8"
+      ]
+    },
+    {
+      "id": "usgs_planetary_nomenclature",
+      "organization": "USGS / IAU",
+      "title": "Gazetteer of Planetary Nomenclature",
+      "url": "https://planetarynames.wr.usgs.gov/",
+      "used_for": [
+        "landing_sites"
+      ]
+    }
+  ]
+}

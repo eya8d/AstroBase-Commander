@@ -1,32 +1,39 @@
-[
-  {
-    "id": "mars_rad_baseline_20170906",
-    "event_id": "donki_sep_13081",
-    "date": "2017-09-06",
-    "instrument": "MSL-RAD-Surface",
-    "spacecraft": "Curiosity",
-    "location": "Mars surface",
-    "daily_mean_absorbed_dose_rate": 7.68,
-    "unit": "microgray_per_hour",
-    "sample_count": 83,
-    "source": "NASA OSDR RadLab, MSL-RAD-Surface",
-    "source_url": "https://visualization.osdr.nasa.gov/radlab/api/?celestial_body=Mars&trajectory=Surface&timestamp%3E=2017-09-06&timestamp%3C=2017-09-07&absorbed_dose_rate&format=json",
-    "retrieved_date": "2026-11-13",
-    "data_note": "Daily mean calculated from 83 RadLab readings for this date. This is the background comparison day, not a dose limit."
-  },
-  {
-    "id": "mars_rad_sep_peak_20170911",
-    "event_id": "donki_sep_13081",
-    "date": "2017-09-11",
-    "instrument": "MSL-RAD-Surface",
-    "spacecraft": "Curiosity",
-    "location": "Mars surface",
-    "daily_mean_absorbed_dose_rate": 17.87,
-    "unit": "microgray_per_hour",
-    "sample_count": 129,
-    "source": "NASA OSDR RadLab, MSL-RAD-Surface",
-    "source_url": "https://visualization.osdr.nasa.gov/radlab/api/?celestial_body=Mars&trajectory=Surface&timestamp%3E=2017-09-11&timestamp%3C=2017-09-12&absorbed_dose_rate&format=json",
-    "retrieved_date": "2026-11-13",
-    "data_note": "Daily mean calculated from 129 RadLab readings during the Mars surface solar-particle event. The daily mean is about 2.3 times the 6 September comparison mean; it is a measured absorbed dose rate, not a crew health limit."
-  }
-]
+{
+  "schema_version": "1.0",
+  "data_kind": "historical_measurement",
+  "measurements": [
+    {
+      "id": "curiosity_rad_sep_2017",
+      "instrument": "Curiosity Radiation Assessment Detector (RAD)",
+      "dataset": "NASA OSDR RadLab, MSL-RAD-Surface",
+      "location_context": "Mars surface, Curiosity rover location (Gale Crater)",
+      "period_start": "2017-09-06",
+      "period_end": "2017-09-12",
+      "event_period_start": "2017-09-10",
+      "event_period_end": "2017-09-12",
+      "unit": "µGy/hour",
+      "quantity": "daily mean absorbed dose rate",
+      "values": [
+        {
+          "date": "2017-09-06",
+          "value": 7.68,
+          "role": "background comparison day",
+          "sample_count": 83,
+          "source_url": "https://visualization.osdr.nasa.gov/radlab/api/?celestial_body=Mars&trajectory=Surface&timestamp%3E=2017-09-06&timestamp%3C=2017-09-07&absorbed_dose_rate&format=json"
+        },
+        {
+          "date": "2017-09-11",
+          "value": 17.87,
+          "role": "solar particle event peak day",
+          "sample_count": 129,
+          "source_url": "https://visualization.osdr.nasa.gov/radlab/api/?celestial_body=Mars&trajectory=Surface&timestamp%3E=2017-09-11&timestamp%3C=2017-09-12&absorbed_dose_rate&format=json"
+        }
+      ],
+      "interpretation": "The daily mean absorbed dose rate measured by RAD on 11 September 2017 (17.87 µGy/hour) was about 2.3 times the 6 September comparison day (7.68 µGy/hour). These are measurements at one rover location; they are not a general Mars dose and not a crew health limit.",
+      "retrieved_date": "2026-11-13",
+      "data_note": "Correction: the supplied pack listed 7.68 on 2017-09-10 and 17.87 on 2017-09-12. Re-checking the RadLab API showed those two daily means belong to 2017-09-06 (n=83) and 2017-09-11 (n=129). 2017-09-10 averages about 8.0 and 2017-09-12 falls from about 17.5 to 9.7. The event period 10-12 September is kept as context.",
+      "source_url": "https://visualization.osdr.nasa.gov/radlab/",
+      "related_source_url": "https://www.jpl.nasa.gov/news/large-solar-storm-sparks-global-aurora-and-doubles-radiation-levels-on-the-martian-surface/"
+    }
+  ]
+}

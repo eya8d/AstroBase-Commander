@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "victory": {
+    "id": "victory_30_sols",
+    "condition": "completed_sol >= 30 and all critical resources > 0",
+    "screen_file": "ui/victory.json"
+  },
+  "defeat": {
+    "id": "defeat_resource_or_base_failure",
+    "condition": "any configured loss condition becomes true",
+    "screen_file": "ui/defeat.json",
+    "failure_reason_map": {
+      "oxygen": "OXYGEN DEPLETED",
+      "water": "WATER DEPLETED",
+      "food": "FOOD DEPLETED",
+      "crew_health": "CREW HEALTH CRITICAL",
+      "base_integrity": "HABITAT DESTROYED"
+    }
+  }
+}

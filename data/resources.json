@@ -1,0 +1,127 @@
+{
+  "resources": [
+    {
+      "id": "energy",
+      "display_name": "Energy",
+      "unit": "kWh",
+      "starting_amount": 100,
+      "minimum": 0,
+      "critical": true,
+      "consumption_per_sol": 8,
+      "description": "Electrical energy stored for base operations.",
+      "max_amount": 150
+    },
+    {
+      "id": "oxygen",
+      "display_name": "Oxygen",
+      "unit": "units",
+      "starting_amount": 100,
+      "minimum": 0,
+      "critical": true,
+      "consumption_per_sol": 5,
+      "description": "Breathable oxygen reserve for the crew.",
+      "max_amount": 150
+    },
+    {
+      "id": "water",
+      "display_name": "Water",
+      "unit": "units",
+      "starting_amount": 100,
+      "minimum": 0,
+      "critical": true,
+      "consumption_per_sol": 6,
+      "description": "Water reserve for crew use and life-support systems.",
+      "max_amount": 150
+    },
+    {
+      "id": "food",
+      "display_name": "Food",
+      "unit": "rations",
+      "starting_amount": 100,
+      "minimum": 0,
+      "critical": true,
+      "consumption_per_sol": 4,
+      "description": "Stored food rations for the crew.",
+      "max_amount": 150
+    },
+    {
+      "id": "shield",
+      "display_name": "Radiation Shield",
+      "unit": "points",
+      "starting_amount": 30,
+      "minimum": 0,
+      "critical": false,
+      "consumption_per_sol": 0,
+      "description": "Available shielding capacity used to reduce radiation exposure.",
+      "max_amount": 100
+    },
+    {
+      "id": "science_points",
+      "display_name": "Science Points",
+      "unit": "points",
+      "starting_amount": 0,
+      "minimum": 0,
+      "critical": false,
+      "consumption_per_sol": 0,
+      "description": "Points earned by completing research and learning objectives.",
+      "max_amount": 999
+    },
+    {
+      "id": "crew_health",
+      "display_name": "Crew Health",
+      "unit": "points",
+      "starting_amount": 100,
+      "minimum": 0,
+      "critical": true,
+      "consumption_per_sol": 0,
+      "description": "Abstract crew health indicator used by the game.",
+      "max_amount": 100
+    },
+    {
+      "id": "base_integrity",
+      "display_name": "Base Integrity",
+      "unit": "points",
+      "starting_amount": 100,
+      "minimum": 0,
+      "critical": true,
+      "consumption_per_sol": 0,
+      "description": "Structural condition of the Mars habitat.",
+      "max_amount": 100
+    },
+    {
+      "id": "crew_morale",
+      "display_name": "Crew Morale",
+      "unit": "points",
+      "starting_amount": 75,
+      "minimum": 0,
+      "max_amount": 100,
+      "critical": false,
+      "consumption_per_sol": 1,
+      "description": "Abstract psychological well-being of the crew. Below 40 the lab works at half speed; below 20 crew health suffers.",
+      "added_for": "AstroBase story campaign (round 3)"
+    },
+    {
+      "id": "ore",
+      "display_name": "Ore",
+      "unit": "units",
+      "starting_amount": 0,
+      "minimum": 0,
+      "max_amount": 99,
+      "critical": false,
+      "consumption_per_sol": 0,
+      "description": "Rock collected by the commander outside. Used to build and upgrade structures.",
+      "added_for": "AstroBase story campaign (round 3) (world gameplay material)"
+    }
+  ],
+  "resource_rules": {
+    "clamp_minimum_to_zero": true,
+    "check_loss_conditions_after_each_effect": true,
+    "apply_daily_consumption_before_end_of_sol_event_roll": true,
+    "resource_values_are_gameplay_abstractions": true,
+    "display_thresholds": {
+      "yellow_below_ratio": 0.6,
+      "red_below_ratio": 0.3,
+      "note": "Ratios of each resource's starting amount, used for HUD colours."
+    }
+  }
+}
